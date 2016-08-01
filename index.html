@@ -2,9 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title></title>
+    <title>Stackbot</title>
+    <script type="text/javascript">
+        function redirect(){
+            var search = document.getElementById("search_field").value;
+            window.location = "http://www.google.com/#hl=en&source=hp&biw=1024&bih=604&q="+search+"&aq=f&aqi=&aql=&oq=&gs_rfai=&fp=1";
+        }
+    </script>
 </head>
 <body>
-
+<div align="center">
+    <h1 align="center">Stackbot</h1>
+    <input type="text" id="search_field"/>
+    <button onclick="redirect()">Search</button>
+</div>
 </body>
 </html>
