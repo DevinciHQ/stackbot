@@ -8,7 +8,7 @@
     <script type="text/javascript">
         function redirect(){
             var search = document.getElementById("search_field").value;
-            window.location = "http://www.google.com/#hl=en&source=hp&biw=1024&bih=604&q="+search+"&aq=f&aqi=&aql=&oq=&gs_rfai=&fp=1";
+            window.location = "http://www.google.com/#q="+encodeURI(search);
         }
     </script>
 </head>
