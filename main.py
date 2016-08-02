@@ -17,6 +17,8 @@ import webapp2
 # For use when dealing with the datastore.
 from google.appengine.ext import ndb
 
+from user_agents import parse as parseUA
+
 # A simple Datastore Entity that takes any values (good for development)
 # See https://cloud.google.com/appengine/docs/python/ndb/creating-entity-models
 class Query(ndb.Expando):
@@ -35,6 +37,9 @@ class QueryHandler(webapp2.RequestHandler):
       # Save to the datatore.
       query.put()
 
+      if self.request.headers['User-Agent']:
+        self.response.write(parseUA(self.request.headers['User-Agent']))
+
       # Output some debug messages for now.
       # TODO: Redirect to google.
       self.response.write('Saved')
@@ -43,6 +48,7 @@ class QueryHandler(webapp2.RequestHandler):
     # Output for when we first land on the page (or when no query was entered)
     self.response.headers['Content-Type'] = 'text/plain'
     self.response.write('Yey!' + q)
+
 
 
 # Actually run the webserver and accept requests.
