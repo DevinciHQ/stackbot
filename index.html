@@ -8,8 +8,10 @@
     <script type="text/javascript">
         function submit(){
             var search = document.getElementById("search_field").value;
-
-            window.location = "http://www.google.com/#q="+encodeURI(search);
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.open("GET", "http://localhost:8080/?q="+encodeURI(search), true); // true for asynchronous
+            xmlHttp.send(null);
+            //window.location = "http://www.google.com/#q="+encodeURI(search);
         }
     </script>
 </head>
