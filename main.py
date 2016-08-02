@@ -38,7 +38,7 @@ class QueryHandler(webapp2.RequestHandler):
       #Insert the OS and version along with the search query if the user-agent is not empty
       if self.request.headers['User-Agent']:
         self.response.write(parseUA(self.request.headers['User-Agent']))
-        query = Query(query=q, os=str(userAgent.os.family) + " Version: " + str(userAgent.os.version_string))
+        query = Query(query=q, os=str(userAgent.os.family) + " Version: " + str(userAgent.os.version_string), browser=str(userAgent.browser.family))
       else:
         query = Query(query=q)
       # Save to the datatore.
