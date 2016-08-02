@@ -14,6 +14,8 @@
 
 import webapp2
 import datetime
+import json
+import urllib
 
 # For use when dealing with the datastore.
 from google.appengine.ext import ndb
@@ -70,12 +72,25 @@ class QueryHandler(webapp2.RequestHandler):
             logging.info('Saved')
             logging.debug('query: %s', str(q))
 
-        # Output for when we first land on the page (or when no query was entered)
-        self.response.headers['Content-Type'] = 'text/plain'
+            escaped_q = urllib.urlencode({'q': q})
+            redirect = 'http://google.com/#' + escaped_q
 
-# Actually run the webserver and accept requests.
+            # Output for when we first land on the page (or when no query was entered)
+            self.response.headers['Content-Type'] = 'application/json'
+            payload = {
+                'redirect': redirect
+            }
+            output = {
+                'success': True,
+                'payload': payload,
+            }
+            self.response.out.write(json.dumps(output))
+
+
+
+        # Actually run the webserver and accept requests.
 app = webapp2.WSGIApplication([
-    ('/', QueryHandler),
+    ('/api/q', QueryHandler),
 ], debug=True)
 
 
