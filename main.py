@@ -72,7 +72,6 @@ class QueryHandler(webapp2.RequestHandler):
 
         # Output for when we first land on the page (or when no query was entered)
         self.response.headers['Content-Type'] = 'text/plain'
-        self.response.write('Add your query: TODO')
 
 # Actually run the webserver and accept requests.
 app = webapp2.WSGIApplication([

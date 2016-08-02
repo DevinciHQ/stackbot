@@ -3,5 +3,10 @@ api_version: 1
 threadsafe: true
 
 handlers:
-- url: /.*
+- url: /api/q
   script: main.app
+
+- url: /
+  static_files: index.html
+  upload: index.html
+
