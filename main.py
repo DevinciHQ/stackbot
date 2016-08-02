@@ -28,27 +28,30 @@ class Query(ndb.Expando):
 # This handles the incoming request and creates a Query entity if a query string
 # was passed.
 class QueryHandler(webapp2.RequestHandler):
-    def get(self):
-        q = self.request.get('q')
-        # Make sure the length of the query string is at least 1 char.
-        if len(q) > 0:
-            # Create a new Query entity from the q value.
-            # TODO: Add the other values that we want from the request headers.
-            query = Query(query=q)
-            # Save to the datatore.
-            query.put()
+  def get(self):
+    q = self.request.get('q')
+    # Make sure the length of the query string is at least 1 char.
+    if len(q) > 0:
+      # Get the user-agent header from the request.
+      userAgent = parseUA(self.request.headers['User-Agent'])
 
-            if self.request.headers['User-Agent']:
-                self.response.write(parseUA(self.request.headers['User-Agent']))
+      #Insert the OS and version along with the search query if the user-agent is not empty
+      if self.request.headers['User-Agent']:
+        self.response.write(parseUA(self.request.headers['User-Agent']))
+        query = Query(query=q, os=str(userAgent.os.family) + " Version: " + str(userAgent.os.version_string))
+      else:
+        query = Query(query=q)
+      # Save to the datatore.
+      query.put()
 
-            # Output some debug messages for now.
-            # TODO: Redirect to google.
-            self.response.write('Saved')
-            self.response.write(q)
+      # Output some debug messages for now.
+      # TODO: Redirect to google.
+      self.response.write('Saved')
+      self.response.write(q)
 
-        # Output for when we first land on the page (or when no query was entered)
-        self.response.headers['Content-Type'] = 'text/plain'
-        self.response.write('Yey!' + q)
+    # Output for when we first land on the page (or when no query was entered)
+    self.response.headers['Content-Type'] = 'text/plain'
+    self.response.write('Yey!' + q)
 
 # Actually run the webserver and accept requests.
 app = webapp2.WSGIApplication([
