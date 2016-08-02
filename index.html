@@ -6,8 +6,9 @@
     <meta charset="UTF-8">
     <title>Stackbot</title>
     <script type="text/javascript">
-        function redirect(){
+        function submit(){
             var search = document.getElementById("search_field").value;
+
             window.location = "http://www.google.com/#q="+encodeURI(search);
         }
     </script>
@@ -19,7 +20,7 @@
         <div class="input-group">
             <input type="text" class="form-control" placeholder="Search for..." id="search_field">
       <span class="input-group-btn">
-        <button class="btn btn-secondary" type="button" onclick="redirect()">Enter</button>
+        <button class="btn btn-secondary" type="button" onclick="submit()">Enter</button>
       </span>
         </div>
     </div>
