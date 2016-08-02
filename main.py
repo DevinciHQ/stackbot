@@ -60,7 +60,8 @@ class QueryHandler(webapp2.RequestHandler):
                 timestamp=datetime.datetime.utcnow().isoformat(),
                 country=geo['country'],
                 city=geo['city'],
-                city_lat_long=geo['city_lat_long']
+                city_lat_long=geo['city_lat_long'],
+                ip=self.request.remote_addr
             )
             # Save to the datatore.
             query.put()
