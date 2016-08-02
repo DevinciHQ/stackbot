@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import webapp2
+import datetime
 
 # For use when dealing with the datastore.
 from google.appengine.ext import ndb
@@ -38,9 +39,9 @@ class QueryHandler(webapp2.RequestHandler):
       #Insert the OS and version along with the search query if the user-agent is not empty
       if self.request.headers['User-Agent']:
         self.response.write(parseUA(self.request.headers['User-Agent']))
-        query = Query(query=q, os=str(userAgent.os.family) + " Version: " + str(userAgent.os.version_string), browser=str(userAgent.browser.family))
+        query = Query(query=q, os=str(userAgent.os.family) + " Version: " + str(userAgent.os.version_string), browser=str(userAgent.browser.family), timestamp=datetime.datetime.utcnow().isoformat())
       else:
-        query = Query(query=q)
+        query = Query(query=q, timestamp=datetime.datetime.utcnow().isoformat())
       # Save to the datatore.
       query.put()
 
