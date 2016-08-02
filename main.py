@@ -18,41 +18,60 @@ import datetime
 # For use when dealing with the datastore.
 from google.appengine.ext import ndb
 from user_agents import parse as parseUA
-
+import logging
 
 # A simple Datastore Entity that takes any values (good for development)
 # See https://cloud.google.com/appengine/docs/python/ndb/creating-entity-models
 class Query(ndb.Expando):
     pass
 
+# Not that geoip2 (from maximind) doesn't work on GAE because there is a C lib in there apparently.
+# We can use Appengine's added headers to do that work though thankfully.
+def get_geo_data(request):
+    geo = dict()
+    geo['region'] = request.headers.get("X-AppEngine-Region", "unknown")
+    geo['city'] = request.headers.get("X-AppEngine-City", "unknown")
+    geo['country'] = request.headers.get("X-AppEngine-Country", "unknown")
+    geo['city_lat_long'] = request.headers.get("X-AppEngine-CityLatLong", "unknown")
+    return geo
+
 
 # This handles the incoming request and creates a Query entity if a query string
 # was passed.
 class QueryHandler(webapp2.RequestHandler):
-  def get(self):
-    q = self.request.get('q')
-    # Make sure the length of the query string is at least 1 char.
-    if len(q) > 0:
-      # Get the user-agent header from the request.
-      userAgent = parseUA(self.request.headers['User-Agent'])
+    def get(self):
+        q = self.request.get('q')
+        # Make sure the length of the query string is at least 1 char.
+        if len(q) > 0:
 
-      #Insert the OS and version along with the search query if the user-agent is not empty
-      if self.request.headers['User-Agent']:
-        self.response.write(parseUA(self.request.headers['User-Agent']))
-        query = Query(query=q, os=str(userAgent.os.family) + " Version: " + str(userAgent.os.version_string), browser=str(userAgent.browser.family), timestamp=datetime.datetime.utcnow().isoformat())
-      else:
-        query = Query(query=q, timestamp=datetime.datetime.utcnow().isoformat())
-      # Save to the datatore.
-      query.put()
+            # Get the user-agent header from the request.
+            userAgent = parseUA(self.request.headers['User-Agent'])
+            if self.request.headers['User-Agent']:
+                pass
+            geo = get_geo_data(self.request)
+            logging.debug('geo', geo)
 
-      # Output some debug messages for now.
-      # TODO: Redirect to google.
-      self.response.write('Saved')
-      self.response.write(q)
+            # Create a new Query entity from the q value.
+            # TODO: Add the other values that we want from the request headers.
+            query = Query(
+                query=q,
+                os=str(userAgent.os.family) + " Version: " + str(userAgent.os.version_string),
+                browser=str(userAgent.browser.family),
+                timestamp=datetime.datetime.utcnow().isoformat(),
+                country=geo['country'],
+                city=geo['city'],
+                city_lat_long=geo['city_lat_long']
+            )
+            # Save to the datatore.
+            query.put()
+            # Output some debug messages for now.
+            # TODO: Redirect to google.
+            logging.info('Saved')
+            logging.debug('query: %s', str(q))
 
-    # Output for when we first land on the page (or when no query was entered)
-    self.response.headers['Content-Type'] = 'text/plain'
-    self.response.write('Yey!' + q)
+        # Output for when we first land on the page (or when no query was entered)
+        self.response.headers['Content-Type'] = 'text/plain'
+        self.response.write('Add your query: TODO')
 
 # Actually run the webserver and accept requests.
 app = webapp2.WSGIApplication([
