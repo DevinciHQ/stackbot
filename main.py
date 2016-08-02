@@ -14,6 +14,11 @@
 
 import webapp2
 
+class Query(webapp2.RequestHandler):
+  def get(self):
+    q = self.request.get('q')
+    self.response.headers['Content-Type'] = 'text/plain'
+    self.response.write('Yey!' + q)
 
 class MainPage(webapp2.RequestHandler):
     def get(self):
@@ -21,5 +26,7 @@ class MainPage(webapp2.RequestHandler):
         self.response.write('Hello, World!')
 
 app = webapp2.WSGIApplication([
-    ('/', MainPage),
+    ('/', Query),
 ], debug=True)
+
+
