@@ -4,4 +4,7 @@ commands:
   up:
     usage: run stackbot locally.
     cmd: dev_appserver.py .
+  pip-install:
+    usage: python pip, but locally vendored.
+    cmd: pip install -t lib {{args}}
 
