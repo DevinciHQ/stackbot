@@ -1,0 +1,7 @@
+ahoyapi: v2
+usage: Commands for running and updating stackbot
+commands:
+  up:
+    usage: run stackbot locally.
+    cmd: dev_appserver.py .
+
