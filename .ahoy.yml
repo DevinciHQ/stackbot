@@ -7,4 +7,7 @@ commands:
   pip-install:
     usage: python pip, but locally vendored.
     cmd: pip install -t lib {{args}}
+  console:
+    usage: open the app engine web python console.
+    cmd: open 'http://localhost:8000/console'
 
