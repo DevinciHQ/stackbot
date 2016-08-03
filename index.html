@@ -19,7 +19,7 @@
                     if(response.success == true) window.location = response.payload.redirect;
                 }
             }
-            xmlHttp.open("GET", "http://localhost:8080/api/q?q="+encodeURI(q), true); // true for asynchronous
+            xmlHttp.open("GET", "/api/q?q="+encodeURI(q), true); // true for asynchronous
             xmlHttp.send(null);
         }
         function searchengine(){
