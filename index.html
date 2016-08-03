@@ -9,9 +9,14 @@
         function submit(){
             var search = document.getElementById("search_field").value;
             var xmlHttp = new XMLHttpRequest();
-            xmlHttp.open("GET", "http://localhost:8080/?q="+encodeURI(search), true); // true for asynchronous
+            xmlHttp.onreadystatechange = function () {
+                if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+                    var response = JSON.parse(xmlHttp.responseText);
+                    if(response.success == true) window.location = response.payload.redirect;
+                }
+            }
+            xmlHttp.open("GET", "http://localhost:8080/api/q?q="+encodeURI(search), true); // true for asynchronous
             xmlHttp.send(null);
-            //window.location = "http://www.google.com/#q="+encodeURI(search);
         }
     </script>
 </head>
