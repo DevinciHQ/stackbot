@@ -10,4 +10,6 @@ commands:
   console:
     usage: open the app engine web python console.
     cmd: open 'http://localhost:8000/console'
-
+  deploy:
+    usage: deploy the app to google app engine
+    cmd: appcfg.py -A devinci-stackbot -V {{args}} update .
