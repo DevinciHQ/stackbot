@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="search" type="application/opensearchdescription+xml" title="Stackbot" href="/opensearch.xml" />
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <meta charset="UTF-8">
     <title>Stackbot</title>
     <script type="text/javascript">
         function submit(){
-            var search = document.getElementById("search_field").value;
+            var q = document.getElementById("search_field").value;
+            search(q);
+        }
+        function search(q){
             var xmlHttp = new XMLHttpRequest();
             xmlHttp.onreadystatechange = function () {
                 if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
@@ -15,12 +19,17 @@
                     if(response.success == true) window.location = response.payload.redirect;
                 }
             }
-            xmlHttp.open("GET", "http://localhost:8080/api/q?q="+encodeURI(search), true); // true for asynchronous
+            xmlHttp.open("GET", "http://localhost:8080/api/q?q="+encodeURI(q), true); // true for asynchronous
             xmlHttp.send(null);
         }
+        function searchengine(){
+            var url = window.location.href;
+            if(url.split("?q=")[1] != null) search(url.split("?q=")[1]);
+        }
+
     </script>
 </head>
-<body>
+<body onload="searchengine()">
 <div align="center">
     <h1>Stackbot</h1>
     <div class="col-lg-4 col-lg-offset-4">

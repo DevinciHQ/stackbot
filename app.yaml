@@ -10,3 +10,7 @@ handlers:
   static_files: index.html
   upload: index.html
 
+- url: /opensearch.xml
+  static_files: opensearch.xml
+  upload: opensearch.xml
+
