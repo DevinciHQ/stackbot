@@ -14,3 +14,11 @@ handlers:
   static_files: opensearch.xml
   upload: opensearch.xml
 
+- url: /script.js
+  static_files: script.js
+  upload: script.js
+
+- url: /firebase.js
+  static_files: firebase.js
+  upload: firebase.js
+
