@@ -63,7 +63,8 @@ class QueryHandler(webapp2.RequestHandler):
                 country=geo['country'],
                 city=geo['city'],
                 city_lat_long=geo['city_lat_long'],
-                ip=self.request.remote_addr
+                ip=self.request.remote_addr,
+                uid=self.request.cookies['uid']
             )
             # Save to the datatore.
             query.put()

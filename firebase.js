@@ -87,6 +87,9 @@ function initApp() {
       var photoURL = user.photoURL;
       var isAnonymous = user.isAnonymous;
       var uid = user.uid;
+
+      //Set the uid as cookie to access it in the backend while sending a GET request
+      document.cookie = "uid="+uid;
       var refreshToken = user.refreshToken;
       var providerData = user.providerData;
       // [START_EXCLUDE]
