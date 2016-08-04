@@ -5,12 +5,16 @@ motivates you to be more productive and helps you to search coding related quest
 
 ## Installation
 
-* Install the web server: `npm install http-server`
+* Clone the repo from https://github.com/DevinciHQ/stackbot
+* Change to the stackbot directory.
+* You need to install ahoy for the automation of lengthy commands. [Ahoy](https://github.com/DevinciHQ/ahoy)
 
 ## Usage
 
 * Start the server: `ahoy up`
 * Go to [http://127.0.0.1:8080/](http://127.0.0.1:8080/) to view the page.
+* Make local changes. The server will detect the changes so you don't need to restart the server.
+* Test it locally and deploy the application to Google App Engine: `ahoy deploy <version-number>`
 
 
 ## Debugging
