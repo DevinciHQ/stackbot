@@ -90,6 +90,13 @@ function initApp() {
       var refreshToken = user.refreshToken;
       var providerData = user.providerData;
       // [START_EXCLUDE]
+      document.getElementById("welcome-message").innerHTML = "Welcome "+user.displayName+"!";
+      // Insert image before the welcome message if the user is signed in.
+      var image = new Image(75,75);
+      image.id = "user-image";
+      image.src = user.photoURL;
+      var welcome = document.getElementById("welcome-message");
+      welcome.parentNode.insertBefore(image, welcome);
       document.getElementById('quickstart-sign-in-status').textContent = 'Signed in';
       document.getElementById('quickstart-sign-in').textContent = 'Sign out';
       document.getElementById('quickstart-account-details').textContent = JSON.stringify({
@@ -117,5 +124,14 @@ function initApp() {
     // [END_EXCLUDE]
   });
   // [END authstatelistener]
-  document.getElementById('quickstart-sign-in').addEventListener('click', toggleSignIn, false);
+  //Clean up after user logs out.
+  document.getElementById('quickstart-sign-in').onclick = function(){
+    toggleSignIn();
+    if(document.getElementById('quickstart-sign-in').textContent = 'Sign out'){
+      var element = document.getElementById("user-image");
+      element.outerHTML = "";
+      delete element;
+      document.getElementById("welcome-message").innerHTML = "Sign in with your GitHub account below.";
+    }
+  };
 }
