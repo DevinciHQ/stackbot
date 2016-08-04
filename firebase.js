@@ -124,15 +124,14 @@ function initApp() {
     // [END_EXCLUDE]
   });
   // [END authstatelistener]
-  document.getElementById('quickstart-sign-in').addEventListener('click', toggleSignIn, false);
-}
-
-//Clean up after user logs out.
-document.getElementById('quickstart-sign-in').onclick = function(){
-  if(document.getElementById('quickstart-sign-in').textContent = 'Sign out'){
+  //Clean up after user logs out.
+  document.getElementById('quickstart-sign-in').onclick = function(){
+    toggleSignIn();
+    if(document.getElementById('quickstart-sign-in').textContent = 'Sign out'){
       var element = document.getElementById("user-image");
       element.outerHTML = "";
       delete element;
       document.getElementById("welcome-message").innerHTML = "Sign in with your GitHub account below.";
-  }
-};
+    }
+  };
+}
