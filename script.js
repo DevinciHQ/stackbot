@@ -3,7 +3,7 @@
  */
 
 function submit(){
-    var q = document.getElementById("search_field").value;
+    var q = document.getElementById("search-field").value;
     search(q);
 }
 
