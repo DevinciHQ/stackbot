@@ -3,7 +3,7 @@
  */
 
 function submit(){
-    var q = document.getElementById("search_field").value;
+    var q = document.getElementById("search-field").value;
     search(q);
 }
 
@@ -23,3 +23,11 @@ function searchengine(){
     var url = window.location.href;
     if(url.split("?q=")[1] != null) search(url.split("?q=")[1]);
 }
+
+document.getElementById("search-field")
+    .addEventListener("keyup", function(event) {
+    event.preventDefault();
+    if (event.keyCode == 13) {
+        document.getElementById("search-button").click();
+    }
+});
