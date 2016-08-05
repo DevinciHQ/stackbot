@@ -53,6 +53,11 @@ class QueryHandler(webapp2.RequestHandler):
             geo = get_geo_data(self.request)
             logging.debug('geo', geo)
 
+            #Get the UID cookie if it is set.
+            uid = ""
+            if(self.request.cookies.get('uid') != ""):
+                uid = self.request.cookies.get('uid')
+
             # Create a new Query entity from the q value.
             # TODO: Add the other values that we want from the request headers.
             query = Query(
@@ -64,7 +69,7 @@ class QueryHandler(webapp2.RequestHandler):
                 city=geo['city'],
                 city_lat_long=geo['city_lat_long'],
                 ip=self.request.remote_addr,
-                uid=self.request.cookies['uid']
+                uid=uid
             )
             # Save to the datatore.
             query.put()
