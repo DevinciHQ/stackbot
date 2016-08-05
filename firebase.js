@@ -130,6 +130,8 @@ function initApp() {
   //Clean up after user logs out.
   document.getElementById('quickstart-sign-in').onclick = function(){
     toggleSignIn();
+    //Deleting the cookie.
+    document.cookie = "uid=;"+"expires=Thu, 01 Jan 1970 00:00:01 GMT";
     if(document.getElementById('quickstart-sign-in').textContent = 'Sign out'){
       var element = document.getElementById("user-image");
       element.outerHTML = "";
