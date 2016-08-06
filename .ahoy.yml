@@ -3,7 +3,7 @@ usage: Commands for running and updating stackbot
 commands:
   up:
     usage: run stackbot locally.
-    cmd: dev_appserver.py .
+    cmd: dev_appserver.py --skip_sdk_update_check=true frontend backend
   pip-install:
     usage: python pip, but locally vendored.
     cmd: pip install -t lib {{args}}
