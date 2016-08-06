@@ -13,18 +13,13 @@ handlers:
   static_files: opensearch.xml
   upload: opensearch.xml
 
-- url: /script.js
-  static_files: script.js
-  upload: script.js
-
-- url: /firebase.js
-  static_files: firebase.js
-  upload: firebase.js
-
-- url: /style.css
-  static_files: style.css
-  upload: style.css
-
 - url: /favicon.ico
   static_files: favicon.ico
   upload: favicon.ico
+
+- url: /js
+  static_dir: js
+
+- url: /css
+  static_dir: css
+
