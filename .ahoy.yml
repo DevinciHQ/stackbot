@@ -13,3 +13,9 @@ commands:
   deploy:
     usage: deploy the app to google app engine
     cmd: appcfg.py -A devinci-stackbot -V {{args}} update .
+  deps:
+    usage: Load and install all dependencies.
+    cmd: |
+      npm install -g angular-cli typings
+      npm install
+      typings install
