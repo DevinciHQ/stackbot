@@ -1,7 +1,12 @@
 import { bootstrap } from '@angular/platform-browser-dynamic';
 import { enableProdMode } from '@angular/core';
 import { AppComponent, environment } from './app/';
-import { FIREBASE_PROVIDERS, defaultFirebase } from 'angularfire2';
+import {FIREBASE_PROVIDERS,
+  defaultFirebase,
+  AngularFire,
+  AuthMethods,
+  AuthProviders,
+  firebaseAuthConfig} from 'angularfire2';
 
 if (environment.production) {
   enableProdMode();
@@ -12,9 +17,13 @@ bootstrap(AppComponent,
   FIREBASE_PROVIDERS,
   // Initialize Firebase app
   defaultFirebase({
-    apiKey: "<your-key>",
-    authDomain: "<your-project-authdomain>",
-    databaseURL: "<your-database-URL>",
-    storageBucket: "<your-storage-bucket>"
+    apiKey: "AIzaSyAaNBeWn34_1EsK2fM8oB2TAD37j7tuRCk",
+    authDomain: "devinci-stackbot.firebaseapp.com",
+    databaseURL: "https://devinci-stackbot.firebaseio.com",
+    storageBucket: "devinci-stackbot.appspot.com",
+  }),
+  firebaseAuthConfig({
+    provider: AuthProviders.Github,
+    method: AuthMethods.Redirect
   })
 ]);
