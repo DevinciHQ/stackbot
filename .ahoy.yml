@@ -3,7 +3,7 @@ usage: Commands for running and updating stackbot
 commands:
   up:
     usage: run stackbot locally.
-    cmd: dev_appserver.py --skip_sdk_update_check=true frontend backend
+    cmd: dev_appserver.py --skip_sdk_update_check=true backend & cd frontend && ng serve
   pip-install:
     usage: python pip, but locally vendored.
     cmd: pip install -t lib {{args}}
@@ -19,3 +19,6 @@ commands:
       npm install -g angular-cli typings
       npm install
       typings install
+  build:
+    cmd: ng build
+    usage: Build all of the files necessary to serve the site into the /dist folder.
