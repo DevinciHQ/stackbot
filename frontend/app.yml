@@ -23,3 +23,9 @@ handlers:
 - url: /css
   static_dir: css
 
+- url: /node_modules
+  static_dir: node_modules
+
+- url: /angularfire2
+  static_dir: node_modules/angularfire2
+
