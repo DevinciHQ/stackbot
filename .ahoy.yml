@@ -19,6 +19,7 @@ commands:
     usage: Load and install all dependencies.
     cmd: |
       npm install -g angular-cli typings
+      cd frontend
       npm install
       typings install
   build:
