@@ -5,27 +5,15 @@ api_version: 1
 threadsafe: true
 
 handlers:
-- url: /
-  static_files: index.html
-  upload: index.html
 
 - url: /opensearch.xml
   static_files: opensearch.xml
   upload: opensearch.xml
 
-- url: /favicon.ico
-  static_files: favicon.ico
-  upload: favicon.ico
+- url: (.*)/
+  static_files: dist\1/index.html
+  upload: dist
 
-- url: /js
-  static_dir: js
-
-- url: /css
-  static_dir: css
-
-- url: /node_modules
-  static_dir: node_modules
-
-- url: /angularfire2
-  static_dir: node_modules/angularfire2
-
+- url: (.*)
+  static_files: dist\1
+  upload: dist
