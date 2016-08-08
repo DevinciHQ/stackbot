@@ -4,5 +4,5 @@
 .DS_Store
 typings
 node_modules
-frontend/app/*.js
-frontend/app/*.js.map
+frontend/dist
+frontend/tmp
