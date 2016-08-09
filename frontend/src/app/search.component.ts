@@ -12,5 +12,9 @@ import { Component } from '@angular/core';
 })
 
 export class SearchComponent {
+    search = '';
+    submit(searchField: string) {
+        this.search = searchField;
+    }
 
 }
