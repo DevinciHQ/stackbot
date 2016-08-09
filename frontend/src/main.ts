@@ -1,6 +1,7 @@
 import { bootstrap } from '@angular/platform-browser-dynamic';
 import { enableProdMode } from '@angular/core';
 import { AppComponent, environment } from './app/';
+import { SearchComponent } from './app/search.component';
 import {FIREBASE_PROVIDERS,
   defaultFirebase,
   AngularFire,
@@ -12,6 +13,7 @@ if (environment.production) {
   enableProdMode();
 }
 
+bootstrap(SearchComponent);
 bootstrap(AppComponent,
 [
   FIREBASE_PROVIDERS,
