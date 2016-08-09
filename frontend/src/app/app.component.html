@@ -1,2 +1,15 @@
 <div> {{ (af.auth | async)?.uid }} </div>
 <button (click)="login()">Login</button>
+
+<div align="center">
+    <h1>Stackbot</h1>
+    <div class="col-lg-4 col-lg-offset-4">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search for..." id="search-field">
+            <span class="input-group-btn">
+        <button class="btn btn-secondary" type="button" onclick="submit();" id="search-button">Search</button>
+      </span>
+        </div>
+    </div>
+</div>
+<br>
