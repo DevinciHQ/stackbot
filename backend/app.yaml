@@ -6,3 +6,6 @@ threadsafe: true
 handlers:
 - url: /api/q
   script: main.app
+
+- url: /
+  script: main.app

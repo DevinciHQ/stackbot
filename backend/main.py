@@ -41,10 +41,19 @@ def get_geo_data(request):
 # This handles the incoming request and creates a Query entity if a query string
 # was passed.
 class QueryHandler(webapp2.RequestHandler):
+    def options(self):
+            # Output CORS headers for non-GET requests (json data POSTS)
+            self.response.headers['Access-Control-Allow-Origin'] = '*'
+            self.response.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
+            self.response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
     def get(self):
         q = self.request.get('q')
         # Make sure the length of the query string is at least 1 char.
         if len(q) > 0:
+            # Output CORS headers for GET requests
+            self.response.headers['Access-Control-Allow-Origin'] = '*'
+            self.response.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
+            self.response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
 
             # Get the user-agent header from the request.
             userAgent = parseUA(self.request.headers['User-Agent'])
@@ -92,9 +101,7 @@ class QueryHandler(webapp2.RequestHandler):
             }
             self.response.out.write(json.dumps(output))
 
-
-
-        # Actually run the webserver and accept requests.
+# Actually run the webserver and accept requests.
 app = webapp2.WSGIApplication([
     ('/api/q', QueryHandler),
 ], debug=True)
