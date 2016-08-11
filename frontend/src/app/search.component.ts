@@ -21,20 +21,26 @@ export class SearchComponent {
     private data;
 
     submit(searchField: string) {
-        this.getService.getUrl(searchField)
-            .subscribe(
-                function(data) { this.data = data},
-                function(error) { console.log("Error happened: " + error)},
-                function() {
-                    if(this.data.success){
-                        window.location.href = this.data.payload.redirect;
+        if(searchField != '') {
+            this.getService.getUrl(searchField)
+                .subscribe(
+                    function (data) {
+                        this.data = data
+                    },
+                    function (error) {
+                        console.log("Error happened: " + error)
+                    },
+                    function () {
+                        if (this.data.success) {
+                            window.location.href = this.data.payload.redirect;
+                        }
                     }
-                }
-            );
+                );
+        }
     }
 
     onPressEnter(e, searchField){
-        if(e.keyCode == 13){
+        if(e.keyCode == 13 && searchField != ''){
             this.submit(searchField);
         }
     }
