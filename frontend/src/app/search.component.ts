@@ -17,13 +17,17 @@ import { GetService } from "./get.service";
 @Injectable()
 export class SearchComponent {
     constructor(private getService: GetService){}
-    private data: JSON;
-    private errorMessage;
+    private data;
     submit(searchField: string) {
         this.getService.getUrl(searchField)
             .subscribe(
-                data => this.data = data,
-                error =>  this.errorMessage = <any>error);
-        console.log(JSON.stringify(this.data));
+                function(data) { this.data = data},
+                function(error) { console.log("Error happened: " + error)},
+                function() {
+                    if(this.data.success){
+                        window.location.href = this.data.payload.redirect;
+                    }
+                }
+            );
     }
 }
