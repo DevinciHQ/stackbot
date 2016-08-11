@@ -2,7 +2,7 @@
     <h1>Stackbot</h1>
     <div class="col-lg-4 col-lg-offset-4">
         <div class="input-group">
-            <input type="text" class="form-control" placeholder="Search for..." #searchField>
+            <input type="text" class="form-control" (keypress)="onPressEnter($event, searchField.value)" placeholder="Search for..." #searchField>
             <span class="input-group-btn">
         <button class="btn btn-secondary" type="button" (click)="submit(searchField.value)" id="search-button">Search</button>
       </span>

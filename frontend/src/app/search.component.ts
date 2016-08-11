@@ -16,8 +16,10 @@ import { GetService } from "./get.service";
 
 @Injectable()
 export class SearchComponent {
+
     constructor(private getService: GetService){}
     private data;
+
     submit(searchField: string) {
         this.getService.getUrl(searchField)
             .subscribe(
@@ -29,5 +31,11 @@ export class SearchComponent {
                     }
                 }
             );
+    }
+
+    onPressEnter(e, searchField){
+        if(e.keyCode == 13){
+            this.submit(searchField);
+        }
     }
 }
