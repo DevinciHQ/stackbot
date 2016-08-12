@@ -14,7 +14,7 @@ if (environment.production) {
   enableProdMode();
 }
 
-bootstrap(SearchComponent, [HTTP_PROVIDERS, JSONP_PROVIDERS]);
+bootstrap(SearchComponent, [HTTP_PROVIDERS]);
 bootstrap(AppComponent,
 [
   FIREBASE_PROVIDERS,
