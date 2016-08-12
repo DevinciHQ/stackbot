@@ -20,13 +20,13 @@ export class SearchComponent {
 
     private data: any;
 
-    constructor(public getService: GetService, public redirectService: RedirectService){}
+    constructor(private getService: GetService, private redirectService: RedirectService){}
 
     submit(searchField: string) {
         if(searchField != '') {
             this.getService.getUrl(searchField).subscribe(
                 data => {
-                    this.data = data
+                    this.data = data;
                     this.redirectService.redirect(this.data);
                 }, error => { console.log("Error happened: " + error);}
             );
