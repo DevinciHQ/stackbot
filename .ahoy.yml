@@ -3,7 +3,9 @@ usage: Commands for running and updating stackbot
 commands:
   up:
     usage: run stackbot locally.
-    cmd: dev_appserver.py .
+    cmd: |
+      cd frontend && ng build --watch=true &
+      dev_appserver.py --skip_sdk_update_check=true frontend backend
   pip-install:
     usage: python pip, but locally vendored.
     cmd: pip install -t lib {{args}}
@@ -13,3 +15,13 @@ commands:
   deploy:
     usage: deploy the app to google app engine
     cmd: appcfg.py -A devinci-stackbot -V {{args}} update .
+  deps:
+    usage: Load and install all dependencies.
+    cmd: |
+      npm install -g angular-cli typings
+      cd frontend
+      npm install
+      typings install
+  build:
+    cmd: ng build
+    usage: Build all of the files necessary to serve the site into the /dist folder.

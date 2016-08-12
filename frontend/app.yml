@@ -1,0 +1,19 @@
+module: frontend
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
+
+handlers:
+
+- url: /opensearch.xml
+  static_files: opensearch.xml
+  upload: opensearch.xml
+
+- url: (.*)/
+  static_files: dist\1/index.html
+  upload: dist
+
+- url: (.*)
+  static_files: dist\1
+  upload: dist

@@ -2,3 +2,7 @@
 *.swp
 .idea
 .DS_Store
+typings
+node_modules
+frontend/dist
+frontend/tmp

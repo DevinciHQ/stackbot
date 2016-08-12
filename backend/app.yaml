@@ -1,0 +1,11 @@
+module: backend
+runtime: python27
+api_version: 1
+threadsafe: true
+
+handlers:
+- url: /api/q
+  script: main.app
+
+- url: /
+  script: main.app
