@@ -19,13 +19,8 @@ import { RedirectService } from "./redirect.service";
 export class SearchComponent {
 
     private data: any;
-    public redirectService: RedirectService;
-    public getService: GetService;
 
-    constructor(getService: GetService, redirectService: RedirectService){
-        this.redirectService = redirectService;
-        this.getService = getService;
-    }
+    constructor(public getService: GetService, public redirectService: RedirectService){}
 
     submit(searchField: string) {
         if(searchField != '') {
