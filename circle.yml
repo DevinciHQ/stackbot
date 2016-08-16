@@ -17,9 +17,9 @@ dependencies:
     # Update app-engine-python here so we're not asked to when we start the server.
     - gcloud --quiet components update app-engine-python
     # Install ahoy
-    - go get github.com/DevinciHQ/ahoy
-    - go install github.com/DevinciHQ/ahoy
+    - go get github.com/DevinciHQ/ahoy && go install github.com/DevinciHQ/ahoy
     - ahoy deps-backend
+    - ahoy deps-frontend
     # Retrieve our secrets from the CircleCI environment
     #- echo $CLIENT_SECRET | base64 --decode > ${HOME}/client-secret.json
     #- sed  s/YOUR-API-KEY/$API_KEY/ api_key.py.sample > api_key.py
@@ -29,6 +29,9 @@ dependencies:
     #- gcloud config set project $GCLOUD_PROJECT
 
 test:
+  pre:
+    - ahoy up:
+        background: true
   override:
     # run local unit tests
     - cd frontend && npm test
