@@ -2,7 +2,7 @@
  * Created by aashil on 8/12/16.
  */
 
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, NgZone } from "@angular/core";
 import { ReportService } from "./report.service";
 import { AngularFire } from "angularfire2";
 
@@ -18,7 +18,7 @@ export class ReportComponent implements OnInit{
     private data: any;
     private uid: any;
 
-    constructor(private reportService: ReportService, private af: AngularFire){}
+    constructor(private reportService: ReportService, private af: AngularFire, private zone: NgZone){}
 
     ngOnInit() {
         console.log('testing the on init');
