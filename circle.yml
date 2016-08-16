@@ -36,7 +36,7 @@ test:
         background: true
   override:
     # run local unit tests
-    - cd frontend && npm test
+    - ahoy test
 
 #deployment:
     #staging:
