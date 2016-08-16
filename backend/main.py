@@ -116,9 +116,11 @@ class ReportHandler(webapp2.RequestHandler):
         uid = self.request.get('uid')
         logging.debug(uid)
 
+
 # Actually run the webserver and accept requests.
 app = webapp2.WSGIApplication([
-    ('/api/q', QueryHandler), ('/api/report', ReportHandler)
+    ('/api/q',QueryHandler),
+    ('/api/report', ReportHandler)
 ], debug=True)
 
 
