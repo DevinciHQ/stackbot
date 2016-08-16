@@ -2,7 +2,7 @@
  * Created by aashil on 8/12/16.
  */
 
-import { Component, OnInit, NgZone } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { ReportService } from "./report.service";
 import { AngularFire } from "angularfire2";
 
@@ -18,15 +18,12 @@ export class ReportComponent implements OnInit {
     private data: any;
     private uid: any;
 
-    constructor(private reportService: ReportService, private af: AngularFire, private zone: NgZone){}
+    constructor(private reportService: ReportService, private af: AngularFire){}
 
     ngOnInit() {
-        console.log("On-init");
-    }
-    /* this.zone.run(() => {
         console.log('testing the on init');
         this.af.auth.subscribe(
-            uid => this.uid = this.af.auth.getAuth().uid;
+            uid => this.uid = this.af.auth.getAuth().uid
         );
 
         this.reportService.getReport(this.uid).subscribe(
@@ -34,6 +31,6 @@ export class ReportComponent implements OnInit {
                 this.data = data;
             }, error => { console.log("Error happened: " + error);}
         );
-    }); */
+    }
 
 }
