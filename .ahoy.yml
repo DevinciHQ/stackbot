@@ -8,20 +8,25 @@ commands:
       dev_appserver.py --skip_sdk_update_check=true frontend backend
   pip-install:
     usage: python pip, but locally vendored.
-    cmd: pip install -t lib {{args}}
+    cmd: cd backend && pip install -t lib {{args}}
   console:
     usage: open the app engine web python console.
     cmd: open 'http://localhost:8000/console'
   deploy:
     usage: deploy the app to google app engine
     cmd: appcfg.py -A devinci-stackbot -V {{args}} update .
-  deps:
+  deps-frontend:
     usage: Load and install all dependencies.
     cmd: |
       npm install -g angular-cli typings
       cd frontend
       npm install
       typings install
+  deps-backend:
+    usage: Load and install all backend dependencies.
+    cmd: |
+      cd backend &&
+      ahoy pip-install -- -r requirements.txt
   build:
     cmd: ng build
     usage: Build all of the files necessary to serve the site into the /dist folder.
