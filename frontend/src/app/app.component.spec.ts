@@ -3,7 +3,7 @@
 import { addProviders, async, inject } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 
-describe('App: Fake', () => {
+describe('App: Stackbot', () => {
   beforeEach(() => {
     addProviders([AppComponent]);
   });
