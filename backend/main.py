@@ -113,6 +113,9 @@ class ReportHandler(webapp2.RequestHandler):
         self.response.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
         self.response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
 
+        uid = self.request.get('uid')
+        logging.debug(uid)
+
 # Actually run the webserver and accept requests.
 app = webapp2.WSGIApplication([
     ('/api/q', QueryHandler), ('/api/report', ReportHandler)
