@@ -6,7 +6,8 @@ import { RedirectService } from './redirect.service';
 
 describe('redirect', () => {
     it('has name', () => {
-        let redirect: RedirectService = {};
+        //let redirect: RedirectService = {};
+        
     });
 });
 
