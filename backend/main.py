@@ -114,7 +114,10 @@ class ReportHandler(webapp2.RequestHandler):
         self.response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
 
         uid = self.request.get('uid')
-        logging.debug(uid)
+        #https: // cloud.google.com / appengine / docs / python / ndb / queries  # properties_by_string
+        result = Query.query(ndb.GenericProperty('uid') == uid)
+        for key in result:
+            print(key.content)
 
 
 # Actually run the webserver and accept requests.
