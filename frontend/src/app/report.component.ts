@@ -21,15 +21,18 @@ export class ReportComponent implements OnInit {
     constructor(private reportService: ReportService, private af: AngularFire){}
 
     ngOnInit() {
-        console.log('testing the on init');
         this.af.auth.subscribe(
-            uid => this.uid = this.af.auth.getAuth().uid
-        );
-
-        this.reportService.getReport(this.uid).subscribe(
-            data => {
-                this.data = data;
-            }, error => { console.log("Error happened: " + error);}
+            auth => {
+                if(auth != null){
+                    this.uid = auth.uid;
+                    this.reportService.getReport(this.uid).subscribe(
+                        data => {
+                            this.data = data;
+                        }, error => { console.log("Error happened: " + error);
+                        }
+                    );
+                }
+            }
         );
     }
 
