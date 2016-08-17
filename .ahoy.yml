@@ -28,7 +28,7 @@ commands:
       cd backend &&
       ahoy pip-install -- -r requirements.txt
   build:
-    cmd: cd frontent && ng build
+    cmd: cd frontend && ng build
     usage: Build all of the files necessary to serve the site into the /dist folder.
   test:
     cmd: |
