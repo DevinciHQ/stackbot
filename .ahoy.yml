@@ -32,6 +32,7 @@ commands:
     usage: Build all of the files necessary to serve the site into the /dist folder.
   test:
     cmd: |
+      set -e
       cd frontend &&
         if [ $CIRCLE_TEST_REPORTS ]; then
           echo '> Adding junit output to $CIRCLE_TEST_REPORTS'
