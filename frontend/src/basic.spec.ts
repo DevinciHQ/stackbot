@@ -1,9 +1,9 @@
 /**
  * Created by aashil on 8/15/16.
  */
-import { SearchComponent } from './app/search.component'
-import { GetService } from './app/get.service'
-import { RedirectService } from './app/redirect.service'
+// import { SearchComponent } from './app/search.component'
+// import { GetService } from './app/get.service'
+import { RedirectService } from './app/redirect.service';
 
 
 describe('1st tests', () => {
@@ -41,8 +41,8 @@ describe('redirect', () => {
     beforeEach(() => {
         redirectService = new RedirectService();
     });
-    spyOn(redirectService, "redirect");
-    it("redirect method has been called",
-        () => expect(redirectService.redirect("whatever")).toHaveBeenCalled()
+    spyOn(redirectService, 'redirect');
+    it('redirect method has been called',
+        () => expect(redirectService.redirect('whatever')).toHaveBeenCalled()
     );
 });

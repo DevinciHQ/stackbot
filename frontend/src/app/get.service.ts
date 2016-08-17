@@ -9,10 +9,13 @@ import 'rxjs/add/operator/catch';
 
 @Injectable()
 export class GetService {
-    constructor (private http: Http) {}
+
     private backendUrl = 'http://localhost:8081/api/q?q=';  // URL to web API
+
+    constructor (private http: Http) {}
+
     getUrl (searchField: String): Observable<JSON> {
-        return this.http.get(this.backendUrl+searchField)
+        return this.http.get(this.backendUrl + searchField)
             .map(this.extractData)
             .catch(this.handleError);
     }
