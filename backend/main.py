@@ -41,11 +41,13 @@ def get_geo_data(request):
 # This handles the incoming request and creates a Query entity if a query string
 # was passed.
 class QueryHandler(webapp2.RequestHandler):
+
     def options(self):
             # Output CORS headers for non-GET requests (json data POSTS)
             self.response.headers['Access-Control-Allow-Origin'] = '*'
             self.response.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
             self.response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
+
     def get(self):
         q = self.request.get('q')
         # Make sure the length of the query string is at least 1 char.
@@ -62,11 +64,6 @@ class QueryHandler(webapp2.RequestHandler):
             geo = get_geo_data(self.request)
             logging.debug('geo', geo)
 
-            #Get the UID cookie if it is set.
-            uid = ""
-            if(self.request.cookies.get('uid') != ""):
-                uid = self.request.cookies.get('uid')
-
             # Create a new Query entity from the q value.
             # TODO: Add the other values that we want from the request headers.
             query = Query(
@@ -78,7 +75,7 @@ class QueryHandler(webapp2.RequestHandler):
                 city=geo['city'],
                 city_lat_long=geo['city_lat_long'],
                 ip=self.request.remote_addr,
-                uid=uid
+                uid=self.request.get('uid', None)
             )
             # Save to the datatore.
             query.put()

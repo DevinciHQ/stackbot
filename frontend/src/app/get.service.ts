@@ -11,13 +11,18 @@ import 'rxjs/add/operator/catch';
 export class GetService {
 
     private backendUrl = 'http://localhost:8081/api/q?q=';  // URL to web API
-
     constructor (private http: Http) {}
 
-    getUrl (searchField: String): Observable<JSON> {
-        return this.http.get(this.backendUrl + searchField)
-            .map(this.extractData)
-            .catch(this.handleError);
+    getUrl (searchField: String, uid: String): Observable<JSON> {
+        if (uid !== undefined) {
+            return this.http.get(this.backendUrl + searchField + '&uid=' + uid)
+                .map(this.extractData)
+                .catch(this.handleError);
+        } else {
+            return this.http.get(this.backendUrl + searchField)
+                .map(this.extractData)
+                .catch(this.handleError);
+        }
     }
     private extractData(res: Response) {
         let body = res.json();
