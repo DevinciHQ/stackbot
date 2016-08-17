@@ -15,7 +15,6 @@ import { AngularFire } from 'angularfire2';
 @Injectable()
 export class SearchComponent {
 
-    private data: any;
     private uid: String;
 
     constructor(private getService: GetService, private redirectService: RedirectService, private af: AngularFire) {}
@@ -29,11 +28,18 @@ export class SearchComponent {
                       this.uid = auth.uid;
                   }
                   this.getService.getUrl(searchField, this.uid).subscribe(
-                        data => {
-                            this.data = data;
-                            this.redirectService.redirect(this.data);
-                        }, error => { console.log('Error happened: ' + error); }
-                  );
+                      data => {
+                          if (data['success'] !== true) {
+                              console.log('Backend returned false, don\'t redirect.');
+                              return;
+                          }
+                          if (typeof(data['payload']['redirect']) !== 'string') {
+                              console.log('Backend returned no redirect, don\'t redirect.');
+                              return;
+                          }
+                          this.redirectService.redirect(data['payload']['redirect']);
+                      }, error => { console.log('Error happened: ' + error); }
+                 );
               }
             );
         }
