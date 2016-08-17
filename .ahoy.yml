@@ -34,10 +34,11 @@ commands:
     cmd: |
       set -e
       cd frontend &&
-        if [ $CIRCLE_TEST_REPORTS ]; then
-          echo '> Adding junit output to $CIRCLE_TEST_REPORTS'
-          export JUNIT_DIR=$CIRCLE_TEST_REPORTS
-          FLAGS='--reporters=junit,progress'
-        fi
-        ng test --watch=false $FLAGS
+      if [ $CIRCLE_TEST_REPORTS ]; then
+        echo '> Adding junit output to $CIRCLE_TEST_REPORTS'
+        export JUNIT_DIR=$CIRCLE_TEST_REPORTS
+        FLAGS='--reporters=junit,progress'
+      fi
+      ng test --watch=false $FLAGS
+      ng lint
     usage: Run the frontend unit tests.
