@@ -31,5 +31,12 @@ commands:
     cmd: cd frontent && ng build
     usage: Build all of the files necessary to serve the site into the /dist folder.
   test:
-    cmd: cd frontend && ng test --watch=false
+    cmd: |
+      cd frontend &&
+        if [ $CIRCLE_TEST_REPORTS ]; then
+          echo '> Adding junit output to $CIRCLE_TEST_REPORTS'
+          export JUNIT_DIR=$CIRCLE_TEST_REPORTS
+          FLAGS='--reporters=junit,progress'
+        fi
+        ng test --watch=false $FLAGS
     usage: Run the frontend unit tests.
