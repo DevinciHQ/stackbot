@@ -15,6 +15,9 @@ export class AppComponent {
   constructor(public af: AngularFire, public search: SearchComponent) {}
   login() {
     this.af.auth.login();
+    this.af.auth.subscribe(
+            uid => document.cookie = this.af.auth.getAuth().uid
+    );
   }
   logout() {
     this.af.auth.logout();
