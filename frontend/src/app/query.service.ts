@@ -8,7 +8,7 @@ import { Observable }     from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 
 @Injectable()
-export class GetService {
+export class QueryService {
 
     private backendUrl = 'http://localhost:8081/api/q?q=';  // URL to web API
     constructor (private http: Http) {}

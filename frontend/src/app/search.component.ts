@@ -1,14 +1,14 @@
 
 import { Component } from '@angular/core';
 import { Injectable } from '@angular/core';
-import { GetService } from './get.service';
+import { QueryService } from './query.service';
 import { RedirectService } from './redirect.service';
 import { AngularFire } from 'angularfire2';
 
 @Component({
     selector: 'search',
     templateUrl: './app/search.component.html',
-    providers: [GetService, RedirectService]
+    providers: [QueryService, RedirectService]
     // styleUrls: ['app.component.css']
 })
 
@@ -17,7 +17,7 @@ export class SearchComponent {
 
     private uid: String;
 
-    constructor(private getService: GetService, private redirectService: RedirectService, private af: AngularFire) {}
+    constructor(private getService: QueryService, private redirectService: RedirectService, private af: AngularFire) {}
 
     submit(searchField: string) {
         if (searchField !== '') {
