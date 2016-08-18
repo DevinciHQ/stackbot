@@ -7,10 +7,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class RedirectService {
 
-    redirect(redirectData) {
-        if (redirectData.success) {
-            window.location.href = redirectData.payload.redirect;
-        }
+    public redirect(href) {
+        window.location.href = href;
     }
-
 }

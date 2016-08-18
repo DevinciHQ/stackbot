@@ -2,7 +2,7 @@
  * Created by aashil on 8/15/16.
  */
 // import { SearchComponent } from './app/search.component'
-// import { GetService } from './app/get.service'
+// import { QueryService } from './app/get.service'
 import { RedirectService } from './app/redirect.service';
 
 
@@ -17,7 +17,7 @@ describe('1st tests', () => {
 describe('Submit', () => {
     let searchComponent: SearchComponent;
     beforeEach(() => {
-        searchComponent = new SearchComponent(new GetService, new RedirectService);
+        searchComponent = new SearchComponent(new QueryService, new RedirectService);
     });
     spyOn(this.searchComponent, "submit");
     it("Submit method has been called",

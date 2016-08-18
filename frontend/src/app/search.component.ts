@@ -1,47 +1,29 @@
 
 import { Component } from '@angular/core';
 import { Injectable } from '@angular/core';
-import { GetService } from './get.service';
-import { RedirectService } from './redirect.service';
-import { AngularFire } from 'angularfire2';
+import { QueryService } from './query.service';
 
 @Component({
     selector: 'search',
     templateUrl: './app/search.component.html',
-    providers: [GetService, RedirectService]
+    providers: [QueryService]
     // styleUrls: ['app.component.css']
 })
 
 @Injectable()
 export class SearchComponent {
 
-    private data: any;
-    private uid: String;
-
-    constructor(private getService: GetService, private redirectService: RedirectService, private af: AngularFire) {}
+    constructor(private queryService: QueryService) {}
 
     submit(searchField: string) {
         if (searchField !== '') {
-
-            this.af.auth.subscribe(
-              auth => {
-                  if (auth != null) {
-                      this.uid = auth.uid;
-                  }
-                  this.getService.getUrl(searchField, this.uid).subscribe(
-                        data => {
-                            this.data = data;
-                            this.redirectService.redirect(this.data);
-                        }, error => { console.log('Error happened: ' + error); }
-                  );
-              }
-            );
+            this.queryService.doQuery(searchField);
         }
     }
 
     onPressEnter(e, searchField) {
         if (e.keyCode === 13 && searchField !== '') {
-            this.submit(searchField);
+            this.queryService.doQuery(searchField);
         }
     }
 }
