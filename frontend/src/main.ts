@@ -1,11 +1,10 @@
 import {bootstrap} from '@angular/platform-browser-dynamic';
 import {enableProdMode} from '@angular/core';
-import {AppComponent, SearchComponent, QueryService, RedirectService, environment} from './app/';
+import {AppComponent, SearchComponent, ReportComponent, QueryService, RedirectService, environment} from './app/';
 import {HTTP_PROVIDERS} from '@angular/http';
 import {
     FIREBASE_PROVIDERS,
     defaultFirebase,
-    AngularFire,
     AuthMethods,
     AuthProviders,
     firebaseAuthConfig
@@ -18,7 +17,6 @@ if (environment.production) {
 bootstrap(AppComponent, [
     HTTP_PROVIDERS,
     FIREBASE_PROVIDERS,
-    AngularFire,
     // Initialize Firebase app
     defaultFirebase({
         apiKey: 'AIzaSyAaNBeWn34_1EsK2fM8oB2TAD37j7tuRCk',
@@ -31,6 +29,7 @@ bootstrap(AppComponent, [
         method: AuthMethods.Redirect
     }),
     SearchComponent,
+    ReportComponent,
     QueryService,
-    RedirectService
+    RedirectService,
 ]);
