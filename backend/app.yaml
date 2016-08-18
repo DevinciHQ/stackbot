@@ -4,8 +4,5 @@ api_version: 1
 threadsafe: true
 
 handlers:
-- url: /api/q
-  script: main.app
-
-- url: /
+- url: (.*)
   script: main.app
