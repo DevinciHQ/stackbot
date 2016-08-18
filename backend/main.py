@@ -116,7 +116,8 @@ class ReportHandler(webapp2.RequestHandler):
         uid = self.request.get('uid', "")
         logging.debug("This is uid:" + uid)
         #https://cloud.google.com/appengine/docs/python/ndb/queries#properties_by_string
-        result = Query.query(ndb.GenericProperty('uid') == uid)
+        #https://cloud.google.com/appengine/docs/python/ndb/queries#cursors
+        result = Query.query(ndb.GenericProperty('uid') == uid).order(-ndb.GenericProperty('timestamp'))
         data = []
         for query in result:
             # This is annoying.. maybe we should use another word instead of query?
@@ -131,7 +132,6 @@ class ReportHandler(webapp2.RequestHandler):
             q.pop('city', None)
             data.append(q)
 
-        data = sorted(data, key=lambda k: k['timestamp']).reverse()
         if len(data) > 20:
             data = data[:20]
 
