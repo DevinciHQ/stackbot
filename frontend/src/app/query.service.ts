@@ -27,15 +27,14 @@ export class QueryService {
     }
 
     // Save the search query and get the JSON response (which also contains link to redirect) in return.
-    public doQuery(query: string) {
-        this._backendRequest('/api/q', {q: query }).subscribe(
-            data => {
-                // If when data is returned from a query with a redirect set, do the redirect.
-                if (data['redirect']) {
-                    this._redirect(data['redirect']);
-                }
-            }
-        );
+
+    /**
+     *
+     * @param query
+     * @returns {Observable<Object>}
+     */
+    public doQuery(query: string): Observable<Object> {
+        return this._backendRequest('/api/q', {q: query });
     }
 
     // Get the search history as a JSON response.
@@ -47,14 +46,15 @@ export class QueryService {
 
     // Extract the JSON data from the response object.
     private _backendRequest(endpoint: string, data: { [ key: string ]: string; }): Observable<Object> {
+
         let getParams: string[] = [];
 
-        if (this.uid !== undefined) {
+        if (this.uid !== null) {
             data['uid'] = this.uid;
         }
         let requestUrl = this.backendUrl + endpoint;
         Object.keys(data).forEach(function(key) {
-            getParams.push(encodeURI(key) + '=' + encodeURI(data[key]));
+            getParams.push(encodeURIComponent(key) + '=' + encodeURIComponent(data[key]));
         });
         if (getParams) {
             requestUrl += '?' + getParams.join('&');
@@ -63,10 +63,6 @@ export class QueryService {
         return this.http.get(requestUrl)
                 .map(this._extractData)
                 .catch(this._handleError);
-    }
-
-    private _redirect(href) {
-        window.location = href;
     }
 
     /**

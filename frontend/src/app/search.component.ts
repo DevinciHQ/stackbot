@@ -17,13 +17,28 @@ export class SearchComponent {
 
     submit(searchField: string) {
         if (searchField !== '') {
-            this.queryService.doQuery(searchField);
+          this.doSearch(searchField)  ;
         }
     }
 
     onPressEnter(e, searchField) {
         if (e.keyCode === 13 && searchField !== '') {
-            this.queryService.doQuery(searchField);
+            this.doSearch(searchField);
         }
+    }
+
+    doSearch(searchField) {
+        this.queryService.doQuery(searchField).subscribe(
+            data => {
+                // If when data is returned from a query with a redirect set, do the redirect.
+                if (data['redirect']) {
+                    this._redirect(data['redirect']);
+                }
+            }
+        );
+    }
+
+    private _redirect(href) {
+        window.location = href;
     }
 }
