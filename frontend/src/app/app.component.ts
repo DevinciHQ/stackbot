@@ -17,12 +17,14 @@ export class AppComponent {
     this.af.auth.login();
     this.af.auth.subscribe(
       auth => {
-        if(auth != null) document.cookie = 'uid='+auth.uid
+        if (auth != null) {
+          document.cookie = 'uid=' + auth.uid;
+        }
       }
     );
   }
   logout() {
     this.af.auth.logout();
-    document.cookie = "uid=;"+"expires=Thu, 01 Jan 1970 00:00:01 GMT";
+    document.cookie = 'uid=;"+"expires=Thu, 01 Jan 1970 00:00:01 GMT';
   }
 }

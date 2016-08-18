@@ -38,6 +38,13 @@ export class QueryService {
         );
     }
 
+    // Get the search history as a JSON response.
+    public getQueries() {
+        if (this.uid !== undefined) {
+            return this._backendRequest('/api/report', {});
+        }
+    }
+
     // Extract the JSON data from the response object.
     private _backendRequest(endpoint: string, data: { [ key: string ]: string; }): Observable<Object> {
         let getParams: string[] = [];
