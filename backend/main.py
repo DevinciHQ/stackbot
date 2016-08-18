@@ -98,9 +98,44 @@ class QueryHandler(webapp2.RequestHandler):
             }
             self.response.out.write(json.dumps(output))
 
+
+class ReportHandler(webapp2.RequestHandler):
+
+    def options(self):
+        # Output CORS headers for non-GET requests (json data POSTS)
+        self.response.headers['Access-Control-Allow-Origin'] = '*'
+        self.response.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
+        self.response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
+
+    def get(self):
+        # Output CORS headers for GET requests
+        self.response.headers['Access-Control-Allow-Origin'] = '*'
+        self.response.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
+        self.response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
+
+        uid = self.request.get('uid', "")
+        logging.debug("This is uid:" + uid)
+        #https://cloud.google.com/appengine/docs/python/ndb/queries#properties_by_string
+        #https://cloud.google.com/appengine/docs/python/ndb/queries#cursors
+        result = ndb.gql("SELECT query, timestamp FROM Query WHERE uid = :1 ORDER BY timestamp DESC LIMIT 20", uid)
+        data = []
+        for query in result:
+            # This is annoying.. maybe we should use another word instead of query?
+            # We couldn't use 'query.query' like we can for other values because that's a reserved word?
+            q = query._to_dict()
+            data.append(q)
+
+        output = {
+            'success': True,
+            'payload': data
+        }
+        self.response.out.write(json.dumps(output))
+
+
 # Actually run the webserver and accept requests.
 app = webapp2.WSGIApplication([
-    ('/api/q', QueryHandler),
+    ('/api/q',QueryHandler),
+    ('/api/report', ReportHandler)
 ], debug=True)
 
 

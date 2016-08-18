@@ -6,6 +6,9 @@ commands:
     cmd: |
       cd frontend && ng build --watch=true &
       dev_appserver.py --skip_sdk_update_check=true frontend backend
+  front-build:
+    usage: build the frontend files.
+    cmd: cd frontend && ng build --watch=true &
   pip-install:
     usage: python pip, but locally vendored.
     cmd: cd backend && pip install -t lib {{args}}
