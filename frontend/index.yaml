@@ -14,6 +14,20 @@ indexes:
   properties:
   - name: uid
   - name: timestamp
+    direction: desc
+  - name: query
+
+- kind: Query
+  properties:
+  - name: uid
+  - name: DESC
+  - name: query
+  - name: timestamp
+
+- kind: Query
+  properties:
+  - name: uid
+  - name: timestamp
 
 - kind: Query
   properties:

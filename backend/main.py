@@ -117,23 +117,13 @@ class ReportHandler(webapp2.RequestHandler):
         logging.debug("This is uid:" + uid)
         #https://cloud.google.com/appengine/docs/python/ndb/queries#properties_by_string
         #https://cloud.google.com/appengine/docs/python/ndb/queries#cursors
-        result = Query.query(ndb.GenericProperty('uid') == uid).order(-ndb.GenericProperty('timestamp'))
+        result = ndb.gql("SELECT query, timestamp FROM Query WHERE uid ='" + uid + "' ORDER BY timestamp DESC LIMIT 20")
         data = []
         for query in result:
             # This is annoying.. maybe we should use another word instead of query?
             # We couldn't use 'query.query' like we can for other values because that's a reserved word?
             q = query._to_dict()
-            q.pop('uid', None)
-            q.pop('ip', None)
-            q.pop('city_lat_long', None)
-            q.pop('browser', None)
-            q.pop('os', None)
-            q.pop('country', None)
-            q.pop('city', None)
             data.append(q)
-
-        if len(data) > 20:
-            data = data[:20]
 
         output = {
             'success': True,
