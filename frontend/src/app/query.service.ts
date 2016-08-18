@@ -2,7 +2,7 @@
 import { Injectable }     from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Observable }     from 'rxjs/Observable';
-import { AngularFire } from 'angularfire2';
+import { AngularFireAuth } from 'angularfire2';
 import 'rxjs/add/operator/catch';
 
 @Injectable()
@@ -11,14 +11,14 @@ export class QueryService {
     private uid: string = null;
     private backendUrl = 'http://localhost:8081';  // URL to web API
 
-    constructor (private http: Http, private af: AngularFire) {
+    constructor (private http: Http, private auth: AngularFireAuth) {
 
         // Subscribe to the authentication events of angularfire2 so we can update
         // our local version of the UID when appropriate.
-        this.af.auth.subscribe(
-            auth => {
-                if (auth != null) {
-                    this.uid = auth.uid;
+        this.auth.subscribe(
+            authEvent => {
+                if (authEvent != null) {
+                    this.uid = authEvent.uid;
                 } else {
                     this.uid = null;
                 }
