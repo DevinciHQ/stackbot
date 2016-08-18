@@ -15,21 +15,21 @@ if (environment.production) {
 }
 
 bootstrap(AppComponent, [
-  HTTP_PROVIDERS,
-  FIREBASE_PROVIDERS,
-  // Initialize Firebase app
-  defaultFirebase({
-    apiKey: 'AIzaSyAaNBeWn34_1EsK2fM8oB2TAD37j7tuRCk',
-    authDomain: 'devinci-stackbot.firebaseapp.com',
-    databaseURL: 'https://devinci-stackbot.firebaseio.com',
-    storageBucket: 'devinci-stackbot.appspot.com',
-  }),
-  firebaseAuthConfig({
-    provider: AuthProviders.Github,
-    method: AuthMethods.Redirect
-  }),
-  SearchComponent,
-  ReportComponent,
-  QueryService,
-  RedirectService,
+    HTTP_PROVIDERS,
+    FIREBASE_PROVIDERS,
+    // Initialize Firebase app
+    defaultFirebase({
+        apiKey: 'AIzaSyAaNBeWn34_1EsK2fM8oB2TAD37j7tuRCk',
+        authDomain: 'devinci-stackbot.firebaseapp.com',
+        databaseURL: 'https://devinci-stackbot.firebaseio.com',
+        storageBucket: 'devinci-stackbot.appspot.com',
+    }),
+    firebaseAuthConfig({
+        provider: AuthProviders.Github,
+        method: AuthMethods.Redirect
+    }),
+    SearchComponent,
+    ReportComponent,
+    QueryService,
+    RedirectService,
 ]);
