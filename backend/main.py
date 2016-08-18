@@ -117,7 +117,7 @@ class ReportHandler(webapp2.RequestHandler):
         logging.debug("This is uid:" + uid)
         #https://cloud.google.com/appengine/docs/python/ndb/queries#properties_by_string
         #https://cloud.google.com/appengine/docs/python/ndb/queries#cursors
-        result = ndb.gql("SELECT query, timestamp FROM Query WHERE uid ='" + uid + "' ORDER BY timestamp DESC LIMIT 20")
+        result = ndb.gql("SELECT query, timestamp FROM Query WHERE uid = :1 ORDER BY timestamp DESC LIMIT 20", uid)
         data = []
         for query in result:
             # This is annoying.. maybe we should use another word instead of query?
