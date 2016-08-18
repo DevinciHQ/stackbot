@@ -115,12 +115,28 @@ class ReportHandler(webapp2.RequestHandler):
 
         uid = self.request.get('uid', "")
         logging.debug("This is uid:" + uid)
-        #https: // cloud.google.com / appengine / docs / python / ndb / queries  # properties_by_string
+        #https://cloud.google.com/appengine/docs/python/ndb/queries#properties_by_string
         result = Query.query(ndb.GenericProperty('uid') == uid)
-        for key in result:
-            print(key)
+        data = []
+        for query in result:
+            # This is annoying.. maybe we should use another word instead of query?
+            # We couldn't use 'query.query' like we can for other values because that's a reserved word?
+            q = query._to_dict()
+            q.pop('uid', None)
+            q.pop('ip', None)
+            q.pop('city_lat_long', None)
+            q.pop('browser', None)
+            q.pop('os', None)
+            q.pop('country', None)
+            q.pop('city', None)
+            data.append(q)
 
-        self.response.out.write("")
+        data = sorted(data, key=lambda k: k['timestamp'])
+        output = {
+            'success': True,
+            'payload': data
+        }
+        self.response.out.write(json.dumps(output))
 
 
 # Actually run the webserver and accept requests.
