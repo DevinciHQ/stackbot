@@ -131,7 +131,10 @@ class ReportHandler(webapp2.RequestHandler):
             q.pop('city', None)
             data.append(q)
 
-        data = sorted(data, key=lambda k: k['timestamp'])
+        data = sorted(data, key=lambda k: k['timestamp']).reverse()
+        if len(data) > 20:
+            data = data[:20]
+
         output = {
             'success': True,
             'payload': data
