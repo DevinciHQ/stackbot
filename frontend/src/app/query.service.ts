@@ -54,7 +54,7 @@ export class QueryService {
         }
         let requestUrl = this.backendUrl + endpoint;
         Object.keys(data).forEach(function(key) {
-            getParams.push(key + '=' + data[key]);
+            getParams.push(encodeURI(key) + '=' + encodeURI(data[key]));
         });
         if (getParams) {
             requestUrl += '?' + getParams.join('&');
