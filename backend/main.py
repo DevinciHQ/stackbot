@@ -20,7 +20,17 @@ import urllib
 # For use when dealing with the datastore.
 from google.appengine.ext import ndb
 from user_agents import parse as parseUA
-import logging
+import logging, os
+
+
+# Set a flag for what environment we're in.
+if os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine/'):
+    # Running on Google AppEngine
+    env = 'production'
+else:
+    # Running locally using dev_appserver.py
+    env = 'local'
+
 
 # A simple Datastore Entity that takes any values (good for development)
 # See https://cloud.google.com/appengine/docs/python/ndb/creating-entity-models

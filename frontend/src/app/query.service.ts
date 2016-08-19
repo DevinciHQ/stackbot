@@ -13,6 +13,11 @@ export class QueryService {
 
     constructor (private http: Http, private auth: AngularFireAuth) {
 
+        if (window.location.hostname.endsWith('stackbot.com')) {
+            // Use the production backend when serving from the live site.
+            this.backendUrl = 'backend-devinci-stackbot.appspot.com';
+        }
+
         // Subscribe to the authentication events of angularfire2 so we can update
         // our local version of the UID when appropriate.
         this.auth.subscribe(
