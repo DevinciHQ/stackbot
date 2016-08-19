@@ -4,7 +4,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { QueryService } from './query.service';
-import { AngularFire } from 'angularfire2';
+import { AngularFireAuth } from 'angularfire2';
 
 @Component({
     selector: 'report',
@@ -16,11 +16,11 @@ export class ReportComponent implements OnInit {
 
     private data: any;
 
-    constructor(private queryService: QueryService, private af: AngularFire) {}
+    constructor(private queryService: QueryService, private auth: AngularFireAuth) {}
 
     ngOnInit() {
 
-        this.af.auth.subscribe(
+        this.auth.subscribe(
             auth => {
                 if (auth != null) {
                     this.queryService.getQueries().subscribe(
@@ -29,6 +29,8 @@ export class ReportComponent implements OnInit {
                         }, error => { console.log('Error happened: ' + error);
                         }
                     );
+                } else {
+                    this.data = null;
                 }
             }
         );
