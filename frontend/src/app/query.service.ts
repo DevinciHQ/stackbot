@@ -2,7 +2,7 @@
 import { Injectable }     from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Observable }     from 'rxjs/Observable';
-import { AngularFire } from 'angularfire2';
+import { AngularFireAuth } from 'angularfire2';
 import 'rxjs/add/operator/catch';
 
 @Injectable()
@@ -11,14 +11,14 @@ export class QueryService {
     private uid: string = null;
     private backendUrl = 'http://localhost:8081';  // URL to web API
 
-    constructor (private http: Http, private af: AngularFire) {
+    constructor (private http: Http, private auth: AngularFireAuth) {
 
         // Subscribe to the authentication events of angularfire2 so we can update
         // our local version of the UID when appropriate.
-        this.af.auth.subscribe(
-            auth => {
-                if (auth != null) {
-                    this.uid = auth.uid;
+        this.auth.subscribe(
+            authEvent => {
+                if (authEvent != null) {
+                    this.uid = authEvent.uid;
                 } else {
                     this.uid = null;
                 }
@@ -27,15 +27,14 @@ export class QueryService {
     }
 
     // Save the search query and get the JSON response (which also contains link to redirect) in return.
-    public doQuery(query: string) {
-        this._backendRequest('/api/q', {q: query }).subscribe(
-            data => {
-                // If when data is returned from a query with a redirect set, do the redirect.
-                if (data['redirect']) {
-                    this._redirect(data['redirect']);
-                }
-            }
-        );
+
+    /**
+     *
+     * @param query
+     * @returns {Observable<Object>}
+     */
+    public doQuery(query: string): Observable<Object> {
+        return this._backendRequest('/api/q', {q: query });
     }
 
     // Get the search history as a JSON response.
@@ -47,14 +46,15 @@ export class QueryService {
 
     // Extract the JSON data from the response object.
     private _backendRequest(endpoint: string, data: { [ key: string ]: string; }): Observable<Object> {
+
         let getParams: string[] = [];
 
-        if (this.uid !== undefined) {
+        if (this.uid !== null) {
             data['uid'] = this.uid;
         }
         let requestUrl = this.backendUrl + endpoint;
         Object.keys(data).forEach(function(key) {
-            getParams.push(key + '=' + data[key]);
+            getParams.push(encodeURIComponent(key) + '=' + encodeURIComponent(data[key]));
         });
         if (getParams) {
             requestUrl += '?' + getParams.join('&');
@@ -63,10 +63,6 @@ export class QueryService {
         return this.http.get(requestUrl)
                 .map(this._extractData)
                 .catch(this._handleError);
-    }
-
-    private _redirect(href) {
-        window.location = href;
     }
 
     /**
