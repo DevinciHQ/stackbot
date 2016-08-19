@@ -49,11 +49,10 @@ def get_geo_data(request):
     return geo
 
 # Return the object after setting the CORS header.
-def get_CORS_Header(obj):
+def set_cors_header(obj):
     obj.response.headers['Access-Control-Allow-Origin'] = '*'
     obj.response.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
     obj.response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
-    return obj
 
 # This handles the incoming request and creates a Query entity if a query string
 # was passed.
@@ -61,7 +60,7 @@ class QueryHandler(webapp2.RequestHandler):
 
     def options(self):
             # Set CORS headers for non-GET requests (json data POSTS)
-            get_CORS_Header(self)
+            set_cors_header(self)
 
 
     def get(self):
@@ -69,7 +68,7 @@ class QueryHandler(webapp2.RequestHandler):
         # Make sure the length of the query string is at least 1 char.
         if len(q) > 0:
             # Set CORS headers for GET requests
-            get_CORS_Header(self)
+            set_cors_header(self)
 
             # Get the user-agent header from the request.
             userAgent = parseUA(self.request.headers['User-Agent'])
@@ -117,11 +116,11 @@ class ReportHandler(webapp2.RequestHandler):
 
     def options(self):
         # Set CORS headers for non-GET requests (json data POSTS)
-        get_CORS_Header(self)
+        set_cors_header(self)
 
     def get(self):
         # Set CORS headers for GET requests
-        get_CORS_Header(self)
+        set_cors_header(self)
 
         uid = jwt.decode(self.request.headers['Authorization'], 'secret', algorithms=['HS256'])['bearer']
         logging.debug("This is uid:" + uid)
@@ -144,7 +143,7 @@ class ReportHandler(webapp2.RequestHandler):
 
 class TokenHandler(webapp2.RequestHandler):
     def get(self):
-        get_CORS_Header(self)
+        set_cors_header(self)
         print jwt.decode(self.request.headers['Authorization'], 'secret', algorithms=['HS256'])['bearer']
 
 
