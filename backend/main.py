@@ -48,25 +48,28 @@ def get_geo_data(request):
     geo['city_lat_long'] = request.headers.get("X-AppEngine-CityLatLong", "unknown")
     return geo
 
+# Return the object after setting the CORS header.
+def get_CORS_Header(obj):
+    obj.response.headers['Access-Control-Allow-Origin'] = '*'
+    obj.response.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
+    obj.response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
+    return obj
 
 # This handles the incoming request and creates a Query entity if a query string
 # was passed.
 class QueryHandler(webapp2.RequestHandler):
 
     def options(self):
-            # Output CORS headers for non-GET requests (json data POSTS)
-            self.response.headers['Access-Control-Allow-Origin'] = '*'
-            self.response.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
-            self.response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
+            # Set CORS headers for non-GET requests (json data POSTS)
+            get_CORS_Header(self)
+
 
     def get(self):
         q = self.request.get('q')
         # Make sure the length of the query string is at least 1 char.
         if len(q) > 0:
-            # Output CORS headers for GET requests
-            self.response.headers['Access-Control-Allow-Origin'] = '*'
-            self.response.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
-            self.response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
+            # Set CORS headers for GET requests
+            get_CORS_Header(self)
 
             # Get the user-agent header from the request.
             userAgent = parseUA(self.request.headers['User-Agent'])
@@ -113,16 +116,12 @@ class QueryHandler(webapp2.RequestHandler):
 class ReportHandler(webapp2.RequestHandler):
 
     def options(self):
-        # Output CORS headers for non-GET requests (json data POSTS)
-        self.response.headers['Access-Control-Allow-Origin'] = '*'
-        self.response.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
-        self.response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
+        # Set CORS headers for non-GET requests (json data POSTS)
+        get_CORS_Header(self)
 
     def get(self):
-        # Output CORS headers for GET requests
-        self.response.headers['Access-Control-Allow-Origin'] = '*'
-        self.response.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
-        self.response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
+        # Set CORS headers for GET requests
+        get_CORS_Header(self)
 
         uid = self.request.get('uid', "")
         logging.debug("This is uid:" + uid)
