@@ -4,11 +4,11 @@ commands:
   up:
     usage: run stackbot locally.
     cmd: |
-      cd frontend && ng build --watch=true &
-      dev_appserver.py --skip_sdk_update_check=true frontend backend
+      cd default && ng build --watch=true &
+      dev_appserver.py --skip_sdk_update_check=true default backend
   front-build:
     usage: build the frontend files.
-    cmd: cd frontend && ng build --watch=true &
+    cmd: cd default && ng build --watch=true &
   pip-install:
     usage: python pip, but locally vendored.
     cmd: cd backend && pip install -t lib {{args}}
@@ -22,7 +22,7 @@ commands:
     usage: Load and install all dependencies.
     cmd: |
       npm install -g angular-cli typings
-      cd frontend
+      cd default
       npm install
       typings install
   deps-backend:
@@ -31,12 +31,12 @@ commands:
       cd backend &&
       ahoy pip-install -- -r requirements.txt
   build:
-    cmd: cd frontend && ng build
+    cmd: cd default && ng build
     usage: Build all of the files necessary to serve the site into the /dist folder.
   test:
     cmd: |
       set -e
-      cd frontend &&
+      cd default &&
       if [ $CIRCLE_TEST_REPORTS ]; then
         echo '> Adding junit output to $CIRCLE_TEST_REPORTS'
         export JUNIT_DIR=$CIRCLE_TEST_REPORTS
