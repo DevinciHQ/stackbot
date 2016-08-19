@@ -26,7 +26,7 @@ bootstrap(AppComponent, [
     }),
     firebaseAuthConfig({
         provider: AuthProviders.Github,
-        method: AuthMethods.Redirect
+        method: AuthMethods.Popup
     }),
     SearchComponent,
     ReportComponent,
