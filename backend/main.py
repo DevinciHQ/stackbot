@@ -16,6 +16,7 @@ import webapp2
 import datetime
 import json
 import urllib
+import jwt
 
 # For use when dealing with the datastore.
 from google.appengine.ext import ndb
@@ -142,10 +143,16 @@ class ReportHandler(webapp2.RequestHandler):
         self.response.out.write(json.dumps(output))
 
 
+class TokenHandler(webapp2.RequestHandler):
+    def get(self):
+        print jwt.decode(self.request.get('token'), 'secret', algorithms=['HS256'])
+
+
 # Actually run the webserver and accept requests.
 app = webapp2.WSGIApplication([
     ('/api/q',QueryHandler),
-    ('/api/report', ReportHandler)
+    ('/api/report', ReportHandler),
+    ('/api/token', TokenHandler)
 ], debug=True)
 
 
