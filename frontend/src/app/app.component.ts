@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { AngularFire } from 'angularfire2';
 import { SearchComponent } from './search.component';
 import { ReportComponent } from './report.component';
+import { AuthButtonComponent } from './auth.button.component';
 
 
 @Component({
@@ -9,14 +9,7 @@ import { ReportComponent } from './report.component';
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.css'],
-  directives: [SearchComponent, ReportComponent]
+  directives: [SearchComponent, ReportComponent, AuthButtonComponent]
 })
 export class AppComponent {
-  constructor(public af: AngularFire, public search: SearchComponent) {}
-  login() {
-    this.af.auth.login();
-  }
-  logout() {
-    this.af.auth.logout();
-  }
 }
