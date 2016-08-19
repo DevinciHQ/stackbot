@@ -29,6 +29,8 @@ export class ReportComponent implements OnInit {
                         }, error => { console.log('Error happened: ' + error);
                         }
                     );
+                } else {
+                    this.data = null;
                 }
             }
         );
