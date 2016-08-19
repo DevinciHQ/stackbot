@@ -50,17 +50,21 @@ def get_geo_data(request):
 
 # Return the object after setting the CORS header.
 def set_cors_header(obj):
-    obj.response.headers['Access-Control-Allow-Origin'] = '*'
-    obj.response.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
+    if env == 'local':
+        obj.response.headers['Access-Control-Allow-Origin'] = 'http://localhost:8080'
+    else:
+        obj.response.headers['Access-Control-Allow-Origin'] = 'https://www.stackbot.com/'
+    obj.response.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
     obj.response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
+    obj.response.headers['Access-Control-Allow-Credentials'] = 'true';
 
 # This handles the incoming request and creates a Query entity if a query string
 # was passed.
 class QueryHandler(webapp2.RequestHandler):
 
     def options(self):
-            # Set CORS headers for non-GET requests (json data POSTS)
-            set_cors_header(self)
+        # Set CORS headers for non-GET requests (json data POSTS)
+        set_cors_header(self)
 
 
     def get(self):
@@ -77,39 +81,47 @@ class QueryHandler(webapp2.RequestHandler):
             geo = get_geo_data(self.request)
             logging.debug('geo', geo)
 
-            # Create a new Query entity from the q value.
-            # TODO: Add the other values that we want from the request headers.
-            query = Query(
-                query=q,
-                os=str(userAgent.os.family) + " Version: " + str(userAgent.os.version_string),
-                browser=str(userAgent.browser.family),
-                timestamp=datetime.datetime.utcnow().isoformat(),
-                country=geo['country'],
-                city=geo['city'],
-                city_lat_long=geo['city_lat_long'],
-                ip=self.request.remote_addr,
-                uid=jwt.decode(self.request.headers['Authorization'], 'secret', algorithms=['HS256'])['bearer']
-            )
-            # Save to the datatore.
-            query.put()
-            # Output some debug messages for now.
-            # TODO: Redirect to google.
-            logging.info('Saved')
-            logging.debug('query: %s', str(q))
+            header_data = self.request.headers['Authorization'].split(" ")
+            if header_data[0] == 'Bearer':
+                try:
+                    token_data = jwt.decode(header_data[1], 'secret', algorithms=['HS256'])
+                    # Create a new Query entity from the q value.
+                    # TODO: Add the other values that we want from the request headers.
+                    query = Query(
+                        query=q,
+                        os=str(userAgent.os.family) + " Version: " + str(userAgent.os.version_string),
+                        browser=str(userAgent.browser.family),
+                        timestamp=datetime.datetime.utcnow().isoformat(),
+                        country=geo['country'],
+                        city=geo['city'],
+                        city_lat_long=geo['city_lat_long'],
+                        ip=self.request.remote_addr,
+                        uid=token_data['d']
+                    )
+                    # Save to the datatore.
+                    query.put()
+                    # Output some debug messages for now.
+                    # TODO: Redirect to google.
+                    logging.info('Saved')
+                    logging.debug('query: %s', str(q))
 
-            escaped_q = urllib.urlencode({'q': q})
-            redirect = 'http://google.com/#' + escaped_q
+                    escaped_q = urllib.urlencode({'q': q})
+                    redirect = 'http://google.com/#' + escaped_q
 
-            # Output for when we first land on the page (or when no query was entered)
-            self.response.headers['Content-Type'] = 'application/json'
-            payload = {
-                'redirect': redirect
-            }
-            output = {
-                'success': True,
-                'payload': payload,
-            }
-            self.response.out.write(json.dumps(output))
+                    # Output for when we first land on the page (or when no query was entered)
+                    self.response.headers['Content-Type'] = 'application/json'
+                    payload = {
+                        'redirect': redirect
+                    }
+                    output = {
+                        'success': True,
+                        'payload': payload,
+                    }
+                    self.response.out.write(json.dumps(output))
+                except jwt.ExpiredSignatureError:
+                    print "expired"
+
+
 
 
 class ReportHandler(webapp2.RequestHandler):
@@ -122,30 +134,40 @@ class ReportHandler(webapp2.RequestHandler):
         # Set CORS headers for GET requests
         set_cors_header(self)
 
-        uid = jwt.decode(self.request.headers['Authorization'], 'secret', algorithms=['HS256'])['bearer']
-        logging.debug("This is uid:" + uid)
-        #https://cloud.google.com/appengine/docs/python/ndb/queries#properties_by_string
-        #https://cloud.google.com/appengine/docs/python/ndb/queries#cursors
-        result = ndb.gql("SELECT query, timestamp FROM Query WHERE uid = :1 ORDER BY timestamp DESC LIMIT 20", uid)
-        data = []
-        for query in result:
-            # This is annoying.. maybe we should use another word instead of query?
-            # We couldn't use 'query.query' like we can for other values because that's a reserved word?
-            q = query._to_dict()
-            data.append(q)
+        header_data = self.request.headers['Authorization'].split(" ")
 
-        output = {
-            'success': True,
-            'payload': data
-        }
-        self.response.out.write(json.dumps(output))
+        if header_data[0] == 'Bearer':
+            try:
+                token_data = jwt.decode(header_data[1], 'secret', algorithms=['HS256'])
+                # https://cloud.google.com/appengine/docs/python/ndb/queries#properties_by_string
+                # https://cloud.google.com/appengine/docs/python/ndb/queries#cursors
+                result = ndb.gql("SELECT query, timestamp FROM Query WHERE uid = :1 ORDER BY timestamp DESC LIMIT 20",
+                                 token_data['d'])
+                data = []
+                for query in result:
+                    # This is annoying.. maybe we should use another word instead of query?
+                    # We couldn't use 'query.query' like we can for other values because that's a reserved word?
+                    q = query._to_dict()
+                    data.append(q)
 
+                output = {
+                    'success': True,
+                    'payload': data
+                }
+                self.response.out.write(json.dumps(output))
+            except jwt.ExpiredSignatureError:
+                print "expired"
 
 class TokenHandler(webapp2.RequestHandler):
     def get(self):
         set_cors_header(self)
-        print jwt.decode(self.request.headers['Authorization'], 'secret', algorithms=['HS256'])['bearer']
-
+        header_data = self.request.headers['Authorization'].split(" ")
+        if header_data[0] == 'Bearer':
+            try:
+                token_data = jwt.decode(header_data[1], 'secret', algorithms=['HS256'])
+                print token_data['exp']
+            except jwt.ExpiredSignatureError:
+                print "expired"
 
 # Actually run the webserver and accept requests.
 app = webapp2.WSGIApplication([
