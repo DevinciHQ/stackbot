@@ -89,7 +89,7 @@ class QueryHandler(webapp2.RequestHandler):
                 city=geo['city'],
                 city_lat_long=geo['city_lat_long'],
                 ip=self.request.remote_addr,
-                uid=self.request.get('uid', None)
+                uid=jwt.decode(self.request.headers['Authorization'], 'secret', algorithms=['HS256'])['bearer']
             )
             # Save to the datatore.
             query.put()
@@ -123,7 +123,7 @@ class ReportHandler(webapp2.RequestHandler):
         # Set CORS headers for GET requests
         get_CORS_Header(self)
 
-        uid = self.request.get('uid', "")
+        uid = jwt.decode(self.request.headers['Authorization'], 'secret', algorithms=['HS256'])['bearer']
         logging.debug("This is uid:" + uid)
         #https://cloud.google.com/appengine/docs/python/ndb/queries#properties_by_string
         #https://cloud.google.com/appengine/docs/python/ndb/queries#cursors
@@ -144,7 +144,8 @@ class ReportHandler(webapp2.RequestHandler):
 
 class TokenHandler(webapp2.RequestHandler):
     def get(self):
-        print jwt.decode(self.request.get('token'), 'secret', algorithms=['HS256'])
+        get_CORS_Header(self)
+        print jwt.decode(self.request.headers['Authorization'], 'secret', algorithms=['HS256'])['bearer']
 
 
 # Actually run the webserver and accept requests.
