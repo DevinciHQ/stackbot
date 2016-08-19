@@ -4,5 +4,6 @@
 .DS_Store
 typings
 node_modules
-frontend/dist
-frontend/tmp
+default/dist
+default/tmp
+default/index.yaml
