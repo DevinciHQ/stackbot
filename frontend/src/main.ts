@@ -1,6 +1,6 @@
 import {bootstrap} from '@angular/platform-browser-dynamic';
 import {enableProdMode} from '@angular/core';
-import {AppComponent, SearchComponent, ReportComponent, QueryService, RedirectService, environment} from './app/';
+import {AppComponent, SearchComponent, ReportComponent, AuthButtonComponent, QueryService, RedirectService, environment} from './app/';
 import {HTTP_PROVIDERS} from '@angular/http';
 import {
     FIREBASE_PROVIDERS,
@@ -30,6 +30,7 @@ bootstrap(AppComponent, [
     }),
     SearchComponent,
     ReportComponent,
+    AuthButtonComponent,
     QueryService,
     RedirectService,
 ]);
