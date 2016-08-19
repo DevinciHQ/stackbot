@@ -2,7 +2,7 @@
  * Created by aashil on 8/12/16.
  */
 
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { QueryService } from './query.service';
 import { AngularFireAuth } from 'angularfire2';
 
@@ -12,17 +12,14 @@ import { AngularFireAuth } from 'angularfire2';
     providers: [QueryService]
 })
 
-export class ReportComponent implements OnInit {
+export class ReportComponent {
 
     private data: any;
 
-    constructor(private queryService: QueryService, private auth: AngularFireAuth) {}
-
-    ngOnInit() {
-
+    constructor(private queryService: QueryService, private auth: AngularFireAuth) {
         this.auth.subscribe(
-            auth => {
-                if (auth != null) {
+            authentication => {
+                if (authentication != null) {
                     this.queryService.getQueries().subscribe(
                         data => {
                             this.data = data;
