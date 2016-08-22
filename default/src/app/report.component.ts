@@ -4,7 +4,8 @@
 
 import { Component } from '@angular/core';
 import { QueryService } from './query.service';
-import { AngularFireAuth } from 'angularfire2';
+// import { AuthHttp } from 'angular2-jwt';
+import { AuthService } from './auth.service';
 
 @Component({
     selector: 'report',
@@ -16,19 +17,24 @@ export class ReportComponent {
 
     private data: any;
 
-    constructor(private queryService: QueryService, private auth: AngularFireAuth) {
-        this.auth.subscribe(
-            authentication => {
-                if (authentication != null) {
+    constructor(private queryService: QueryService, private auth: AuthService) {
+
+        this.auth.authEvent().subscribe(
+            token => {
+                if (token) {
                     this.queryService.getQueries().subscribe(
                         data => {
                             this.data = data;
-                        }, error => { console.log('Error happened: ' + error);
+                        }, error => {
+                            console.log('Error happened: ' + error);
                         }
                     );
                 } else {
-                    this.data = null;
+                    this.data = [];
                 }
+            },
+            err => {
+                console.log('authEvent', err);
             }
         );
     }

@@ -2,29 +2,30 @@
  * Created by aashil on 8/19/16.
  */
 import { Component } from '@angular/core';
-import { AngularFireAuth } from 'angularfire2';
+import { AuthService } from './auth.service';
 
 @Component({
     selector: 'auth-button',
     templateUrl: './app/auth.button.component.html',
 })
 export class AuthButtonComponent {
-    private uid = null;
-    constructor(public auth: AngularFireAuth) {
-      this.auth.subscribe(
+    private loggedIn = false;
+
+    constructor(public auth: AuthService) {
+      this.auth.authEvent().subscribe(
             authentication => {
                 if (authentication != null) {
-                    this.uid = authentication.uid;
+                    this.loggedIn = true;
                 } else {
-                    this.uid = null;
+                    this.loggedIn = false;
                 }
             }
         );
     }
     login() {
-    this.auth.login();
+        this.auth.login();
     }
     logout() {
-    this.auth.logout();
+        this.auth.logout();
     }
 }

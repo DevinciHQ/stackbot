@@ -15,10 +15,11 @@ const map: any = {
 
 /** User packages configuration. */
 const packages: any = {
-  angularfire2: {
+  'angularfire2': {
     defaultExtension: 'js',
     main: 'angularfire2.js'
-  }
+  },
+  'angular2-jwt': { defaultExtension: 'js' }
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -58,7 +59,8 @@ System.config({
   map: {
     '@angular': 'vendor/@angular',
     'rxjs': 'vendor/rxjs',
-    'main': 'main.js'
+    'main': 'main.js',
+    'angular2-jwt': 'vendor/angular2-jwt/angular2-jwt.js'
   },
   packages: cliSystemConfigPackages
 });

@@ -1,6 +1,7 @@
 import {bootstrap} from '@angular/platform-browser-dynamic';
 import {enableProdMode} from '@angular/core';
-import {AppComponent, SearchComponent, ReportComponent, AuthButtonComponent, QueryService, RedirectService, environment} from './app/';
+import {AppComponent, SearchComponent, ReportComponent, AuthButtonComponent,
+    QueryService, RedirectService, environment, AuthService} from './app/';
 import {HTTP_PROVIDERS} from '@angular/http';
 import {
     FIREBASE_PROVIDERS,
@@ -9,6 +10,7 @@ import {
     AuthProviders,
     firebaseAuthConfig
 } from 'angularfire2';
+import {AUTH_PROVIDERS} from 'angular2-jwt';
 
 if (environment.production) {
     enableProdMode();
@@ -33,4 +35,6 @@ bootstrap(AppComponent, [
     AuthButtonComponent,
     QueryService,
     RedirectService,
+    AuthService,
+    AUTH_PROVIDERS
 ]);

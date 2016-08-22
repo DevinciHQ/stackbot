@@ -18,7 +18,8 @@ module.exports = function(defaults) {
       '@angular/**/*.+(js|js.map)',
       'angularfire2/**/*.js',
       'firebase/*.js',
-      'jasmine-core/lib/jasmine-core/*.+(js|css)'
+      'jasmine-core/lib/jasmine-core/*.+(js|css)',
+      'angular2-jwt/*.js'
     ]
   });
 };

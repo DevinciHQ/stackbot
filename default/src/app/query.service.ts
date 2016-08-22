@@ -1,34 +1,19 @@
 
 import { Injectable }     from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Response } from '@angular/http';
 import { Observable }     from 'rxjs/Observable';
-import { AngularFireAuth } from 'angularfire2';
 import 'rxjs/add/operator/catch';
+import { AuthHttp } from 'angular2-jwt';
 
 @Injectable()
 export class QueryService {
+    private backendUrl: string = 'http://localhost:8081';
 
-    private uid: string = null;
-    private backendUrl = 'http://localhost:8081';  // URL to web API
-
-    constructor (private http: Http, private auth: AngularFireAuth) {
-
+    constructor(private http: AuthHttp) {
         if (window.location.hostname.endsWith('stackbot.com')) {
             // Use the production backend when serving from the live site.
             this.backendUrl = 'backend-devinci-stackbot.appspot.com';
         }
-
-        // Subscribe to the authentication events of angularfire2 so we can update
-        // our local version of the UID when appropriate.
-        this.auth.subscribe(
-            authEvent => {
-                if (authEvent != null) {
-                    this.uid = authEvent.uid;
-                } else {
-                    this.uid = null;
-                }
-            }
-        );
     }
 
     // Save the search query and get the JSON response (which also contains link to redirect) in return.
@@ -44,19 +29,13 @@ export class QueryService {
 
     // Get the search history as a JSON response.
     public getQueries() {
-        if (this.uid !== undefined) {
-            return this._backendRequest('/api/report', {});
-        }
-    }
+        return this._backendRequest('/api/report', {});
+    };
 
     // Extract the JSON data from the response object.
     private _backendRequest(endpoint: string, data: { [ key: string ]: string; }): Observable<Object> {
 
         let getParams: string[] = [];
-
-        if (this.uid !== null) {
-            data['uid'] = this.uid;
-        }
         let requestUrl = this.backendUrl + endpoint;
         Object.keys(data).forEach(function(key) {
             getParams.push(encodeURIComponent(key) + '=' + encodeURIComponent(data[key]));
@@ -64,7 +43,6 @@ export class QueryService {
         if (getParams) {
             requestUrl += '?' + getParams.join('&');
         }
-
         return this.http.get(requestUrl)
                 .map(this._extractData)
                 .catch(this._handleError);

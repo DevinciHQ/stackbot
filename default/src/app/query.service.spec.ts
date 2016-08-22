@@ -8,29 +8,14 @@ import {
   addProviders,
   async
 } from '@angular/core/testing';
-import { HTTP_PROVIDERS, BaseRequestOptions, XHRBackend, Response, ResponseOptions} from '@angular/http';
-import {MockBackend, MockConnection} from '@angular/http/testing';
+import { HTTP_PROVIDERS, ConnectionBackend, BaseRequestOptions, XHRBackend, Response, ResponseOptions, Http} from '@angular/http';
+import { MockBackend, MockConnection} from '@angular/http/testing';
 import { QueryService } from './query.service';
-import { AngularFireAuth} from 'angularfire2';
+import { AuthHttp } from 'angular2-jwt';
 
 class AuthBackend extends MockBackend {
 
 }
-
-class MockAngularFireAuth {
-
-  public login(): any {
-      // jasmine.crea
-     // new Promise();
-  }
-  public logout() {
-  }
-
-    public subscribe() {
-
-    }
-}
-
 
 describe('QueryService', () => {
     beforeEach(() => {
@@ -39,11 +24,12 @@ describe('QueryService', () => {
             MockBackend,
             BaseRequestOptions,
             HTTP_PROVIDERS,
-            {provide: AngularFireAuth , useClass: MockAngularFireAuth},
             // This is how you can Mock the backend of Http so that you can actually intercept and provide your own
             // custom responses. See examples below.. This took hours to figure out as there isn't great documentation.
             // addProviders, async, and inject were all added in angular RC4 (alternatives existed earlier).
-            {provide: XHRBackend, useClass: MockBackend}
+            {provide: AuthHttp, useClass: Http},
+            {provide: XHRBackend, useClass: MockBackend},
+            {provide: ConnectionBackend, useClass: MockBackend}
         ]);
     });
 
