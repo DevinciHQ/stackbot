@@ -53,8 +53,8 @@ describe('SearchComponent', () => {
 
     it('populateSearch function should return the decoded value of the q parameter',
         inject([SearchComponent], (component: SearchComponent) => {
-            let value = component.populateSearch('http://localhost:8080/?q=!%23%26*%25%40%5E');
-            expect(value).toBe('!#&*%@^');
+            let value = component.populateSearch('http://localhost:8080/?q=!%23%26*%25%40%5E+%2B');
+            expect(value).toBe('!#&*%@^ +');
         })
     );
 });

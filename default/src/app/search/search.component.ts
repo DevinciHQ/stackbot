@@ -57,6 +57,8 @@ export class SearchComponent {
             // For each part, decode the key name and the value and add them to the output.
             for (let i = 0; i < parameters.length; i++) {
                 let paramParts = parameters[i].split('=');
+                // Replace '+' with spaces '%20' because the decodeURIComponent doesn't do it.
+                paramParts[1] = paramParts[1].replace('+', '%20');
                 getParams[decodeURIComponent(paramParts[0])] = decodeURIComponent(paramParts[1]);
             }
         }
