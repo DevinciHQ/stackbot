@@ -17,7 +17,7 @@ commands:
     cmd: open 'http://localhost:8000/console'
   deploy:
     usage: deploy the app to google app engine
-    cmd: appcfg.py -A devinci-stackbot -V {{args}} update .
+    cmd: appcfg.py -A devinci-stackbot -V {{args}} update default backend
   deps-frontend:
     usage: Load and install all dependencies.
     cmd: |

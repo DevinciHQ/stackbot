@@ -10,9 +10,10 @@ export class QueryService {
     private backendUrl: string = 'http://localhost:8081';
 
     constructor(private http: AuthHttp) {
-        if (window.location.hostname.endsWith('stackbot.com')) {
+        let hostname = window.location.hostname;
+        if (hostname.endsWith('stackbot.com') || hostname.endsWith('devinci-stackbot.appspot.com')) {
             // Use the production backend when serving from the live site.
-            this.backendUrl = 'backend-devinci-stackbot.appspot.com';
+            this.backendUrl = 'https://backend-dot-devinci-stackbot.appspot.com';
         }
     }
 

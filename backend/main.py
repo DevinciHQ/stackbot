@@ -18,6 +18,7 @@ import json
 import urllib
 import jwt
 import time
+from urlparse import urlparse
 
 # For use when dealing with the datastore.
 from google.appengine.ext import ndb
@@ -49,12 +50,25 @@ def get_geo_data(request):
 
 # Return the object after setting the CORS header.
 def set_cors_header(obj):
-    global env
-    if env == 'local':
-        obj.response.headers['Access-Control-Allow-Origin'] = 'http://localhost:8080'
-    else:
-        obj.response.headers['Access-Control-Allow-Origin'] = 'http://localhost:8080'
-        #obj.response.headers['Access-Control-Allow-Origin'] = 'https://www.stackbot.com'
+
+    approved_hosts = [
+        'http://localhost:8080',
+        'https://www.stackbot.com',
+        'https://stackbot.com',
+        'https://devinci-stackbot.appspot.com'
+    ]
+
+    # global env
+    #if env == 'local':
+    #    obj.response.headers['Access-Control-Allow-Origin'] = 'http://localhost:8080'
+    print(obj.request.referer)
+    referer = obj.request.referer
+    url = urlparse(referer)
+    host = url.scheme + "://" + url.hostname
+    if url.port:
+        host += ":" + str(url.port)
+    if host in approved_hosts:
+        obj.response.headers['Access-Control-Allow-Origin'] = host
     obj.response.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
     obj.response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
     obj.response.headers['Access-Control-Allow-Credentials'] = 'true'
@@ -251,6 +265,7 @@ class ReportHandler(webapp2.RequestHandler):
 
 """ ------------- MAIN ------------------ """
 
+logging.debug('SERVER_SOFTWARE', os.getenv('SERVER_SOFTWARE', ''))
 # Set a flag for what environment we're in.
 if os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine/'):
     # Running on Google AppEngine
