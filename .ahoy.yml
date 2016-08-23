@@ -17,7 +17,11 @@ commands:
     cmd: open 'http://localhost:8000/console'
   deploy:
     usage: deploy the app to google app engine
-    cmd: appcfg.py -A devinci-stackbot -V {{args}} update default backend
+    cmd: |
+      set -e
+      cd default && ng build && cd  ../
+      appcfg.py -A devinci-stackbot -V {{args}} update default
+      appcfg.py -A devinci-stackbot -V {{args}} update backend
   deps-frontend:
     usage: Load and install all dependencies.
     cmd: |
