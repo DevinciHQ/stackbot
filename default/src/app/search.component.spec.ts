@@ -45,8 +45,8 @@ describe('SearchComponent', () => {
 
     it('the parseURLParameters function should return a dictionary of parameters and their values.',
         inject([SearchComponent], (component: SearchComponent) => {
-            component.parseURLParams('!#%^&*');
-            expect(component.getParams).toBe('asdf');
+            let value = component.parseURLParams('http://localhost:8080/?q=!%23%26*%25%40%5E');
+            expect(value['q']).toBe('!#&*%@^');
         })
     );
 });
