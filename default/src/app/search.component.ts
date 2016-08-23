@@ -13,7 +13,7 @@ import { QueryService } from './query.service';
 @Injectable()
 export class SearchComponent {
 
-    preSearchText = null;
+    preSearchText;
     constructor(private queryService: QueryService) {
         this.preSearchText = this.populateSearch(window.location.href);
     }

@@ -1,7 +1,6 @@
 
 <div class="input-group">
-    <input *ngIf="preSearchText" type="text" class="form-control" (keypress)="onPressEnter($event, searchField.value)" value={{preSearchText}} #searchField>
-    <input *ngIf="preSearchText === null" type="text" class="form-control" (keypress)="onPressEnter($event, searchField.value)" placeholder="Search for..." #searchField>
+    <input type="text" class="form-control" (keypress)="onPressEnter($event, searchField.value)" value={{preSearchText}} #searchField>
     <span class="input-group-btn">
         <button class="btn btn-secondary" type="button" (click)="submit(searchField.value)" id="search-button">Search</button>
     </span>
