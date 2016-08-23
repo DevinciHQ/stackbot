@@ -43,10 +43,10 @@ describe('SearchComponent', () => {
     //     })
     // );
 
-    it('submit button should NOT send a query if search field is empty',
+    it('the parseURLParameters function should return a dictionary of parameters and their values.',
         inject([SearchComponent], (component: SearchComponent) => {
-            component.populateSearch('asdf');
-            expect(component.preSearchText).toBe('asdf');
+            component.parseURLParams('!#%^&*');
+            expect(component.getParams).toBe('asdf');
         })
     );
 });
