@@ -1,17 +1,15 @@
 
 import { Component } from '@angular/core';
-import { Injectable } from '@angular/core';
 import { QueryService } from '../query/index';
+import { FocusMeDirective } from '../shared/focus-me.directive';
 
 @Component({
     moduleId: module.id,
     selector: 'search',
     templateUrl: 'search.component.html',
-    providers: [QueryService]
-    // styleUrls: ['app.component.css']
+    providers: [QueryService],
+    directives: [FocusMeDirective]
 })
-
-@Injectable()
 export class SearchComponent {
 
     private preSearchText;
