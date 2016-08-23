@@ -1,11 +1,12 @@
 
 import { Component } from '@angular/core';
 import { Injectable } from '@angular/core';
-import { QueryService } from './query.service';
+import { QueryService } from '../query/index';
 
 @Component({
+    moduleId: module.id,
     selector: 'search',
-    templateUrl: './app/search.component.html',
+    templateUrl: 'search.component.html',
     providers: [QueryService]
     // styleUrls: ['app.component.css']
 })

@@ -1,5 +1,6 @@
 import {addProviders, inject } from '@angular/core/testing';
-import { SearchComponent, QueryService } from './';
+import { SearchComponent } from './index';
+import { QueryService } from '../query/index';
 
 class MockQueryService {
 

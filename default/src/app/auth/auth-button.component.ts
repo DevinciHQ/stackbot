@@ -5,9 +5,10 @@ import { Component } from '@angular/core';
 import { AuthService } from './auth.service';
 
 @Component({
+    moduleId: module.id,
     selector: 'auth-button',
-    templateUrl: './app/auth.button.component.html',
-    styleUrls: ['./app/auth.button.component.css']
+    templateUrl: 'auth-button.component.html',
+    styleUrls: ['auth-button.component.css']
 })
 export class AuthButtonComponent {
     private loggedIn = false;

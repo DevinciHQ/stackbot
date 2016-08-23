@@ -5,7 +5,7 @@
 import { AngularFireAuth } from 'angularfire2';
 import {Injectable} from '@angular/core';
 import {Subject}    from 'rxjs/Subject';
-import {User} from './user';
+import {User} from '../shared/user';
 
 // Declare ga function as ambient
 declare var ga: Function;
@@ -30,7 +30,6 @@ export class AuthService {
                 if (authEvent) {
                     let _self = this;
                     firebase.auth().currentUser.getToken().then(function(idToken) {
-                        console.log('fb_auth:login', idToken);
                         localStorage.setItem('id_token', idToken);
                         _self.user = _self.userFromAuth(authEvent);
                         _self.token.next(idToken);
@@ -52,12 +51,17 @@ export class AuthService {
 
     login() {
         this.fb_auth.login();
-        console.log('login');
+        //     .then( ret => {
+        //     localStorage.setItem('github_token', ret.github.accessToken);
+        //     console.log('ret', ret);
+        // });
+        // console.log('login');
     }
 
     logout() {
         this.fb_auth.logout();
-        console.log('logout');
+        // localStorage.removeItem('github_token');
+        // console.log('logout');
     }
 
     authEvent() {
