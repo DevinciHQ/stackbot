@@ -1,5 +1,4 @@
 <div align="center">
-    <br>
-    <button *ngIf="!loggedIn" (click)="login()">Login</button>
-    <button *ngIf="loggedIn" (click)="logout()">Logout</button>
+    <button class="btn btn-success btn-lg" *ngIf="!loggedIn" (click)="login()" type="submit">Login with Github</button>
+    <button class="upper-right btn btn-xs" *ngIf="loggedIn" (click)="logout()" type="submit">Logout</button>
 </div>

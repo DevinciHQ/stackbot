@@ -1,0 +1,9 @@
+button.upper-right {
+    position: fixed;
+    right: 100px;
+    top: 20px;
+}
+
+button {
+    margin: 20px;
+}
