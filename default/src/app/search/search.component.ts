@@ -58,8 +58,7 @@ export class SearchComponent {
             for (let i = 0; i < parameters.length; i++) {
                 let paramParts = parameters[i].split('=');
                 // Replace '+' with spaces '%20' because the decodeURIComponent doesn't do it.
-                paramParts[1] = paramParts[1].replace('+', '%20');
-                getParams[decodeURIComponent(paramParts[0])] = decodeURIComponent(paramParts[1]);
+                getParams[decodeURIComponent(paramParts[0].replace('+', '%20'))] = decodeURIComponent(paramParts[1].replace('+', '%20'));
             }
         }
         return getParams;

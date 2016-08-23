@@ -46,15 +46,16 @@ describe('SearchComponent', () => {
 
     it('the parseURLParameters function should return a dictionary of parameters and their values.',
         inject([SearchComponent], (component: SearchComponent) => {
-            let value = component.parseURLParams('http://localhost:8080/?q=!%23%26*%25%40%5E');
-            expect(value['q']).toBe('!#&*%@^');
+            let value = component.parseURLParams('http://localhost:8080/?q=!%23%26*%25%40%5E+%2B&with+space=also+works');
+            expect(value['q']).toBe('!#&*%@^ +');
+             expect(value['with space']).toBe('also works');
         })
     );
 
     it('populateSearch function should return the decoded value of the q parameter',
         inject([SearchComponent], (component: SearchComponent) => {
-            let value = component.populateSearch('http://localhost:8080/?q=!%23%26*%25%40%5E+%2B');
-            expect(value).toBe('!#&*%@^ +');
+            let value = component.populateSearch('http://localhost:8080/?q=some+search');
+            expect(value).toBe('some search');
         })
     );
 });
