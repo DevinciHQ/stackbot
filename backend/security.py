@@ -118,12 +118,11 @@ def set_cors_header(obj):
         'https://devinci-stackbot.appspot.com'
     ]
 
-    # global env
-    #if env == 'local':
-    #    obj.response.headers['Access-Control-Allow-Origin'] = 'http://localhost:8080'
-    print(obj.request.referer)
-    referer = obj.request.referer
-    url = urlparse(referer)
+    # No need for CORS headers if there wasn't a referrer.
+    if obj.request.referer is None:
+        return
+
+    url = urlparse(obj.request.referer)
     host = url.scheme + "://" + url.hostname
     if url.port:
         host += ":" + str(url.port)
