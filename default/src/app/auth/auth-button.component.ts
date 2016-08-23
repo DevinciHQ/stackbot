@@ -7,8 +7,8 @@ import { AuthService } from './auth.service';
 @Component({
     moduleId: module.id,
     selector: 'auth-button',
-    templateUrl: 'auth.button.component.html',
-    styleUrls: ['auth.button.component.css']
+    templateUrl: 'auth-button.component.html',
+    styleUrls: ['auth-button.component.css']
 })
 export class AuthButtonComponent {
     private loggedIn = false;
