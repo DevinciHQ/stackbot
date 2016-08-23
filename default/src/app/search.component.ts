@@ -41,29 +41,30 @@ export class SearchComponent {
         );
     }
 
-    populateSearch(href) {
-        let parameters = this.parseURL(window.location.href);
+    populateSearch(href): string {
+        let parameters = this.parseURLParams(window.location.href);
        /* if (href.split('?q=').length === 2) {
             // First split on question mark, then on &, then for each split on =, then find "q" item, then decode that value.
             return decodeURIComponent(href.split('?q=')[1]).replace('+', ' ');
         }*/
-        for (let i = 0; i < parameters.length; i++) {
-            console.log(parameters[i]);
-            if (parameters[i] === 'q') {
 
-            }
-        }
+        return parameters['q'] || null;
     }
 
-    parseURL(url) {
-        let dict = {};
-        if (url.split('?').length === 2) {
-            let parameters = url.split('?')[1].split('&');
+    parseURLParams(url) {
+        let getParams = {};
+        // Split the url into two parts before and after the '?'
+        let urlParts = url.split('?');
+        if (urlParts.length === 2) {
+            // Split the GET params into parts.
+            let parameters = urlParts[1].split('&');
+            // For each part, decode the key name and the value and add them to the output.
             for (let i = 0; i < parameters.length; i++) {
-                dict[parameters[i].split('=')[0]] = parameters[i].split('=')[1];
+                let paramParts = parameters[i].split('=');
+                getParams[decodeURIComponent(paramParts[0])] = decodeURIComponent(paramParts[1]);
             }
         }
-        return dict;
+        return getParams;
     }
 
     private _redirect(href) {
