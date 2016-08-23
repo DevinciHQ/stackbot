@@ -13,12 +13,9 @@ import { QueryService } from './query.service';
 @Injectable()
 export class SearchComponent {
 
-    private preSearchText = null;
+    preSearchText = null;
     constructor(private queryService: QueryService) {
-        let URL = window.location.href;
-        if (URL.split('?q=').length === 2) {
-            this.preSearchText = decodeURIComponent(URL.split('?q=')[1]).replace('+', ' ');
-        }
+        this.preSearchText = this.populateSearch(window.location.href);
     }
 
     submit(searchField: string) {
@@ -42,6 +39,31 @@ export class SearchComponent {
                 }
             }
         );
+    }
+
+    populateSearch(href) {
+        let parameters = this.parseURL(window.location.href);
+       /* if (href.split('?q=').length === 2) {
+            // First split on question mark, then on &, then for each split on =, then find "q" item, then decode that value.
+            return decodeURIComponent(href.split('?q=')[1]).replace('+', ' ');
+        }*/
+        for (let i = 0; i < parameters.length; i++) {
+            console.log(parameters[i]);
+            if (parameters[i] === 'q') {
+
+            }
+        }
+    }
+
+    parseURL(url) {
+        let dict = {};
+        if (url.split('?').length === 2) {
+            let parameters = url.split('?')[1].split('&');
+            for (let i = 0; i < parameters.length; i++) {
+                dict[parameters[i].split('=')[0]] = parameters[i].split('=')[1];
+            }
+        }
+        return dict;
     }
 
     private _redirect(href) {
