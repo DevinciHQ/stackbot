@@ -43,4 +43,11 @@ describe('SearchComponent', () => {
     //         expect(querySrv.doQuery).toHaveBeenCalledWith('some search');
     //     })
     // );
+
+    it('the parseURLParameters function should return a dictionary of parameters and their values.',
+        inject([SearchComponent], (component: SearchComponent) => {
+            let value = component.parseURLParams('http://localhost:8080/?q=!%23%26*%25%40%5E');
+            expect(value['q']).toBe('!#&*%@^');
+        })
+    );
 });
