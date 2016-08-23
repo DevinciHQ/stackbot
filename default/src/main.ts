@@ -1,7 +1,7 @@
 import {bootstrap} from '@angular/platform-browser-dynamic';
 import {enableProdMode} from '@angular/core';
-import {AppComponent, SearchComponent, ReportComponent, AuthButtonComponent,
-    QueryService, RedirectService, environment, AuthService} from './app/';
+import {AppComponent, environment} from './app';
+import {AuthService} from './app/auth/index';
 import {HTTP_PROVIDERS} from '@angular/http';
 import {
     FIREBASE_PROVIDERS,
@@ -30,11 +30,6 @@ bootstrap(AppComponent, [
         provider: AuthProviders.Github,
         method: AuthMethods.Popup
     }),
-    SearchComponent,
-    ReportComponent,
-    AuthButtonComponent,
-    QueryService,
-    RedirectService,
-    AuthService,
-    AUTH_PROVIDERS
+    AUTH_PROVIDERS,
+    AuthService
 ]);

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { SearchComponent } from './search.component';
-import { ReportComponent } from './report.component';
-import { AuthButtonComponent } from './auth.button.component';
+import { SearchComponent } from './search/index';
+import { ReportComponent } from './report/index';
+import { AuthButtonComponent } from './auth/index';
 
 @Component({
     moduleId: module.id,

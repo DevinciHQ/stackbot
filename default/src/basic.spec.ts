@@ -3,7 +3,6 @@
  */
 // import { SearchComponent } from './app/search.component'
 // import { QueryService } from './app/get.service'
-import { RedirectService } from './app/redirect.service';
 
 
 describe('1st tests', () => {
@@ -35,14 +34,3 @@ describe('Service: LanguagesService', () => {
     }));
 })*/
 
-
-describe('redirect', () => {
-    let redirectService: RedirectService;
-    beforeEach(() => {
-        redirectService = new RedirectService();
-    });
-    spyOn(redirectService, 'redirect');
-    it('redirect method has been called',
-        () => expect(redirectService.redirect('whatever')).toHaveBeenCalled()
-    );
-});

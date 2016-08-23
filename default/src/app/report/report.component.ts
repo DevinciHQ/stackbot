@@ -3,13 +3,14 @@
  */
 
 import { Component } from '@angular/core';
-import { QueryService } from './query.service';
+import { QueryService } from '../query/query.service';
 // import { AuthHttp } from 'angular2-jwt';
-import { AuthService } from './auth.service';
+import { AuthService } from '../auth/index';
 
 @Component({
+    moduleId: module.id,
     selector: 'report',
-    templateUrl: './app/report.component.html',
+    templateUrl: 'report.component.html',
     providers: [QueryService]
 })
 

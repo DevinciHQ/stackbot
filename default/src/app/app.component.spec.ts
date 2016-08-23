@@ -3,7 +3,7 @@
 import { addProviders, async, inject } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { AngularFireAuth } from 'angularfire2';
-import { SearchComponent } from './search.component';
+import { SearchComponent } from './search/search.component';
 
 class MockSearchComponent {
   public mockName: string = 'Mocked Service';
