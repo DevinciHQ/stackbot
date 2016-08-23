@@ -42,12 +42,11 @@ export class SearchComponent {
     }
 
     populateSearch(href): string {
-        let parameters = this.parseURLParams(window.location.href);
+        let parameters = this.parseURLParams(href);
        /* if (href.split('?q=').length === 2) {
             // First split on question mark, then on &, then for each split on =, then find "q" item, then decode that value.
             return decodeURIComponent(href.split('?q=')[1]).replace('+', ' ');
         }*/
-
         return parameters['q'] || null;
     }
 
