@@ -2,3 +2,4 @@ user-agents
 webapp2
 google
 pystache
+PyJWT
