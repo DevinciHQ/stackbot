@@ -7,7 +7,7 @@
             </tr>
             <tr *ngFor="let d of data">
                 <td>{{d.query}}</td>
-                <td>{{d.timestamp}}</td>
+                <td>{{ formatDate(d.timestamp) }}</td>
             </tr>
         </thead>
     </table>
