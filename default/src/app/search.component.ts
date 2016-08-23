@@ -13,7 +13,13 @@ import { QueryService } from './query.service';
 @Injectable()
 export class SearchComponent {
 
-    constructor(private queryService: QueryService) {}
+    private preSearchText = null;
+    constructor(private queryService: QueryService) {
+        let URL = window.location.href;
+        if (URL.split('?q=').length === 2) {
+            this.preSearchText = decodeURIComponent(URL.split('?q=')[1]).replace('+', ' ');
+        }
+    }
 
     submit(searchField: string) {
         if (searchField !== '') {
