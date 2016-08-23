@@ -42,4 +42,11 @@ describe('SearchComponent', () => {
     //         expect(querySrv.doQuery).toHaveBeenCalledWith('some search');
     //     })
     // );
+
+    it('submit button should NOT send a query if search field is empty',
+        inject([SearchComponent], (component: SearchComponent) => {
+            component.populateSearch('asdf');
+            expect(component.preSearchText).toBe('asdf');
+        })
+    );
 });
