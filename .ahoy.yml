@@ -4,11 +4,8 @@ commands:
   up:
     usage: run stackbot locally.
     cmd: |
-      cd default && ng build --watch=true &
+      ahoy frontend-build-watch &
       dev_appserver.py --skip_sdk_update_check=true default backend
-  front-build:
-    usage: build the frontend files.
-    cmd: cd default && ng build --watch=true
   pip-install:
     usage: python pip, but locally vendored.
     cmd: cd backend && pip install -t lib {{args}}
@@ -19,7 +16,7 @@ commands:
     usage: deploy the app to google app engine
     cmd: |
       set -e
-      cd default && ng build && cd  ../
+      ahoy frontend-build
       appcfg.py -A devinci-stackbot -V {{args}} update default
       appcfg.py -A devinci-stackbot -V {{args}} update backend
   deps-frontend:
@@ -27,6 +24,8 @@ commands:
     cmd: |
       npm install -g angular-cli typings
       cd default
+      # There may be some leftover typings and npm modules, so delete the folders.
+      rm -rf node_modules typings
       npm install
       typings install
   deps-backend:
@@ -34,9 +33,12 @@ commands:
     cmd: |
       cd backend &&
       ahoy pip-install -- -r requirements.txt
-  build:
-    cmd: cd default && ng build
+  frontend-build:
+    cmd: cd default && rm -rf dist || true && webpack --config webpack.config.js --progress --profile -—bail {{args}}
     usage: Build all of the files necessary to serve the site into the /dist folder.
+  frontend-build-watch:
+    usage: build the frontend files.
+    cmd: ahoy frontend-build -- --watch
   test:
     cmd: |
       set -e
