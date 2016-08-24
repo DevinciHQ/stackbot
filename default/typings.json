@@ -1,8 +1,11 @@
 {
   "globalDependencies": {
-    "jasmine": "registry:dt/jasmine#2.2.0+20160621224255",
-    "firebase3": "file:node_modules/angularfire2/firebase3.d.ts",
     "core-js": "registry:dt/core-js#0.0.0+20160602141332",
+    "jasmine": "registry:dt/jasmine#2.2.0+20160621224255",
     "node": "registry:dt/node#6.0.0+20160807145350"
+  },
+  "dependencies": {
+      "es6-promise": "github:typed-typings/npm-es6-promise#fb04188767acfec1defd054fc8024fafa5cd4de7",
+       "firebase": "github:typed-typings/npm-firebase"
   }
 }

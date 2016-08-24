@@ -48,6 +48,6 @@ commands:
         export JUNIT_DIR=$CIRCLE_TEST_REPORTS
         FLAGS='--reporters=junit,progress'
       fi
-      ng test --watch=false $FLAGS
+      npm test $FLAGS
       ng lint
     usage: Run the frontend unit tests.

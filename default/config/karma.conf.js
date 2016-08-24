@@ -5,10 +5,6 @@ module.exports = function (config) {
     basePath: '',
 
     frameworks: ['jasmine'],
-    plugins: [
-      require('karma-jasmine'),
-      require('karma-junit-reporter')
-    ],
 
     files: [
       {pattern: './config/karma-test-shim.js', watched: false}
