@@ -7,3 +7,4 @@ node_modules
 default/dist
 default/tmp
 default/index.yaml
+default/webpack-dist
