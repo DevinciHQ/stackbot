@@ -12,7 +12,7 @@ import { FocusMeDirective } from '../shared/focus-me.directive';
 })
 export class SearchComponent {
 
-    private preSearchText;
+    private preSearchText: any;
     constructor(private queryService: QueryService) {
         this.preSearchText = this.populateSearch(window.location.href);
     }
@@ -23,13 +23,13 @@ export class SearchComponent {
         }
     }
 
-    onPressEnter(e, searchField) {
+    onPressEnter(e: any, searchField: any) {
         if (e.keyCode === 13 && searchField !== '') {
             this.doSearch(searchField);
         }
     }
 
-    doSearch(searchField) {
+    doSearch(searchField: any) {
         this.queryService.doQuery(searchField).subscribe(
             data => {
                 // If when data is returned from a query with a redirect set, do the redirect.
@@ -40,12 +40,12 @@ export class SearchComponent {
         );
     }
 
-    populateSearch(href): string {
+    populateSearch(href: any): string {
         let parameters = this.parseURLParams(href);
         return parameters['q'] || null;
     }
 
-    parseURLParams(url) {
+    parseURLParams(url: any) {
         let getParams = {};
         // Split the url into two parts before and after the '?'
         let urlParts = url.split('?');
@@ -63,7 +63,7 @@ export class SearchComponent {
         return getParams;
     }
 
-    private _redirect(href) {
+    private _redirect(href: any) {
         window.location = href;
     }
 }
