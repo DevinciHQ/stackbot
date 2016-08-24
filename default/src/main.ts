@@ -1,5 +1,9 @@
 import {bootstrap} from '@angular/platform-browser-dynamic';
 import {enableProdMode} from '@angular/core';
+import { AppModule } from './app/app.module';
+
+
+
 import {AppComponent, environment} from './app';
 import {AuthService} from './app/auth/index';
 import {HTTP_PROVIDERS} from '@angular/http';
