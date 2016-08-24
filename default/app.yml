@@ -11,12 +11,12 @@ handlers:
   upload: opensearch.xml
 
 - url: (.*)/
-  static_files: dist\1/index.html
-  upload: dist
+  static_files: webpack-dist\1/index.html
+  upload: webpack-dist
 
 - url: (.*)
-  static_files: dist\1
-  upload: dist
+  static_files: webpack-dist\1
+  upload: webpack-dist
 
 
 skip_files:
