@@ -1,8 +1,5 @@
-/**
- * Created by aashil on 8/24/16.
- */
-
 var path = require('path');
+
 var _root = path.resolve(__dirname, '..');
 function root(args) {
   args = Array.prototype.slice.call(arguments, 0);

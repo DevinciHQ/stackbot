@@ -11,6 +11,7 @@ import {User} from '../shared/user';
 // Declare ga function as ambient
 declare var ga: Function;
 
+
 @Injectable()
 export class AuthService {
 
