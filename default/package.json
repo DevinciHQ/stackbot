@@ -3,14 +3,13 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "ng serve",
+    "start": "webpack-dev-server --inline --progress --port 8080",
+    "test": "karma start config/karma.conf.js",
+    "karma": "karma",
+    "typings": "typings",
+    "build": "rimraf dist && webpack --config webpack.config.js --progress --profile --bail",
     "postinstall": "typings install",
-    "lint": "tslint \"src/**/*.ts\"",
-    "test": "ng test",
-    "tsc": "tsc",
-    "pree2e": "webdriver-manager update",
-    "e2e": "protractor",
-    "build": "ng build"
+    "lint": "tslint \"src/**/*.ts\""
   },
   "private": true,
   "dependencies": {
