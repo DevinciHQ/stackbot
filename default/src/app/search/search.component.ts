@@ -5,7 +5,6 @@ import { FocusMeDirective } from '../shared/focus-me.directive';
 import {AuthService} from '../auth/auth.service';
 
 @Component({
-    moduleId: module.id,
     selector: 'search',
     templateUrl: 'search.component.html',
     providers: [QueryService],

@@ -7,7 +7,6 @@ import { QueryService } from '../query/query.service';
 import { AuthService } from '../auth/index';
 
 @Component({
-    moduleId: module.id,
     selector: 'report',
     templateUrl: 'report.component.html',
     providers: [QueryService]
