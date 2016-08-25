@@ -1,8 +1,8 @@
 
 <div class="input-group">
-    <input focusMe type="text" class="form-control" (keypress)="onPressEnter($event, searchField.value)" value={{preSearchText}} #searchField>
+    <input focusMe type="text" class="form-control" (keypress)="onPressEnter($event, searchField.value)" value={{preSearchText}} #searchField disabled={{disabled}}>
     <span class="input-group-btn">
-        <button class="btn btn-secondary" type="button" (click)="submit(searchField.value)" id="search-button">Search</button>
+        <button class="btn btn-secondary" type="button" (click)="submit(searchField.value)" id="search-button" disabled={{disabled}}>Search</button>
     </span>
 </div>
 

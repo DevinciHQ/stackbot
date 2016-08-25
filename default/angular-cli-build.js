@@ -12,14 +12,14 @@ module.exports = function(defaults) {
       'systemjs/dist/system-polyfills.js',
       'systemjs/dist/system.src.js',
       'zone.js/dist/**/*.+(js|js.map)',
-      'es6-shim/es6-shim.js',
       'reflect-metadata/**/*.+(ts|js|js.map)',
       'rxjs/**/*.+(js|js.map)',
       '@angular/**/*.+(js|js.map)',
       'angularfire2/**/*.js',
       'firebase/*.js',
       'jasmine-core/lib/jasmine-core/*.+(js|css)',
-      'angular2-jwt/*.js'
+      'angular2-jwt/*.js',
+      'core-js/client/shim.min.js'
     ]
   });
 };

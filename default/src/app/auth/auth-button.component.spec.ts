@@ -4,11 +4,8 @@
 
 
 import {
-  describe,
-  expect,
   addProviders,
-  it,
-  inject,
+  inject
 } from '@angular/core/testing';
 
 import { AuthService } from './auth.service';

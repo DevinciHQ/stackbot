@@ -3,7 +3,7 @@
  */
 
 import { AngularFireAuth } from 'angularfire2';
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 import {Subject}    from 'rxjs/Subject';
 import {User} from '../shared/user';
 
@@ -29,7 +29,7 @@ export class AuthService {
                 // or by refreshing the page.
                 if (authEvent) {
                     let _self = this;
-                    firebase.auth().currentUser.getToken().then(function(idToken) {
+                    authEvent.auth.getToken().then(function(idToken) {
                         localStorage.setItem('id_token', idToken);
                         _self.user = _self.userFromAuth(authEvent);
                         _self.token.next(idToken);
