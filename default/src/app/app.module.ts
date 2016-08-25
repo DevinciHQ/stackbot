@@ -1,30 +1,38 @@
+import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { enableProdMode, NgModule } from '@angular/core';
-import { AppComponent, environment } from './';
-import { AngularFireModule } from 'angularfire2';
-import {HTTP_PROVIDERS} from '@angular/http';
-import {AUTH_PROVIDERS} from 'angular2-jwt';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { AuthService, AuthButtonComponent} from './auth/index';
+import { SearchComponent} from './search/index'
+import { HTTP_PROVIDERS} from '@angular/http';
+import { AppComponent }  from './app.component';
+import { AngularFireModule, AuthProviders, AuthMethods } from 'angularfire2';
 import * as firebase from 'firebase';
+import {AUTH_PROVIDERS} from 'angular2-jwt';
+import {ReportComponent} from './report/index';
 
-if (environment.production) {
-    enableProdMode();
-}
-
-// Must export the config
-export const firebaseConfig = {
+const firebaseConfig = {
     apiKey: 'AIzaSyAaNBeWn34_1EsK2fM8oB2TAD37j7tuRCk',
     authDomain: 'devinci-stackbot.firebaseapp.com',
     databaseURL: 'https://devinci-stackbot.firebaseio.com',
     storageBucket: 'devinci-stackbot.appspot.com',
+    provider: AuthProviders.Github,
+    method: AuthMethods.Popup
 };
 
+const firebaseAuthConfig = {
+    provider: AuthProviders.Github,
+    method: AuthMethods.Popup
+};
+
+
 @NgModule({
-  imports: [
-    BrowserModule,
-    AngularFireModule.initializeApp(firebaseConfig),
-  ],
-  declarations: [ AppComponent ],
-  bootstrap: [ AppComponent ]
+    imports:      [ AngularFireModule.initializeApp(firebaseConfig, firebaseAuthConfig),
+                    BrowserModule,
+                    CommonModule,
+                    FormsModule ],
+    declarations: [ AppComponent, SearchComponent, ReportComponent, AuthButtonComponent],
+    providers:    [ AUTH_PROVIDERS, HTTP_PROVIDERS,  AuthService],
+    bootstrap:    [ AppComponent ]
 })
-export class AppModule {}
+export class AppModule { }

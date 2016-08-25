@@ -8,7 +8,6 @@ import { AuthButtonComponent } from './auth/index';
     selector: 'app-root',
     templateUrl: 'app.component.html',
     styleUrls: ['app.component.css'],
-    directives: [ReportComponent, SearchComponent, AuthButtonComponent]
 })
 export class AppComponent {
 }

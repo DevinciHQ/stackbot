@@ -2,10 +2,11 @@
  * Created by aashil on 8/12/16.
  */
 
-import { AngularFireAuth } from 'angularfire2';
-import {Injectable} from '@angular/core';
+import { AngularFireAuth, AngularFire } from 'angularfire2';
+import { Injectable } from '@angular/core';
 import {Subject}    from 'rxjs/Subject';
 import {User} from '../shared/user';
+// import * as firebase from 'firebase';
 
 // Declare ga function as ambient
 declare var ga: Function;
@@ -29,7 +30,9 @@ export class AuthService {
                 // or by refreshing the page.
                 if (authEvent) {
                     let _self = this;
-                    firebase.auth().currentUser.getToken().then(function(idToken) {
+                    console.log(authEvent);
+                    _self.user = _self.userFromAuth(authEvent);
+                    authEvent.auth.getToken().then(function(idToken) {
                         localStorage.setItem('id_token', idToken);
                         _self.user = _self.userFromAuth(authEvent);
                         _self.token.next(idToken);
