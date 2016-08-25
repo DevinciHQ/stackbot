@@ -2,6 +2,7 @@
 import { Component } from '@angular/core';
 import { QueryService } from '../query/index';
 import { FocusMeDirective } from '../shared/focus-me.directive';
+import {AuthService} from '../auth/auth.service';
 
 @Component({
     moduleId: module.id,
@@ -13,8 +14,21 @@ import { FocusMeDirective } from '../shared/focus-me.directive';
 export class SearchComponent {
 
     private preSearchText;
-    constructor(private queryService: QueryService) {
+    private disabled = '';
+    constructor(private queryService: QueryService, private auth: AuthService) {
         this.preSearchText = this.populateSearch(window.location.href);
+        this.auth.authEvent().subscribe(
+            token => {
+                if (token) {
+                        return this.disabled = '';
+                } else {
+                    return this.disabled = 'disabled';
+                }
+            },
+            err => {
+                console.log('authEvent', err);
+            }
+        );
     }
 
     submit(searchField: string) {
