@@ -13,7 +13,9 @@ import {AUTH_PROVIDERS} from 'angular2-jwt';
 import {ReportComponent} from './report/index';
 
 // DO NOT DELETE: This is needed of the compiler says, Cannot find namespace 'firebase'.
+/* tslint:disable */
 import * as firebase from 'firebase';
+/* tslint:enable */
 
 const firebaseConfig = {
     apiKey: 'AIzaSyAaNBeWn34_1EsK2fM8oB2TAD37j7tuRCk',

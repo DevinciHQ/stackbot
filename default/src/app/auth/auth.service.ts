@@ -2,7 +2,7 @@
  * Created by aashil on 8/12/16.
  */
 
-import { AngularFireAuth, AngularFire } from 'angularfire2';
+import { AngularFireAuth } from 'angularfire2';
 import { Injectable } from '@angular/core';
 import {Subject}    from 'rxjs/Subject';
 import {User} from '../shared/user';

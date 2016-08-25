@@ -1,8 +1,6 @@
 
 import { Component } from '@angular/core';
 import { QueryService } from '../query/index';
-import { FocusMeDirective } from '../shared/focus-me.directive';
-
 
 @Component({
     selector: 'search',
