@@ -68,7 +68,7 @@ export class AuthService {
         return this.tokenEvent$;
     }
 
-    userFromAuth(auth): User {
+    userFromAuth(auth: any): User {
         let fields = {
             uid: auth.uid
         };
