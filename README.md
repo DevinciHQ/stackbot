@@ -23,3 +23,7 @@ motivates you to be more productive and helps you to search coding related quest
 * Set the SDK, probably in /usr/local/google_appengine on OSX.
 * Ensure you have a 'Google App Engine' Debug configuration setup and to use that for debugging.
 * Make sure you don't have `ahoy up` already serving the site or the ports will conflict.
+
+## Setting up the IDE
+
+* Ensure that you are using the typescript compiler from the node_modules instead of the typescript compiler bundled with your IDE. This can be done by following Preferences > Languages & Frameworks > Typescript and changing the typescript version to the one from node_modules directory.
