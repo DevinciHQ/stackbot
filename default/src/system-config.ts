@@ -8,18 +8,21 @@
  * User Configuration.
  **********************************************************************************************/
 /** Map relative paths to URLs. */
-const map: any = {
-  'firebase': 'vendor/firebase/firebase.js',
-  'angularfire2': 'vendor/angularfire2'
-};
+const map = {
+    'app':                        'app', // 'dist',
+    '@angular':                   'vendor/@angular',
+    'angular2-in-memory-web-api': 'vendor/angular2-in-memory-web-api',
+    'rxjs':                       'vendor/rxjs',
+    'firebase':                   'vendor/firebase',
+    'angularfire2':               'vendor/angularfire2'
+  };
 
 /** User packages configuration. */
 const packages: any = {
-  'angularfire2': {
-    defaultExtension: 'js',
-    main: 'angularfire2.js'
-  },
-  'angular2-jwt': { defaultExtension: 'js' }
+  'rxjs':                       'node_modules/rxjs',
+  'firebase':                   { main: 'firebase.js', defaultExtension: 'js' },
+  'angularfire2':               { defaultExtension: 'js', main: 'angularfire2.js' },
+  'angular2-jwt':               { defaultExtension: 'js' }
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -60,7 +63,9 @@ System.config({
     '@angular': 'vendor/@angular',
     'rxjs': 'vendor/rxjs',
     'main': 'main.js',
-    'angular2-jwt': 'vendor/angular2-jwt/angular2-jwt.js'
+    'angular2-jwt': 'vendor/angular2-jwt/angular2-jwt.js',
+    'firebase':                   'vendor/firebase',
+    'angularfire2':               'vendor/firebase'
   },
   packages: cliSystemConfigPackages
 });

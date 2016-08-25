@@ -4,7 +4,6 @@
 
 import { Component } from '@angular/core';
 import { QueryService } from '../query/query.service';
-// import { AuthHttp } from 'angular2-jwt';
 import { AuthService } from '../auth/index';
 
 @Component({
