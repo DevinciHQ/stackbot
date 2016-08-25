@@ -4,7 +4,7 @@ import { QueryService } from '../query/index';
 
 class MockQueryService {
 
-    public doQuery(query) {
+    public doQuery(query: any) {
         // This isn't working!!!!!!!!
         // let source = Observer
         // return source;

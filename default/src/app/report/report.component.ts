@@ -4,11 +4,9 @@
 
 import { Component } from '@angular/core';
 import { QueryService } from '../query/query.service';
-// import { AuthHttp } from 'angular2-jwt';
 import { AuthService } from '../auth/index';
 
 @Component({
-    moduleId: module.id,
     selector: 'report',
     templateUrl: 'report.component.html',
     providers: [QueryService]
@@ -19,7 +17,7 @@ export class ReportComponent {
     private data: any;
 
     public formatDate(date: string): string {
-        let date_object;
+        let date_object: any;
         date_object = new Date(date);
         // Adding 11 to the actual hour to address the 00 (midnight 12 am) case.
         let hours = (date_object.getHours() + 11) % 12 + 1;
