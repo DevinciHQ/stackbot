@@ -43,7 +43,7 @@ export class ReportComponent {
                         }
                     );
                 } else {
-                    this.data = [];
+                    this.data = null;
                 }
             },
             err => {
