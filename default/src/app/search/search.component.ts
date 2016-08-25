@@ -75,6 +75,6 @@ export class SearchComponent {
     }
 
     private _redirect(href: any) {
-        window.location = href;
+        window.location.href = href;
     }
 }
