@@ -3,12 +3,11 @@ import { Component } from '@angular/core';
 import { QueryService } from '../query/index';
 import { FocusMeDirective } from '../shared/focus-me.directive';
 
+
 @Component({
-    moduleId: module.id,
     selector: 'search',
     templateUrl: 'search.component.html',
     providers: [QueryService],
-    directives: [FocusMeDirective]
 })
 export class SearchComponent {
 
