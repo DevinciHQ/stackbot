@@ -1,6 +1,8 @@
 import {addProviders, inject } from '@angular/core/testing';
 import { SearchComponent } from './index';
 import { QueryService } from '../query/index';
+import {AuthService} from '../auth/auth.service';
+import { Subject }    from 'rxjs/Subject';
 
 class MockQueryService {
 
@@ -19,6 +21,27 @@ class MockQueryService {
     }
 }
 
+class MockAuthService {
+
+   private token = new Subject<string>();
+
+    // Observable string streams
+    // user$ = this.user.asObservable();
+    tokenEvent$ = this.token.asObservable();
+
+    login() {
+    }
+
+    logout() {
+
+    }
+
+    authEvent() {
+        return this.tokenEvent$;
+    }
+
+}
+
 // TODO: This isn't actually testing the component on the webpage, but is calling the items directly.
 // TODO: RC5 adds TestBed Class.. see
 // TODO: We can use https://developers.livechatinc.com/blog/testing-angular-2-apps-dependency-injection-and-components/
@@ -27,6 +50,7 @@ describe('SearchComponent', () => {
         addProviders([
             SearchComponent,
             {provide: QueryService, useClass: MockQueryService},
+            {provide: AuthService, useClass: MockAuthService}
         ]);
     });
     it('submit button should NOT send a query if search field is empty',
