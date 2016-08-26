@@ -24,8 +24,8 @@ export class QueryService {
      * @param query
      * @returns {Observable<Object>}
      */
-    public doQuery(query: string): Observable<Object> {
-        return this._backendRequest('/api/q', {q: query });
+    public doQuery(query: string, source: string): Observable<Object> {
+        return this._backendRequest('/api/q', {q: query, source: source });
     }
 
     // Get the search history as a JSON response.
