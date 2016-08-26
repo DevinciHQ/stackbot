@@ -14,6 +14,7 @@ export class SearchComponent {
     private disabled = '';
     constructor(private queryService: QueryService, private auth: AuthService) {
         this.preSearchText = this.populateSearch(window.location.href);
+        this.recordOmniSearch(window.location.href);
         this.auth.authEvent().subscribe(
             token => {
                 if (token) {
@@ -54,6 +55,19 @@ export class SearchComponent {
     populateSearch(href: any): string {
         let parameters = this.parseURLParams(href);
         return parameters['q'] || null;
+    }
+
+    recordOmniSearch(href: any) {
+        let parameters = this.parseURLParams(href);
+        if (parameters['q'] != null) {
+            this.queryService.doQuery(parameters['q'], 'omnibox').subscribe(
+              response => {
+                  return;
+              }, error => {
+                  console.log('Error happened: ' + error);
+              }
+            );
+        }
     }
 
     parseURLParams(url: any) {
