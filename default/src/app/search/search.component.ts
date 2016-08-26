@@ -42,7 +42,7 @@ export class SearchComponent {
     }
 
     doSearch(searchField: any) {
-        this.queryService.doQuery(searchField).subscribe(
+        this.queryService.doQuery(searchField, 'stackbot.com').subscribe(
             data => {
                 // If when data is returned from a query with a redirect set, do the redirect.
                 if (data['redirect']) {
