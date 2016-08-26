@@ -23,12 +23,39 @@ module.exports = webpackMerge(commonConfig, {
   plugins: [
     new webpack.NoErrorsPlugin(),
     new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.UglifyJsPlugin(),
-    new ExtractTextPlugin('[name].[hash].css'),
-    new webpack.DefinePlugin({
-      'process.env': {
-        'ENV': JSON.stringify(ENV)
-      }
-    })
+    new webpack.optimize.UglifyJsPlugin({
+        // beautify: true, //debug
+        // mangle: false, //debug
+        // dead_code: false, //debug
+        // unused: false, //debug
+        // deadCode: false, //debug
+        // compress: {
+        //   screw_ie8: true,
+        //   keep_fnames: true,
+        //   drop_debugger: false,
+        //   dead_code: false,
+        //   unused: false
+        // }, // debug
+        // comments: true, //debug
+
+        /**
+         * If true breaks the app.
+         * https://github.com/mishoo/UglifyJS2/issues/999
+         */
+        mangle: {screw_ie8 : true, keep_fnames: true },
+
+        beautify: false, //prod
+        // mangle: {screw_ie8: true}, //prod
+        compress: {screw_ie8: true}, //prod
+        comments: false //prod
+    }),
+   new ExtractTextPlugin('[name].[hash].css'),
+   //  new webpack.DefinePlugin({
+   //    'process.env': {
+   //      'ENV': JSON.stringify(ENV)
+   //    }
+   //  })
   ]
 });
+
+console.log('Ship production!');
