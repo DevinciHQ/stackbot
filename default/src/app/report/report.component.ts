@@ -24,7 +24,7 @@ export class ReportComponent {
         let minutes = date_object.getMinutes();
         let month = date_object.getMonth() + 1;
         let day = date_object.getDate();
-        let am_pm = date_object.getHours() >= 11 ? 'PM' : 'AM';
+        let am_pm = date_object.getHours() >= 12 ? 'PM' : 'AM';
         let hours_fixed = hours <= 9 ? '0' + hours : hours;
         let minutes_fixed = minutes <= 9 ? '0' + minutes : minutes;
         return hours_fixed + ':' + minutes_fixed + ' ' + am_pm + ' ' + month + '/' + day;
