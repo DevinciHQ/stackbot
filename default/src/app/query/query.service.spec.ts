@@ -46,7 +46,7 @@ describe('QueryService', () => {
         });
 
         // Ensure that doQuery gets back a redirect.
-        queryService.doQuery('asdf').subscribe( data => {
+        queryService.doQuery('asdf', 'test').subscribe( data => {
                 expect(data).toEqual({'redirect': 'http://google.com/#q=asdf'});
             },
             err => {
@@ -68,7 +68,7 @@ describe('QueryService', () => {
         });
 
         // Ensure that doQuery gets back a redirect.
-        queryService.doQuery('&+=#" _!a1');
+        queryService.doQuery('&+=#" _!a1', 'test');
 
     })));
 });
