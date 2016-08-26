@@ -19,7 +19,7 @@ commands:
     usage: deploy the app to google app engine
     cmd: |
       set -e
-      cd default && npm run build && cd  ../
+      cd default && npm run build-prod && cd  ../
       appcfg.py -A devinci-stackbot -V {{args}} update default
       appcfg.py -A devinci-stackbot -V {{args}} update backend
   deps-frontend:
@@ -35,6 +35,9 @@ commands:
       ahoy pip-install -- -r requirements.txt
   build:
     cmd: cd default && npm run build
+    usage: Build all of the files necessary to serve the site into the /dist folder.
+  build-prod:
+    cmd: cd default && npm run build-prod
     usage: Build all of the files necessary to serve the site into the /dist folder.
   test:
     cmd: |
