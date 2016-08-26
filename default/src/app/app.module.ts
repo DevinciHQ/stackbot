@@ -4,6 +4,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AngularFireModule, AuthProviders, AuthMethods } from 'angularfire2';
 
+import {
+  LocationStrategy,
+  HashLocationStrategy
+} from '@angular/common';
+
 import { HTTP_PROVIDERS } from '@angular/http';
 import { AUTH_PROVIDERS } from 'angular2-jwt';
 import { FocusMeDirective } from './shared/focus-me.directive';
@@ -16,7 +21,9 @@ import { ReportComponent } from './report/index';
 import { AuthService, AuthButtonComponent, AuthIntegrationsComponent } from './auth/index';
 import { SearchComponent } from './search/index';
 
-// DO NOT DELETE: This is needed or the compiler says, Cannot find namespace 'firebase'.
+import { routing, appRoutingProviders } from './app.routing';
+
+// DO NOT DELETE: This is needed of the compiler says, Cannot find namespace 'firebase'.
 /* tslint:disable */
 import * as firebase from 'firebase';
 /* tslint:enable */
@@ -59,6 +66,7 @@ let imports = [
     FormsModule,
     CommonModule,
     BrowserModule,
+    routing
 ];
 
 

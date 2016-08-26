@@ -4,7 +4,11 @@
     <div class="col-lg-4 col-lg-offset-4">
         <search></search>
         <auth-button></auth-button>
-        <auth-integrations></auth-integrations>
-        <report></report>
+
+        <a [routerLink]="['/report']" routerLinkActive="active">Report</a><br>
+        <a [routerLink]="['/integrations']" routerLinkActive="active">Integrations</a><br>
+
+        <router-outlet></router-outlet>
+
     </div>
 </div>
