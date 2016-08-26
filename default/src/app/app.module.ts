@@ -49,6 +49,8 @@ let providers = [
     HTTP_PROVIDERS,
     AuthService,
     BackendService,
+    appRoutingProviders,
+    {provide: LocationStrategy, useClass: HashLocationStrategy}
 ];
 
 let declarations = [
