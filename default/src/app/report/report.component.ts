@@ -31,9 +31,9 @@ export class ReportComponent {
     }
 
     constructor(private queryService: QueryService, private auth: AuthService) {
-        this.auth.authEvent().subscribe(
-            token => {
-                if (token) {
+        this.auth.getUser().subscribe(
+            user => {
+                if (user) {
                     this.queryService.getQueries().subscribe(
                         data => {
                             this.data = data;

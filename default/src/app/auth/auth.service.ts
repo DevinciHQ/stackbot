@@ -4,8 +4,8 @@
 
 import { AngularFireAuth } from 'angularfire2';
 import { Injectable } from '@angular/core';
-import {Subject}    from 'rxjs/Subject';
-import {User} from '../shared/user';
+import { Observable, BehaviorSubject }  from 'rxjs/Rx';
+import { User } from '../shared/user';
 import { BackendService } from '../shared/backend.service';
 
 
@@ -15,12 +15,8 @@ declare var ga: Function;
 @Injectable()
 export class AuthService {
 
-    private user: User;
-    private token = new Subject<string>();
-
-    // Observable string streams
-    // user$ = this.user.asObservable();
-    tokenEvent$ = this.token.asObservable();
+    private user = new BehaviorSubject<User>(null);
+    private token = new BehaviorSubject<string>(null);
 
     constructor(private fb_auth: AngularFireAuth, private backend: BackendService) {
 
@@ -32,24 +28,58 @@ export class AuthService {
                 if (authEvent) {
                     let _self = this;
                     authEvent.auth.getToken().then(function(idToken) {
-                        localStorage.setItem('id_token', idToken);
-                        _self.user = _self.userFromAuth(authEvent);
                         _self.token.next(idToken);
-                        ga('set', 'userId', authEvent.uid); // Set the user ID using signed-in user_id.
+                        // Update user only AFTER we get the token so that clients can just Subscribe to user and not jwt token,
+                        // which will change more often as the token needs to be updated for auth purposes.
+                        // Also, only update the user ONCE, so that user events don't cause infinite loops.
+                        if (! _self.user.getValue()) {
+                             console.log('update user');
+                             _self.user.next(_self.userFromAuth(authEvent));
+                        }
                     }).catch(function(error) {
                        console.log(error);
                     });
                 // The user logged out, or hasn't logged in yet.
                 } else {
-                    console.log('logout');
-                    localStorage.removeItem('id_token');
+                    this.user.next(null);
                     this.token.next(null);
+                }
+            }
+        );
+
+        // Register the user_id with google analytics.
+        this.user.subscribe(
+            (user: User) => {
+                if (user) {
+                    ga('set', 'userId', user.uid); // Set the user ID using signed-in user_id.
+                } else {
                     ga('unset', 'userId', null);
                 }
             }
         );
+
+        // Add and remove the token from local storage.
+        this.token.subscribe(
+            (token: string) => {
+                if (token) {
+                    console.log('update token')
+                    localStorage.setItem('id_token', token);
+                } else {
+                    localStorage.removeItem('id_token');
+                }
+            }
+        );
+
+
     }
 
+    getUser(): BehaviorSubject<User> {
+        return this.user;
+    }
+
+    getToken() {
+        return this.token;
+    }
 
     login() {
         this.fb_auth.login();
@@ -66,10 +96,6 @@ export class AuthService {
         // console.log('logout');
     }
 
-    authEvent() {
-        return this.tokenEvent$;
-    }
-
     userFromAuth(auth: any): User {
         let fields = {
             uid: auth.uid
@@ -77,3 +103,4 @@ export class AuthService {
         return new User(fields);
     }
 }
+

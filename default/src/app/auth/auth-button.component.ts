@@ -14,7 +14,7 @@ export class AuthButtonComponent {
     private loggedIn = false;
 
     constructor(public auth: AuthService) {
-      this.auth.authEvent().subscribe(
+      this.auth.getUser().subscribe(
             authentication => {
                 if (authentication != null) {
                     this.loggedIn = true;
