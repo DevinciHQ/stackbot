@@ -13,3 +13,6 @@ class User(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)
     updated = ndb.DateTimeProperty(auto_now=True)
 
+    @staticmethod
+    def get_by_user_id(user_id):
+        return User.query(User.user_id == user_id).get()
