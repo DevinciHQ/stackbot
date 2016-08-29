@@ -13,7 +13,7 @@ import { KeysPipe } from './shared/keys.pipe'
 
 import { AppComponent }  from './app.component';
 import { ReportComponent } from './report/index';
-import { AuthService, AuthButtonComponent } from './auth/index';
+import { AuthService, AuthButtonComponent, AuthIntegrationsComponent } from './auth/index';
 import { SearchComponent } from './search/index';
 
 // DO NOT DELETE: This is needed or the compiler says, Cannot find namespace 'firebase'.
@@ -48,6 +48,7 @@ let declarations = [
     AuthButtonComponent,
     AppComponent,
     FocusMeDirective,
+    AuthIntegrationsComponent,
     KeysPipe,
 ];
 
