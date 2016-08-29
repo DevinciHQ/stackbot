@@ -1,23 +1,12 @@
 
 import { Injectable }     from '@angular/core';
-import { Response } from '@angular/http';
 import { Observable }     from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
-import { AuthHttp } from 'angular2-jwt';
+import {BackendService} from '../shared/backend.service';
 
 @Injectable()
 export class QueryService {
-    private backendUrl: string = 'http://localhost:8081';
-
-    constructor(private http: AuthHttp) {
-        let hostname = window.location.hostname;
-        if (hostname.endsWith('stackbot.com') || hostname.endsWith('devinci-stackbot.appspot.com')) {
-            // Use the production backend when serving from the live site.
-            this.backendUrl = 'https://backend-dot-devinci-stackbot.appspot.com';
-        }
-    }
-
-    // Save the search query and get the JSON response (which also contains link to redirect) in return.
+    constructor(private backend: BackendService) {}
 
     /**
      *
@@ -25,50 +14,12 @@ export class QueryService {
      * @returns {Observable<Object>}
      */
     public doQuery(query: string, source: string): Observable<Object> {
-        return this._backendRequest('/api/q', {q: query, source: source });
+        // Save the search query and get the JSON response (which also contains link to redirect) in return.
+        return this.backend.request('/api/q', {q: query, source: source });
     }
 
     // Get the search history as a JSON response.
-    public getQueries() {
-        return this._backendRequest('/api/report', {});
+    public getQueries(): Observable<Object> {
+        return this.backend.request('/api/report', {});
     };
-
-    // Extract the JSON data from the response object.
-    private _backendRequest(endpoint: string, data: { [ key: string ]: string; }): Observable<Object> {
-
-        let getParams: string[] = [];
-        let requestUrl = this.backendUrl + endpoint;
-        Object.keys(data).forEach(function(key) {
-            getParams.push(encodeURIComponent(key) + '=' + encodeURIComponent(data[key]));
-        });
-        if (getParams) {
-            requestUrl += '?' + getParams.join('&');
-        }
-        return this.http.get(requestUrl)
-                .map(this._extractData)
-                .catch(this._handleError);
-    }
-
-    /**
-     * Process the returned data that will be handed off to the requesting element.
-     */
-    private _extractData(res: Response) {
-        let body = res.json();
-        // Ensure that the response was OK and that the success in the body of the JSON response was true.
-        if (!res.ok || !body['success'] === true) {
-            console.log('Request to ' +  res.url + ' (query service) failed.');
-            return {};
-        }
-        return body['payload'] || { };
-    }
-
- // Handling the errors in case the GET request above throws an error.
-    private _handleError (error: any) {
-        // In a real world app, we might use a remote logging infrastructure
-        // We'd also dig deeper into the error to get a better message
-        let errMsg = (error.message) ? error.message :
-            error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-        console.error(errMsg); // log to console instead
-        return Observable.throw(errMsg);
-    }
 }

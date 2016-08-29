@@ -11,6 +11,8 @@ import { FocusMeDirective} from './shared/focus-me.directive';
 
 import {AUTH_PROVIDERS} from 'angular2-jwt';
 import {ReportComponent} from './report/index';
+import { BackendService } from './shared/backend.service';
+
 
 // DO NOT DELETE: This is needed of the compiler says, Cannot find namespace 'firebase'.
 /* tslint:disable */
@@ -35,6 +37,7 @@ let providers = [
     AUTH_PROVIDERS,
     HTTP_PROVIDERS,
     AuthService,
+    BackendService,
 ];
 
 let declarations = [

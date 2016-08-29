@@ -6,6 +6,8 @@ import { AngularFireAuth } from 'angularfire2';
 import { Injectable } from '@angular/core';
 import {Subject}    from 'rxjs/Subject';
 import {User} from '../shared/user';
+import { BackendService } from '../shared/backend.service';
+
 
 // Declare ga function as ambient
 declare var ga: Function;
@@ -20,7 +22,7 @@ export class AuthService {
     // user$ = this.user.asObservable();
     tokenEvent$ = this.token.asObservable();
 
-    constructor(private fb_auth: AngularFireAuth) {
+    constructor(private fb_auth: AngularFireAuth, private backend: BackendService) {
 
         this.fb_auth.subscribe(
             // An auth event happened.
