@@ -11,7 +11,7 @@ import { AuthService } from './auth.service';
     styleUrls: ['auth-button.component.css']
 })
 export class AuthButtonComponent {
-    private loggedIn = false;
+    public loggedIn = false;
 
     constructor(public auth: AuthService) {
       this.auth.getUser().subscribe(

@@ -202,8 +202,10 @@ export class AuthService {
         let dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : 0;
         let dualScreenTop = window.screenTop !== undefined ? window.screenTop : 0;
 
-        let width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
-        let height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
+        let width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ?
+            document.documentElement.clientWidth : screen.width;
+        let height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ?
+            document.documentElement.clientHeight : screen.height;
 
         let left = ((width / 2) - (w / 2)) + dualScreenLeft;
         let top = ((height / 2) - (h / 2)) + dualScreenTop;
