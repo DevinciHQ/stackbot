@@ -13,6 +13,17 @@ class User(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)
     updated = ndb.DateTimeProperty(auto_now=True)
 
+    def credentials(self, cred_type=None):
+        """ Returns the list of keys for all the user's credentials """
+
+        from credential import Credential
+
+        credentials = Credential.query(Credential.user == self.key)
+        if cred_type:
+            credentials.filter(Credential.type == cred_type)
+        keys = [cred.key for cred in credentials]
+        return ndb.get_multi(keys)  # type: list[Credential | None]
+
     @staticmethod
     def get_by_user_id(user_id):
         return User.query(User.user_id == user_id).get()
