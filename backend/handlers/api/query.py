@@ -14,8 +14,6 @@ from user_agents import parse as parseUA
 # was passed.
 @app.route('/api/q', methods=['GET'])
 def query_handler():
-    # Set CORS headers for GET requests
-    # security.set_cors_header(self)
     # Make sure the length of the query string is at least 1 char.
     q = request.args.get('q', '')
     if len(q) <= 0:
@@ -48,9 +46,6 @@ def query_handler():
     )
     # Save to the datatore.
     query.put()
-    # Output some debug messages for now.
-    # TODO: Redirect to google.
-    logging.info('Saved')
     logging.debug('query: %s', str(q))
 
     escaped_q = urllib.urlencode({'q': q})
