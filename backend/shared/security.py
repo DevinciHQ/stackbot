@@ -24,7 +24,7 @@ class AuthenticationError(Exception):
     """Do nothing with the Authentication Error"""
     pass
 
-class PublicKey:
+class PublicKey(object):
     """Define public key caches the keys and makes a request for new keys only if
     the keys are expired"""
     # This is called only the first time that the class is called.

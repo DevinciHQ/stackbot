@@ -13,7 +13,7 @@ from models.credential import Credential
 OAUTH = OAuth(APP)
 
 
-class OauthHandler:
+class OauthHandler(object):
     """A generic Oauth handler class that should work for most oauth providers and
     our frontend oauth code."""
 
