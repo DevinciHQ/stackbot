@@ -14,7 +14,8 @@ class ApiResponse(dict):
 def get_geo_data(request):
     """ Get the geolocation data from the request. """
 
-    # Note that geoip2 (from maximind) doesn't work on GAE because there is a C lib in there apparently.
+    # Note that geoip2 (from maximind) doesn't work on GAE because there is a
+    # C lib in there apparently.
     # We can use Appengine's added headers to do that work though thankfully.
     geo = dict()
     geo['region'] = request.headers.get("X-AppEngine-Region", "unknown")

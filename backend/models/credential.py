@@ -15,5 +15,3 @@ class Credential(ndb.Model):
     # TODO: We may consider adding an enabled flag where the user could disable
     # an integration without us loosing the key completely.
     # enabled = ndb.BooleanProperty()
-
-

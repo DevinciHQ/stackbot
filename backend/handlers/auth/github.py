@@ -4,7 +4,8 @@ from shared.oauth import OauthHandler, app, request
 
 from shared.settings import Settings
 
-# TODO: We should define our settings ahead of time so that we avoid typos (learn from Drupal's mistakes).
+# TODO: We should define our settings ahead of time so that we avoid typos
+# (learn from Drupal's mistakes).
 # Settings.define('github_consumer_key')
 # Settings.define('github_consumer_secret')
 
@@ -47,7 +48,3 @@ def authorized():
 def token_getter():
     user = github.authenticate_user_or_abort(request)
     return github.get_credential(user)
-
-
-
-

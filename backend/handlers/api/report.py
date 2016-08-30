@@ -9,7 +9,8 @@ from google.appengine.ext import ndb
 
 @app.route('/api/report', methods=['GET'])
 def report_handler():
-    """ Returns a report with all of the most recent queries up to some limit in reverse chronological order. """
+    """ Returns a report with all of the most recent queries up to some limit
+     in reverse chronological order. """
 
     user_id = None
     try:
@@ -21,8 +22,8 @@ def report_handler():
 
     # https://cloud.google.com/appengine/docs/python/ndb/queries#properties_by_string
     # https://cloud.google.com/appengine/docs/python/ndb/queries#cursors
-    result = ndb.gql("SELECT query, timestamp FROM Query WHERE uid = :1 ORDER BY timestamp DESC LIMIT 20",
-                     user_id)
+    result = ndb.gql("SELECT query, timestamp FROM Query WHERE uid = :1 ORDER BY "
+                     "timestamp DESC LIMIT 20", user_id)
     data = []
     for query in result:
         # This is annoying.. maybe we should use another word instead of query?

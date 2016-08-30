@@ -17,7 +17,8 @@ class User(ndb.Model):
     def credentials(self, cred_type=None):
         """ Returns all the user's credentials. """
 
-        # TODO: We shouldn't have to worry about the number of credentials right now because we only allow one per type.
+        # TODO: We shouldn't have to worry about the number of credentials right now because we
+        # only allow one per type.
 
         from credential import Credential
 

@@ -5,7 +5,8 @@ class Settings(ndb.Model):
     """Stores settings in the database.
 
     Notes:
-        Taken from  http://stackoverflow.com/a/35261091 as a way to store sensitive settings in the database.
+        Taken from  http://stackoverflow.com/a/35261091 as a way to store
+        sensitive settings in the database.
 
     """
     name = ndb.StringProperty()

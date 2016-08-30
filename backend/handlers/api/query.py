@@ -56,4 +56,3 @@ def query_handler():
         'redirect': redirect
     }
     return jsonify(ApiResponse(output))
-

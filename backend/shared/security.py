@@ -28,7 +28,8 @@ class PublicKey:
         self._expires = None
         self._keys = {}
         self.RFC_1123_FORMAT = "%a, %d %b %Y %H:%M:%S GMT"
-        self._url = 'https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com'
+        self._url = 'https://www.googleapis.com/robot/v1/metadata/x509/' \
+                    'securetoken@system.gserviceaccount.com'
 
     # This is called everytime the class is called.
     def __call__(self, kid):
@@ -116,8 +117,10 @@ def verify_jwt_token(request):
     global pubkey
     key = pubkey(kid)
 
-    # Finally decode the token using the RS256 algorithm, the devinci-stackbot audience, and the google public key.
-    verified_decoded_token = jwt.decode(raw_token, key, algorithms=['RS256'], audience='devinci-stackbot')
+    # Finally decode the token using the RS256 algorithm,
+    # the devinci-stackbot audience, and the google public key.
+    verified_decoded_token = jwt.decode(raw_token, key, algorithms=['RS256'],
+                                        audience='devinci-stackbot')
 
     if not verified_decoded_token.get('sub'):
         raise ValidationError("sub (aka user_id) is missing from token payload.")
@@ -146,7 +149,11 @@ def set_cors_header(request, response):
     if url.hostname == 'localhost' or host in approved_hosts:
         response.headers['Access-Control-Allow-Origin'] = host
 
-    response.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+    response.headers['Access-Control-Allow-Headers'] = 'Origin,' \
+                                                       ' X-Requested-With,' \
+                                                       ' Content-Type, ' \
+                                                       'Accept, ' \
+                                                       'Authorization'
     response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
     response.headers['Access-Control-Allow-Credentials'] = 'true'
     return response
@@ -160,7 +167,8 @@ def _jwt_authenticate(request):
 def authenticate_user(request):
 
     # I had an idea with the code below to allow a function to pass an exception handler..
-    # Now thinking it's unnecessary, but it would be nice to have something automatically send the abort codes for us.
+    # Now thinking it's unnecessary, but it would be nice to have something automatically
+    # send the abort codes for us.
     #
     # except_fn = None
     # if except_fn is not None and not callable(except_fn):
@@ -202,7 +210,7 @@ def get_referrer_insecure(request):
     if not request.referrer:
         return None
     url = urlparse(request.referrer)
-    if url and url.scheme and url.netloc :
+    if url and url.scheme and url.netloc:
         return "%s://%s" % (url.scheme, url.netloc)
     else:
         logging.warn("Got a malformed referrer.")

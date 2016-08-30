@@ -14,7 +14,8 @@ oauth = OAuth(app)
 
 
 class OauthHandler:
-    """A generic Oauth handler class that should work for most oauth providers and our frontend oauth code."""
+    """A generic Oauth handler class that should work for most oauth providers and
+    our frontend oauth code."""
 
 
     def __init__(self, auth_type, config):
@@ -114,14 +115,16 @@ class OauthHandler:
         """API call to get the session cookie and get the URL to redirect the user to.
 
         Notes:
-            Generates a new session cookie that contains the user_id if the user XHR request uses 'withCredentials = true'.
+            Generates a new session cookie that contains the user_id if the user XHR request uses
+            'withCredentials = true'.
             See https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials
 
         Example flask route:
             /auth/<TYPE>
 
         Todos:
-            * Since this is really more of an API call, should it even be in this class instead of part of the integrations api?
+            * Since this is really more of an API call, should it even be in this class instead of
+            part of the integrations api?
 
         Returns:
             ApiResponse with redirect_for_auth set to the full path a user should be redirected to.
@@ -142,7 +145,8 @@ class OauthHandler:
         # TODO: Can we move this to self.add() instead?
         sec.set_auth_session_cookie()
 
-        # Set the referrer in the session cookie as well so that we can check (insecurely) where the user was originally redirected from.
+        # Set the referrer in the session cookie as well so that we can check (insecurely)
+        # where the user was originally redirected from.
         session['referrer_host'] = sec.get_referrer_insecure(request)
 
         return jsonify(ApiResponse(payload={
@@ -162,12 +166,14 @@ class OauthHandler:
         Returns:
             A Response with a 301 redirect created by flask-oauth.
         """
-        # User session cookie should be set, so we don't need to keep track of the user, but fail if not.
+        # User session cookie should be set, so we don't need to keep track of the user,
+        #  but fail if not.
         self.authenticate_user_or_abort(request)
         return self.oauth_app.authorize(callback=url_for('authorized', _external=True))
 
     def delete(self):
-        """When an authenticated User visits this page, it deletes their OAuth token of this type if it exists.
+        """When an authenticated User visits this page, it deletes their OAuth token of
+        this type if it exists.
 
         Notes:
            A User session cookie can be used to authenticate user.
@@ -191,16 +197,19 @@ class OauthHandler:
 
            This page is where users end up who have completed the OAuth flow.
 
-           Since this page will often show up inside of a popup, we need to finish the process by cleaning up the popup
-           from the frontend code, which is what the popup_closer helps us do. The frontend can send messages to this page
-           via message events, and it will respond back with a success message so that parent can close it. We're not
-           currently handling a scenario where something goes wrong and there is some sort of error.
+           Since this page will often show up inside of a popup, we need to finish the process
+           by cleaning up the popup from the frontend code, which is what the popup_closer helps
+           us do. The frontend can send messages to this page via message events, and it will
+           respond back with a success message so that parent can close it. We're not currently
+           handling a scenario where something goes wrong and there is some sort of error.
 
-           We currently have a potential security issue where we rely on the insecure Referrer header when listening for
-           incoming messages in the popup. Not thinking it's a big deal because that session cookie should only be set
-           when the frontend makes an authorized request to the backend. In theory, an authenticated user could fake the
-           request header of the initial request, but it's not clear to what end since it's their browser. It's also
-           mitigated by the fact that we check the referrer against a whitelist before printing it in the popup_closer.
+           We currently have a potential security issue where we rely on the insecure
+           Referrer header when listening for incoming messages in the popup. Not thinking
+           it's a big deal because that session cookie should only be set when the frontend
+           makes an authorized request to the backend. In theory, an authenticated user could
+           fake the request header of the initial request, but it's not clear to what end since
+           it's their browser. It's also mitigated by the fact that we check the referrer
+           against a whitelist before printing it in the popup_closer.
 
            See check_valid_referrers()
 
