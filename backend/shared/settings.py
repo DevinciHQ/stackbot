@@ -18,14 +18,14 @@ class Settings(ndb.Model):
     @staticmethod
     def get(name):
         """Store the actual settings in the database."""
-        _NOT_SET_VALUE = "_NOT_SET"
+        not_set_value = "_NOT_SET"
         retval = Settings.query(Settings.name == name).get()
         if not retval:
             retval = Settings()
             retval.name = name
-            retval.value = _NOT_SET_VALUE
+            retval.value = not_set_value
             retval.put()
-        if retval.value == _NOT_SET_VALUE:
+        if retval.value == not_set_value:
             raise Exception(('Setting %s not found in the database. A placeholder ' +
                              'record has been created. Go to the Developers Console for your app ' +
                              'in App Engine, look up the Settings record with name=%s and enter ' +

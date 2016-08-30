@@ -4,7 +4,7 @@ import os
 
 from flask import request
 
-from shared import app
+from shared import APP
 from shared import security
 
 
@@ -14,25 +14,25 @@ import handlers
 
 from shared.settings import Settings
 
-app.debug = True
-app.secret_key = 'development'
+APP.debug = True
+APP.secret_key = 'development'
 
 """ ------------- MAIN ------------------ """
 
 Settings.get('github_consumer_key')
 
-server = str(os.getenv('SERVER_SOFTWARE', ''))
+SERVER = str(os.getenv('SERVER_SOFTWARE', ''))
 # logging.info("Running using server: ", env)
 # Set a flag for what environment we're in.
-if server.startswith('Google App Engine/'):
+if SERVER.startswith('Google App Engine/'):
     # Running on Google AppEngine
-    env = 'production'
+    ENV = 'production'
 else:
     # Running locally using dev_appserver.py
-    env = 'local'
+    ENV = 'local'
 
 
-@app.after_request
+@APP.after_request
 def after_request(response):
     """ This handles CORS requests for all requests (including OPTIONS).  """
     response = security.set_cors_header(request, response)

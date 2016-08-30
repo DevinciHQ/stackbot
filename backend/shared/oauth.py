@@ -5,12 +5,12 @@ from flask import url_for, session, request, jsonify, abort
 from flask_oauthlib.client import OAuth, OAuthRemoteApp
 from shared import ApiResponse
 from models.credential import Credential
-from shared import app
+from shared import APP
 from shared.security import ValidationError, AuthenticationError
 import shared.security as sec
 from models.user import User
 
-oauth = OAuth(app)
+OAUTH = OAuth(APP)
 
 
 class OauthHandler:
@@ -26,7 +26,7 @@ class OauthHandler:
         """
         self.cred_type = auth_type
         self.config = config
-        self.oauth_app = oauth.remote_app(type, **config)  # type: OAuthRemoteApp
+        self.oauth_app = OAUTH.remote_app(type, **config)  # type: OAuthRemoteApp
 
     """ HELPER FUNCTIONS FOLLOW """
 

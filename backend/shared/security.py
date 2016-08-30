@@ -33,7 +33,7 @@ class PublicKey:
         """Initialize the fields required by the key"""
         self._expires = None
         self._keys = {}
-        self.RFC_1123_FORMAT = "%a, %d %b %Y %H:%M:%S GMT"
+        self.rfc_1123_format = "%a, %d %b %Y %H:%M:%S GMT"
         self._url = 'https://www.googleapis.com/robot/v1/metadata/x509/' \
                     'securetoken@system.gserviceaccount.com'
 
@@ -56,11 +56,11 @@ class PublicKey:
         """Fetch the keys from firebase if they are expired"""
         res = urlfetch.Fetch(self._url)
         expires = res.headers.data['expires']
-        self._expires = time.strptime(expires, self.RFC_1123_FORMAT)
+        self._expires = time.strptime(expires, self.rfc_1123_format)
         self._keys = json.loads(res.content)
 
     # Converts a public x509 cert into a public RSA key.
-    def conv_509_to_RSA(self, cert):
+    def conv_509_to_rsa(self, cert):
         """Convert the x509 cert obtained into a public RSA key."""
         from Crypto.Util.asn1 import DerSequence
         from Crypto.PublicKey import RSA
@@ -89,7 +89,7 @@ class PublicKey:
             raise Exception("kid not found in accepted public keys")
 
         cert = keys[kid]
-        pkey = self.conv_509_to_RSA(cert)
+        pkey = self.conv_509_to_rsa(cert)
         return pkey.publickey().exportKey()
 
 
@@ -125,8 +125,8 @@ def verify_jwt_token(request):
         raise ValidationError("alg jwt header should be RS256, but is not.")
 
     # use the global pubkey object to fetch the key that matches the key id.
-    global pubkey
-    key = pubkey(kid)
+    global PUBKEY
+    key = PUBKEY(kid)
 
     # Finally decode the token using the RS256 algorithm,
     # the devinci-stackbot audience, and the google public key.
@@ -237,4 +237,4 @@ def get_referrer_insecure(request):
 
 
 # Create the global pubkey object so that other code can use it.
-pubkey = PublicKey()
+PUBKEY = PublicKey()

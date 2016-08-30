@@ -1,7 +1,7 @@
 """This module defines the routes for github authentication process"""
 from werkzeug import security
 
-from shared.oauth import OauthHandler, app, request
+from shared.oauth import OauthHandler, APP, request
 
 from shared.settings import Settings
 
@@ -10,7 +10,7 @@ from shared.settings import Settings
 # Settings.define('github_consumer_key')
 # Settings.define('github_consumer_secret')
 
-github_config = {
+GITHUB_CONFIG = {
     # TODO: These settings don't trigger an issue on startup, only when a request is made.
     'consumer_key': Settings.get('github_consumer_key'),
     'consumer_secret': Settings.get('github_consumer_secret'),
@@ -22,35 +22,35 @@ github_config = {
     'authorize_url': 'https://github.com/login/oauth/authorize'
 }
 
-github = OauthHandler('github', github_config)
+GITHUB = OauthHandler('github', GITHUB_CONFIG)
 
 
-@app.route('/auth/github')
+@APP.route('/auth/github')
 def get():
     """Route for get."""
-    return github.get()
+    return GITHUB.get()
 
 
-@app.route('/auth/github/add')
+@APP.route('/auth/github/add')
 def add():
     """Route for add"""
-    return github.add()
+    return GITHUB.add()
 
 
-@app.route('/auth/github/delete')
+@APP.route('/auth/github/delete')
 def delete():
     """Route for delete"""
-    return github.delete()
+    return GITHUB.delete()
 
 
-@app.route('/auth/github/authorized_callback')
+@APP.route('/auth/github/authorized_callback')
 def authorized():
     """Route for authorize"""
-    return github.authorized()
+    return GITHUB.authorized()
 
 
-@github.oauth_app.tokengetter
+@GITHUB.oauth_app.tokengetter
 def token_getter():
     """Get the credentials from the user token"""
-    user = github.authenticate_user_or_abort(request)
-    return github.get_credential(user)
+    user = GITHUB.authenticate_user_or_abort(request)
+    return GITHUB.get_credential(user)

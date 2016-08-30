@@ -4,19 +4,19 @@ import logging
 import urllib
 
 from flask import request, abort, jsonify
-from shared import app
+from shared import APP
 from models.query import Query
 from shared import security, get_geo_data, ApiResponse
 from user_agents import parse as parseUA
 
 
-@app.route('/api/q', methods=['GET'])
+@APP.route('/api/q', methods=['GET'])
 def query_handler():
     """ Handle the incoming request and create a Query entity if a query string was passed. """
 
     # Make sure the length of the query string is at least 1 char.
-    q = request.args.get('q', '')
-    if len(q) <= 0:
+    query = request.args.get('q', '')
+    if len(query) <= 0:
         abort(400)
 
     user_id = None
@@ -28,15 +28,15 @@ def query_handler():
         abort(401)
 
     # Get the user-agent header from the request.
-    userAgent = parseUA(request.headers['User-Agent'])
+    user_agent = parseUA(request.headers['User-Agent'])
     geo = get_geo_data(request)
 
     # Create a new Query entity from the q value.
     # TODO: Add the other values that we want from the request headers.
     query = Query(
-        query=q,
-        os=str(userAgent.os.family) + " Version: " + str(userAgent.os.version_string),
-        browser=str(userAgent.browser.family),
+        query=query,
+        os=str(user_agent.os.family) + " Version: " + str(user_agent.os.version_string),
+        browser=str(user_agent.browser.family),
         timestamp=datetime.datetime.utcnow().isoformat(),
         country=geo['country'],
         city=geo['city'],
@@ -46,9 +46,9 @@ def query_handler():
     )
     # Save to the datatore.
     query.put()
-    logging.debug('query: %s', str(q))
+    logging.debug('query: %s', str(query))
 
-    escaped_q = urllib.urlencode({'q': q})
+    escaped_q = urllib.urlencode({'q': query})
     redirect = 'http://google.com/#' + escaped_q
 
     # Output for when we first land on the page (or when no query was entered)
