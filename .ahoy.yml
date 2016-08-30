@@ -57,7 +57,16 @@ commands:
     usage: Run the backend unit tests.
     cmd: |
       set -e
+      if [ -z "$APPENGINE" ]; then
+         echo "You need to set your \$APPENGINE env var to the path of your appengine sdk. Usually /usr/local/google_appengine."
+         exit 1
+      elif [ ! -d "$APPENGINE" ]; then
+         echo "\$APPENGINE is set, but the path '$APPENGINE' doesn't exist."
+         exit 1
+      fi
+
       cd backend &&
+      python run_tests.py $APPENGINE tests
       pylint handlers models shared main.py
 
   test:
