@@ -1,3 +1,4 @@
+""" Test the Query model."""
 import unittest
 
 from google.appengine.ext import ndb, testbed
@@ -6,8 +7,10 @@ from models.query import Query
 
 # [START datastore_example_test]
 class DatastoreTestCase(unittest.TestCase):
+    """ Create a test case. """
 
     def setUp(self):
+        """ Setup the test."""
         # First, create an instance of the Testbed class.
         self.testbed = testbed.Testbed()
         # Then activate the testbed, which prepares the service stubs for use.
@@ -25,11 +28,13 @@ class DatastoreTestCase(unittest.TestCase):
 
     # [START datastore_example_teardown]
     def tearDown(self):
+        """ Tear down the test. """
         self.testbed.deactivate()
     # [END datastore_example_teardown]
 
     # [START datastore_example_insert]
     def testInsertEntity(self):
+        """ Test the Query can be inserted. """
         Query().put()
         self.assertEqual(1, len(Query.query().fetch(2)))
     # [END datastore_example_insert]
