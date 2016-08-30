@@ -15,8 +15,8 @@ def query_handler():
     """ Handle the incoming request and create a Query entity if a query string was passed. """
 
     # Make sure the length of the query string is at least 1 char.
-    query = request.args.get('q', '')
-    if len(query) <= 0:
+    query_string = request.args.get('q', '')
+    if len(query_string) <= 0:
         abort(400)
 
     user_id = None
@@ -34,7 +34,7 @@ def query_handler():
     # Create a new Query entity from the q value.
     # TODO: Add the other values that we want from the request headers.
     query = Query(
-        query=query,
+        query=query_string,
         os=str(user_agent.os.family) + " Version: " + str(user_agent.os.version_string),
         browser=str(user_agent.browser.family),
         timestamp=datetime.datetime.utcnow().isoformat(),
@@ -48,7 +48,7 @@ def query_handler():
     query.put()
     logging.debug('query: %s', str(query))
 
-    escaped_q = urllib.urlencode({'q': query})
+    escaped_q = urllib.urlencode({'q': query_string})
     redirect = 'http://google.com/#' + escaped_q
 
     # Output for when we first land on the page (or when no query was entered)
