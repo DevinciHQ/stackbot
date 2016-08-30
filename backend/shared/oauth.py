@@ -28,8 +28,8 @@ class OauthHandler(object):
         self.config = config
         self.oauth_app = OAUTH.remote_app(type, **config)  # type: OAuthRemoteApp
 
-
-    def authenticate_user_or_abort(self, req):
+    @staticmethod
+    def authenticate_user_or_abort(req):
         """Verify a user and return a user_id or abort the request with a 401 error.
 
         Args:
@@ -45,7 +45,8 @@ class OauthHandler(object):
             logging.error(err)
             abort(401)
 
-    def check_valid_referrers(self, host_to_check):
+    @staticmethod
+    def check_valid_referrers(host_to_check):
         """Return the verified referrer or None if not verified.
 
         Args:

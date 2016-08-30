@@ -60,7 +60,8 @@ class PublicKey(object):
         self._keys = json.loads(res.content)
 
     # Converts a public x509 cert into a public RSA key.
-    def conv_509_to_rsa(self, cert):
+    @staticmethod
+    def conv_509_to_rsa(cert):
         """Convert the x509 cert obtained into a public RSA key."""
         from Crypto.Util.asn1 import DerSequence
         from Crypto.PublicKey import RSA
