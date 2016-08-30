@@ -1,8 +1,8 @@
 """Exposing all of the modules inside handlers"""
 
-import api.query
-import api.report
-import api.user
+import handlers.api.query
+import handlers.api.report
+import handlers.api.user
 
-import auth.github
-import api.integration
+import handlers.auth.github
+import handlers.api.integration
