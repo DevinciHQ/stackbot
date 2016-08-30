@@ -1,3 +1,4 @@
+"""This module handles the report route /api/report"""
 import logging
 
 from flask import request, abort, jsonify

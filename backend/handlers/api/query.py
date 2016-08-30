@@ -1,3 +1,4 @@
+"""This module handles the query route /api/q"""
 import datetime
 import logging
 import urllib

@@ -1,3 +1,5 @@
+"""This module checks handles defines the working of the /api/integration
+route"""
 import logging
 
 from flask import request, abort, jsonify
@@ -7,6 +9,7 @@ from shared.security import authenticate_user, ExpiredSignatureError
 
 @app.route('/api/integration', methods=['GET'])
 def get_integrations():
+    """This method returns the integrations data if it passes the authentication test"""
     creds = []
     try:
         user = authenticate_user(request)
