@@ -1,9 +1,10 @@
+"""Defining the schema of the User table in the datastore"""
 # For use when dealing with the datastore.
 from google.appengine.ext import ndb
 
 
 class User(ndb.Model):
-
+    """Define the columns of the User table"""
     user_id = ndb.StringProperty(required=True)
     username = ndb.StringProperty(required=True)
     email = ndb.StringProperty(required=True)
@@ -30,5 +31,5 @@ class User(ndb.Model):
 
     @staticmethod
     def get_by_user_id(user_id):
-        return User.query(User.user_id == user_id).get()
         """ Returns a User from a user_id of one exists. """
+        return User.query(User.user_id == user_id).get()

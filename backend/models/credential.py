@@ -1,9 +1,11 @@
-# For use when dealing with the datastore.
+"""Defining the schema of Credential table"""
+#  For use when dealing with the datastore.
 from google.appengine.ext import ndb
 
 
 # See https://cloud.google.com/appengine/docs/python/ndb/creating-entity-models
 class Credential(ndb.Model):
+    """Define the individual columns of the Credential table"""
     from models.user import User
 
     user = ndb.KeyProperty(User, required=True)
