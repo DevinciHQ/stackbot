@@ -193,7 +193,7 @@ def authenticate_user(req):
     # Plan A: Get their user_id from a jwt token.
     try:
         user_id = _jwt_authenticate(req)
-    except (ValidationError, ExpiredSignatureError) as err:
+    except (ValidationError, ExpiredSignatureError):
         # Keep track of the original error.
         err_type, err_value, err_tb = sys.exc_info()
         # Plan B: Get their user_id from the session.
