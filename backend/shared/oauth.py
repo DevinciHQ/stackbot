@@ -110,7 +110,6 @@ class OauthHandler:
 
     """" HANDLER ENDPOINT FUNCTIONS FOLLOW """
 
-    @property
     def get(self):
         """API call to get the session cookie and get the URL to redirect the user to.
 

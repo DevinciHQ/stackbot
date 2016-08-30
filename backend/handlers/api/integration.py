@@ -1,8 +1,8 @@
 import json
 import logging
 
-from flask import request, abort
-from shared import app
+from flask import request, abort, jsonify
+from shared import app, ApiResponse
 from models.credential import Credential
 from models.user import User
 from shared.security import authenticate_user, ExpiredSignatureError

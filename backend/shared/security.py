@@ -5,7 +5,7 @@ from jwt import ExpiredSignatureError
 from urlparse import urlparse
 import json
 import logging
-from flask import abort, session
+from flask import abort, session, request
 from models.user import User
 import sys
 
@@ -202,7 +202,7 @@ def get_referrer_insecure(request):
     if not request.referrer:
         return None
     url = urlparse(request.referrer)
-    if url.get('scheme') and url.get('netloc'):
+    if url and url.scheme and url.netloc :
         return "%s://%s" % (url.scheme, url.netloc)
     else:
         logging.warn("Got a malformed referrer.")

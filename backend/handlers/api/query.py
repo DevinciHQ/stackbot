@@ -9,7 +9,6 @@ from shared import security, get_geo_data, ApiResponse
 from user_agents import parse as parseUA
 
 
-
 @app.route('/api/q', methods=['GET'])
 def query_handler():
     """ Handle the incoming request and create a Query entity if a query string was passed. """
@@ -21,7 +20,7 @@ def query_handler():
 
     user_id = None
     try:
-        user_id = security.authenticate_user()
+        user_id = security.authenticate_user(request)
     except security.ValidationError as err:
         # IF the user isn't logged in, then throw a 403 error.
         logging.error(err)

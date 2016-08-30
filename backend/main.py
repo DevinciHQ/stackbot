@@ -10,10 +10,14 @@ from shared import security
 # noinspection PyUnresolvedReferences
 import handlers
 
+from shared.settings import Settings
+
 app.debug = True
 app.secret_key = 'development'
 
 """ ------------- MAIN ------------------ """
+
+Settings.get('github_consumer_key')
 
 server = str(os.getenv('SERVER_SOFTWARE', ''))
 # logging.info("Running using server: ", env)
