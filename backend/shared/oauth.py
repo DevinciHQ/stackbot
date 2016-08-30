@@ -1,5 +1,5 @@
+"""Implementation of the oauth functions"""
 import logging
-from urlparse import urlparse
 
 from flask import url_for, session, request, jsonify, abort
 from flask_oauthlib.client import OAuth, OAuthRemoteApp
@@ -16,7 +16,6 @@ oauth = OAuth(app)
 class OauthHandler:
     """A generic Oauth handler class that should work for most oauth providers and
     our frontend oauth code."""
-
 
     def __init__(self, auth_type, config):
         """Constructor that creates the OauthHandler.

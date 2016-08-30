@@ -1,3 +1,6 @@
+"""
+This modules allows us to store sensitive settings in the database.
+"""
 from google.appengine.ext import ndb
 
 
@@ -14,7 +17,7 @@ class Settings(ndb.Model):
 
     @staticmethod
     def get(name):
-
+        """Store the actual settings in the database."""
         _NOT_SET_VALUE = "_NOT_SET"
         retval = Settings.query(Settings.name == name).get()
         if not retval:

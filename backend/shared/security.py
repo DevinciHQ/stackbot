@@ -1,3 +1,4 @@
+"""Add code for dealing with security in the backend"""
 import time
 from google.appengine.api import urlfetch
 import jwt
@@ -15,16 +16,21 @@ jwt.register_algorithm('RS256', RSAAlgorithm(RSAAlgorithm.SHA256))
 
 
 class ValidationError(Exception):
+    """Do nothing with the Validation Error"""
     pass
 
 
 class AuthenticationError(Exception):
+    """Do nothing with the Authentication Error"""
     pass
 
 class PublicKey:
+    """Define public key caches the keys and makes a request for new keys only if
+    the keys are expired"""
     # This is called only the first time that the class is called.
     # It initializes the default values.
     def __init__(self):
+        """Initialize the fields required by the key"""
         self._expires = None
         self._keys = {}
         self.RFC_1123_FORMAT = "%a, %d %b %Y %H:%M:%S GMT"
@@ -33,11 +39,12 @@ class PublicKey:
 
     # This is called everytime the class is called.
     def __call__(self, kid):
+        """Get the actual keys from firebase"""
         return self.get_public_cert(kid)
 
     # Grabs the google certs from the cache or refreshes if they're missing or expired.
     def get_certs(self):
-
+        """Return the keys if they are not expired."""
         now = time.gmtime()
         if self._expires is None or self._expires <= now:
             self.refresh()
@@ -46,6 +53,7 @@ class PublicKey:
 
     # Updates the cache of public google certs
     def refresh(self):
+        """Fetch the keys from firebase if they are expired"""
         res = urlfetch.Fetch(self._url)
         expires = res.headers.data['expires']
         self._expires = time.strptime(expires, self.RFC_1123_FORMAT)
@@ -53,6 +61,7 @@ class PublicKey:
 
     # Converts a public x509 cert into a public RSA key.
     def conv_509_to_RSA(self, cert):
+        """Convert the x509 cert obtained into a public RSA key."""
         from Crypto.Util.asn1 import DerSequence
         from Crypto.PublicKey import RSA
         from binascii import a2b_base64
@@ -74,6 +83,7 @@ class PublicKey:
 
     # Pulls the public cert from the list of certs provided by google.
     def get_public_cert(self, kid):
+        """Get the public certs from firebase"""
         keys = self.get_certs()
         if kid not in keys.keys():
             raise Exception("kid not found in accepted public keys")
@@ -86,7 +96,8 @@ class PublicKey:
 # Takes a request and returns the payload of the Authorization JWT token,
 # including verifying it against google's public keys.
 def verify_jwt_token(request):
-
+    """Verify the jwt token using the key obtained from firebase and return
+    the decoded token"""
     # Make sure we actually have an Authorization header.
     auth_header = request.headers.get('Authorization', False)
     if not auth_header:
@@ -130,6 +141,7 @@ def verify_jwt_token(request):
 
 # Return the object after setting the CORS header.
 def set_cors_header(request, response):
+    """Set the CORS header for the approved hosts"""
 
     approved_hosts = [
         'http://localhost:8080',
@@ -160,12 +172,16 @@ def set_cors_header(request, response):
 
 
 def _jwt_authenticate(request):
+    """Authenticate the JWT token and get the user_id from it."""
     user_id = verify_jwt_token(request).get('sub')
     return user_id
 
 
 def authenticate_user(request):
-
+    """
+    Get the user from the JWT token. If not found there, check the session cookie
+    to see if it is set there. Raise an error if it is not found at any of those places.
+    """
     # I had an idea with the code below to allow a function to pass an exception handler..
     # Now thinking it's unnecessary, but it would be nice to have something automatically
     # send the abort codes for us.
@@ -194,19 +210,23 @@ def authenticate_user(request):
 
 
 def set_auth_session_cookie():
+    """Set the user session cookie"""
     user_id = _jwt_authenticate(request)
     session['user_id'] = user_id
 
 
 def get_auth_session_cookie():
+    """Get the user session cookie"""
     return session.get('user_id', None)
 
 
 def delete_auth_session_cookie():
+    """Delete the user session cookie"""
     session.pop('user_id', None)
 
 
 def get_referrer_insecure(request):
+    """check for an insecure referrer"""
     if not request.referrer:
         return None
     url = urlparse(request.referrer)
