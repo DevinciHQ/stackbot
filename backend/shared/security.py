@@ -126,6 +126,7 @@ def verify_jwt_token(req):
         raise ValidationError("alg jwt header should be RS256, but is not.")
 
     # use the global PUBKEY object to fetch the key that matches the key id.
+    # pylint: disable=W0602
     global PUBKEY
     key = PUBKEY(kid)
 

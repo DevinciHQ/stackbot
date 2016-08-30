@@ -4,9 +4,13 @@ import os
 
 from flask import request
 
-# Load all the handlers from ./handlers.__init___
+# Load all the handlers
+# Message codes for pylint, http://pylint-messages.wikidot.com/all-codes
+# pylint: disable=W0611
 # noinspection PyUnresolvedReferences
-import handlers
+from handlers.api import query, report, user, integration
+# noinspection PyUnresolvedReferences
+from handlers.auth import github
 
 from shared import APP
 from shared import security

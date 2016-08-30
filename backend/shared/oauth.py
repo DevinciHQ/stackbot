@@ -2,12 +2,11 @@
 import logging
 
 from flask import url_for, session, request, jsonify, abort
-from flask_oauthlib.client import OAuth, OAuthRemoteApp
+from flask_oauthlib.client import OAuth
 from shared import ApiResponse
 from shared import APP
 from shared.security import ValidationError, AuthenticationError
 import shared.security as sec
-from models.user import User
 from models.credential import Credential
 
 OAUTH = OAuth(APP)
@@ -26,7 +25,8 @@ class OauthHandler(object):
         """
         self.cred_type = auth_type
         self.config = config
-        self.oauth_app = OAUTH.remote_app(type, **config)  # type: OAuthRemoteApp
+        self.oauth_app = OAUTH.remote_app(type, **config)
+        # type: flask_oauthlib.client.OAuthRemoteApp
 
     @staticmethod
     def authenticate_user_or_abort(req):
@@ -68,7 +68,7 @@ class OauthHandler(object):
         """Get a user's credential for this handler's OAuth provider (i.e. github)
 
         Args:
-            user (User): The user to get a credential of this type for.
+            user (models.user.User): The user to get a credential of this type for.
 
         Returns:
             Credential: The user's credential.
