@@ -33,13 +33,15 @@ commands:
     cmd: |
       cd backend &&
       ahoy pip-install -- -r requirements.txt
+      pip install pylint
   build:
     cmd: cd default && npm run build
     usage: Build all of the files necessary to serve the site into the /dist folder.
   build-prod:
     cmd: cd default && npm run build-prod
     usage: Build all of the files necessary to serve the site into the /dist folder.
-  test:
+  test-frontend:
+    usage: Run the frontend unit tests.
     cmd: |
       set -e
       cd default &&
@@ -50,4 +52,16 @@ commands:
       fi
       npm run test -- --watch=false $FLAGS
       npm run lint
-    usage: Run the frontend unit tests.
+
+  test-backend:
+    usage: Run the backend unit tests.
+    cmd: |
+      set -e
+      pylint backend
+
+  test:
+    usage: Run all the tests (backend and frontend)
+    cmd: |
+      set -e
+      ahoy test-backend
+      ahoy test-frontend
