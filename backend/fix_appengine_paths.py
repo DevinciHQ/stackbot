@@ -1,6 +1,7 @@
 import sys, os
 PATH = os.path.abspath(".")
 sys.path.insert(1, PATH)
+sys.path.insert(1, PATH + "/lib")
 
 import os
 appengine_env_var = os.environ['APPENGINE']
