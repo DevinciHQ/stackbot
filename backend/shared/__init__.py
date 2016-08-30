@@ -1,5 +1,7 @@
+"""Define a method to get the geo headers from the request and a method that returns
+ response with empty payload and success == true in it"""
 from flask import Flask
-app = Flask(__name__)
+APP = Flask(__name__)
 
 
 class ApiResponse(dict):
@@ -14,7 +16,8 @@ class ApiResponse(dict):
 def get_geo_data(request):
     """ Get the geolocation data from the request. """
 
-    # Note that geoip2 (from maximind) doesn't work on GAE because there is a C lib in there apparently.
+    # Note that geoip2 (from maximind) doesn't work on GAE because there is a
+    # C lib in there apparently.
     # We can use Appengine's added headers to do that work though thankfully.
     geo = dict()
     geo['region'] = request.headers.get("X-AppEngine-Region", "unknown")

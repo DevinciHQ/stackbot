@@ -1,14 +1,15 @@
-import logging
+#import logging
 
-from flask import request, abort, jsonify
+#from flask import request, abort, jsonify
 
-from shared import app
-from shared.security import verify_jwt_token
-from models.user import User
+#from shared import app
+#from shared.security import verify_jwt_token
+#from models.user import User
 
 
 #
-# Commented code is UNTESTED, and should get tests or get a new look before implementing in production!
+# Commented code is UNTESTED, and should get tests or get a new look before implementing
+# in production!
 #
 
 
@@ -16,7 +17,8 @@ from models.user import User
 # def new_user():
 #     # Use verify_token instead of authenticate_user because we need to use the token later
 #     # to fill in the user information. Note that the way this is structured, a user can only
-#     # create a user for themselves once via the API. (There are no other users with this power, ie admins)
+#     # create a user for themselves once via the API. (There are no other users with this power,
+#     # ie admins)
 #     verified_token = verify_jwt_token(request)
 #     uid = verified_token.get('sub')
 #     if not uid:

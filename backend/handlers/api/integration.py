@@ -1,18 +1,15 @@
-import json
+"""This module checks handles defines the working of the /api/integration
+route"""
 import logging
 
 from flask import request, abort, jsonify
-from shared import app, ApiResponse
-from models.credential import Credential
-from models.user import User
+from shared import APP, ApiResponse
 from shared.security import authenticate_user, ExpiredSignatureError
 
-# For use when dealing with the datastore.
-from google.appengine.ext import ndb
 
-
-@app.route('/api/integration', methods=['GET'])
+@APP.route('/api/integration', methods=['GET'])
 def get_integrations():
+    """This method returns the integrations data if it passes the authentication test"""
     creds = []
     try:
         user = authenticate_user(request)
@@ -55,4 +52,3 @@ def get_integrations():
 #         'payload': body
 #     }
 #     return json.dumps(output)
-
