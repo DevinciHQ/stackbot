@@ -1,9 +1,7 @@
-import json
 import logging
 
-from flask import request, abort
-from shared import app
-from shared import security
+from flask import request, abort, jsonify
+from shared import app, ApiResponse, security
 
 # For use when dealing with the datastore.
 from google.appengine.ext import ndb
@@ -11,14 +9,15 @@ from google.appengine.ext import ndb
 
 @app.route('/api/report', methods=['GET'])
 def report_handler():
+    """ Returns a report with all of the most recent queries up to some limit in reverse chronological order. """
 
     user_id = None
     try:
         user_id = security.verify_jwt_token(request).get('sub')
     except security.ValidationError as err:
-        # IF the user isn't logged in, then throw a 403 error.
+        # IF the user isn't logged in, then throw a 401 error.
         logging.error(err)
-        abort(403)
+        abort(401)
 
     # https://cloud.google.com/appengine/docs/python/ndb/queries#properties_by_string
     # https://cloud.google.com/appengine/docs/python/ndb/queries#cursors
@@ -31,8 +30,4 @@ def report_handler():
         q = query._to_dict()
         data.append(q)
 
-    output = {
-        'success': True,
-        'payload': data
-    }
-    return json.dumps(output)
+    return jsonify(ApiResponse(data))

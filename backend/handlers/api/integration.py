@@ -32,7 +32,7 @@ def get_integrations():
         'success': True,
         'payload': {"integrations": data}
     }
-    return json.dumps(output)
+    return jsonify(ApiResponse(output))
 
 #
 # @app.route('/api/credential', methods=['GET'])

@@ -1,19 +1,19 @@
 import datetime
-import json
 import logging
 import urllib
 
-from flask import request, abort
+from flask import request, abort, jsonify
 from shared import app
 from models.query import Query
-from shared import security
+from shared import security, get_geo_data, ApiResponse
 from user_agents import parse as parseUA
 
 
-# This handles the incoming request and creates a Query entity if a query string
-# was passed.
+
 @app.route('/api/q', methods=['GET'])
 def query_handler():
+    """ Handle the incoming request and create a Query entity if a query string was passed. """
+
     # Make sure the length of the query string is at least 1 char.
     q = request.args.get('q', '')
     if len(q) <= 0:
@@ -21,11 +21,11 @@ def query_handler():
 
     user_id = None
     try:
-        user_id = security.verify_jwt_token(request).get('sub')
+        user_id = security.authenticate_user()
     except security.ValidationError as err:
         # IF the user isn't logged in, then throw a 403 error.
         logging.error(err)
-        abort(403)
+        abort(401)
 
     # Get the user-agent header from the request.
     userAgent = parseUA(request.headers['User-Agent'])
@@ -53,15 +53,10 @@ def query_handler():
 
     # Output for when we first land on the page (or when no query was entered)
     # response.headers['Content-Type'] = 'application/json'
-    payload = {
+    output = {
         'redirect': redirect
     }
-    output = {
-        'success': True,
-        'payload': payload,
-    }
-    return json.dumps(output)
-
+    return jsonify(ApiResponse(output))
 
 # Not that geoip2 (from maximind) doesn't work on GAE because there is a C lib in there apparently.
 # We can use Appengine's added headers to do that work though thankfully.
