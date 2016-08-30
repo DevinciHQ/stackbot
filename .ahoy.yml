@@ -57,7 +57,8 @@ commands:
     usage: Run the backend unit tests.
     cmd: |
       set -e
-      pylint backend
+      cd backend &&
+      pylint handlers models shared main.py
 
   test:
     usage: Run all the tests (backend and frontend)
