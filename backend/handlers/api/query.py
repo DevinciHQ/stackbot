@@ -5,8 +5,8 @@ import urllib
 
 from flask import request, abort, jsonify
 from shared import APP
-from models.query import Query
 from shared import security, get_geo_data, ApiResponse
+from models.query import Query
 from user_agents import parse as parseUA
 
 

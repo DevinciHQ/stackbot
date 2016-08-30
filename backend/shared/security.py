@@ -1,15 +1,15 @@
 """Add code for dealing with security in the backend"""
 import time
-from google.appengine.api import urlfetch
-import jwt
-from jwt import ExpiredSignatureError
-from urlparse import urlparse
 import json
 import logging
+import sys
+from urlparse import urlparse
+
+from google.appengine.api import urlfetch
 from flask import abort, session, request
 from models.user import User
-import sys
-
+import jwt
+from jwt import ExpiredSignatureError
 # These items are needed to use the RS256 Algorithm.
 from jwt.contrib.algorithms.pycrypto import RSAAlgorithm
 jwt.register_algorithm('RS256', RSAAlgorithm(RSAAlgorithm.SHA256))
@@ -124,7 +124,7 @@ def verify_jwt_token(request):
     if alg != 'RS256':
         raise ValidationError("alg jwt header should be RS256, but is not.")
 
-    # use the global pubkey object to fetch the key that matches the key id.
+    # use the global PUBKEY object to fetch the key that matches the key id.
     global PUBKEY
     key = PUBKEY(kid)
 

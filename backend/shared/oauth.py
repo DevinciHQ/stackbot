@@ -4,11 +4,11 @@ import logging
 from flask import url_for, session, request, jsonify, abort
 from flask_oauthlib.client import OAuth, OAuthRemoteApp
 from shared import ApiResponse
-from models.credential import Credential
 from shared import APP
 from shared.security import ValidationError, AuthenticationError
 import shared.security as sec
 from models.user import User
+from models.credential import Credential
 
 OAUTH = OAuth(APP)
 
@@ -28,7 +28,6 @@ class OauthHandler:
         self.config = config
         self.oauth_app = OAUTH.remote_app(type, **config)  # type: OAuthRemoteApp
 
-    """ HELPER FUNCTIONS FOLLOW """
 
     def authenticate_user_or_abort(self, req):
         """Verify a user and return a user_id or abort the request with a 401 error.
@@ -108,7 +107,6 @@ class OauthHandler:
         credential = Credential(user=user.key, type=self.cred_type, token=access_token)
         return credential.put()
 
-    """" HANDLER ENDPOINT FUNCTIONS FOLLOW """
 
     def get(self):
         """API call to get the session cookie and get the URL to redirect the user to.

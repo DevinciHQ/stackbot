@@ -4,14 +4,12 @@ import os
 
 from flask import request
 
-from shared import APP
-from shared import security
-
-
 # Load all the handlers from ./handlers.__init___
 # noinspection PyUnresolvedReferences
 import handlers
 
+from shared import APP
+from shared import security
 from shared.settings import Settings
 
 APP.debug = True

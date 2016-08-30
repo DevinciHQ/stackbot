@@ -29,7 +29,7 @@ def report_handler():
     for query in result:
         # This is annoying.. maybe we should use another word instead of query?
         # We couldn't use 'query.query' like we can for other values because that's a reserved word?
-        query = query._to_dict()
+        query = query.to_dict()
         data.append(query)
 
     return jsonify(ApiResponse(data))
