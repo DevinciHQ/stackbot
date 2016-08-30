@@ -185,5 +185,28 @@ def authenticate_user(request):
     return user
 
 
+def set_auth_session_cookie():
+    user_id = _jwt_authenticate(request)
+    session['user_id'] = user_id
+
+
+def get_auth_session_cookie():
+    return session.get('user_id', None)
+
+
+def delete_auth_session_cookie():
+    session.pop('user_id', None)
+
+
+def get_referrer_insecure(request):
+    if not request.referrer:
+        return None
+    url = urlparse(request.referrer)
+    if url.get('scheme') and url.get('netloc'):
+        return "%s://%s" % (url.scheme, url.netloc)
+    else:
+        logging.warn("Got a malformed referrer.")
+
+
 # Create the global pubkey object so that other code can use it.
 pubkey = PublicKey()
