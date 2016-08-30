@@ -58,12 +58,3 @@ def query_handler():
     }
     return jsonify(ApiResponse(output))
 
-# Not that geoip2 (from maximind) doesn't work on GAE because there is a C lib in there apparently.
-# We can use Appengine's added headers to do that work though thankfully.
-def get_geo_data(request):
-    geo = dict()
-    geo['region'] = request.headers.get("X-AppEngine-Region", "unknown")
-    geo['city'] = request.headers.get("X-AppEngine-City", "unknown")
-    geo['country'] = request.headers.get("X-AppEngine-Country", "unknown")
-    geo['city_lat_long'] = request.headers.get("X-AppEngine-CityLatLong", "unknown")
-    return geo
