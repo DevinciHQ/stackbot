@@ -1,3 +1,5 @@
+"""Expose all the handlers in the main file and determine the environment where the app
+is running."""
 import os
 
 from flask import request

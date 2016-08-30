@@ -12,11 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""Write basic testing our app on google app engine"""
+
 import main
 import webtest
 
 
 def test_get():
+    """Test the app using webtest"""
     app = webtest.TestApp(main.app)
 
     response = app.get('/')
