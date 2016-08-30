@@ -4,7 +4,7 @@ import { Observable }     from 'rxjs/Observable';
 import { Observer }     from 'rxjs/Observer';
 import 'rxjs/add/operator/catch';
 import { AuthHttp, tokenNotExpired } from 'angular2-jwt';
-import { AngularFireAuth, FirebaseAuthState } from 'angularfire2';
+import { AngularFireAuth } from 'angularfire2';
 
 @Injectable()
 export class BackendService {
@@ -24,7 +24,7 @@ export class BackendService {
 
     // Extract the JSON data from the response object.
     public request(endpoint: string, data: { [ key: string ]: string; }): Observable<Object> {
-        let getParams:string[] = [];
+        let getParams: string[] = [];
         let requestUrl = this._backendUrl + endpoint;
         Object.keys(data).forEach(function (key) {
             getParams.push(encodeURIComponent(key) + '=' + encodeURIComponent(data[key]));
@@ -41,35 +41,34 @@ export class BackendService {
         // If the jwt token is good to go, then return the request Observable.
         if (tokenNotExpired()) {
             return reqObservable;
-        }
 
-        // If the token is expired, we need to trigger a new jwt token to be created.
-        // If the user is logged in then this SHOULD work.
-        else {
+        } else {
+            // If the token is expired, we need to trigger a new jwt token to be created.
+            // If the user is logged in then this SHOULD work.
             let _self = this;
             let token_retries = 0;
             let tokenObs = Observable.create(function (observer: Observer<any>) {
 
                 // First, we need to get the authEvent which has the authEvent.auth.getToken() method we need.
-                let authObs = _self.fb_auth.subscribe(
+                _self.fb_auth.subscribe(
                     (authEvent: any) => {
                         // getToken(true) seems to trigger another authEvent which we're subscribed to, so seems to cause a
                         // infinite loop. This value keeps things from getting too crazy.
                         if (token_retries > 1) {
                             // Trigger an error that will keep the request from happening.
-                            observer.error("Request can't be completed because the token is out of date and couldn't be updated.");
-                        }
-                        // Check the token again because another request may have updated it already by the time we got here.
-                        else if (! tokenNotExpired()) {
+                            observer.error('Request can\'t be completed because the token is out of date and couldn\'t be updated.');
+
+                            // Check the token again because another request may have updated it already by the time we got here.
+                        } else if (! tokenNotExpired()) {
+                            // Check the token again because another request may have updated it already by the time we got here.
                             authEvent.auth.getToken(true).then(
                                 (token: any) => {
                                     // Increment the retries so they can be limited.
                                     token_retries++;
                                 }
                             );
-                        }
-                        // Finally, shut down and let the request proceed.
-                        else {
+                        } else {
+                            // Finally, shut down and let the request proceed.
                             observer.complete();
                         }
                     }

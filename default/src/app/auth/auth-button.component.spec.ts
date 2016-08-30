@@ -17,7 +17,6 @@ import { User } from '../shared/user';
 
 class MockAuthService {
 
-   private token = new BehaviorSubject<string>(null);
    private user = new BehaviorSubject<User>(null);
     // Observable string streams
     // user$ = this.user.asObservable();

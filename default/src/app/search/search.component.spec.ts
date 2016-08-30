@@ -1,43 +1,39 @@
 import {addProviders, inject } from '@angular/core/testing';
 import { SearchComponent } from './index';
 import { QueryService } from '../query/index';
-import {AuthService} from '../auth/auth.service';
-import { Subject }    from 'rxjs/Subject';
+import { AuthService} from '../auth/auth.service';
+import { Observable, BehaviorSubject }   from 'rxjs';
+import { User } from '../shared/user';
 
 class MockQueryService {
 
-    public doQuery(query: any) {
-        // This isn't working!!!!!!!!
-        // let source = Observer
-        // return source;
-
-        // return Rx. Observable.create(observer => {
-        //     // Yield a single value and complete
-        //     observer.onNext(42);
-        //     observer.onCompleted();
-        //     // Any cleanup logic might go here
-        //     return () => console.log('disposed');
-        // });
+    doQuery(path: string, data: any) {
+        return Observable.create(
+            (observer: any) => {
+                // observer.next(new RequestParams(path, data));
+                observer.next(null);
+                // observer.complete();
+            }
+        );
     }
 }
 
 class MockAuthService {
 
-   private token = new Subject<string>();
-
+   private user = new BehaviorSubject<User>(null);
     // Observable string streams
     // user$ = this.user.asObservable();
-    tokenEvent$ = this.token.asObservable();
 
     login() {
+       this.user.next(new User({uid: '123abc', email: 'fake.test@example.com'}));
     }
 
     logout() {
-
+        this.user.next(null);
     }
 
-    authEvent() {
-        return this.tokenEvent$;
+    getUser() {
+        return this.user;
     }
 
 }

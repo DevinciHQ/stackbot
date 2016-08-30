@@ -8,7 +8,7 @@ import { HTTP_PROVIDERS } from '@angular/http';
 import { AUTH_PROVIDERS } from 'angular2-jwt';
 import { FocusMeDirective } from './shared/focus-me.directive';
 import { BackendService } from './shared/backend.service';
-import { KeysPipe } from './shared/keys.pipe'
+import { KeysPipe } from './shared/keys.pipe';
 
 
 import { AppComponent }  from './app.component';

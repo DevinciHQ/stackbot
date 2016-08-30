@@ -9,23 +9,18 @@ import { BackendService} from '../shared/backend.service';
 import { Observable, Observer } from 'rxjs';
 
 
-class RequestParams {
-    constructor(public path: string, public data: any) {}
-}
-
 class MockBackendService {
 
     request(path: string, data: any) {
         return Observable.create(
-            (observer: Observer<RequestParams>) => {
-                // observer.next(new RequestParams(path, data));
+            (observer: Observer<any>) => {
                 observer.next(null);
-                // observer.complete();
+                observer.complete();
             }
         );
     }
-
 }
+
 describe('QueryService', () => {
     beforeEach(() => {
         addProviders([
@@ -40,7 +35,6 @@ describe('QueryService', () => {
 
             let query = 'asdf';
             let source = 'test';
-            let path = '/api/q';
 
             spyOn(backend, 'request').and.callThrough();
 

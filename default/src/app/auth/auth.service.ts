@@ -68,7 +68,7 @@ export class AuthService {
         this.token.subscribe(
             (token: string) => {
                 if (token) {
-                    console.log('update token')
+                    console.log('update token');
                     localStorage.setItem('id_token', token);
                 } else {
                     localStorage.removeItem('id_token');
