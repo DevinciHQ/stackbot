@@ -12,12 +12,12 @@ from handlers.api import query, report, user, integration
 # noinspection PyUnresolvedReferences
 from handlers.auth import github
 
-from shared import APP
+from shared import app
 from shared import security
 from shared.settings import Settings
 
-APP.debug = True
-APP.secret_key = 'development'
+app.debug = True
+app.secret_key = 'development'
 
 """ ------------- MAIN ------------------ """
 
@@ -34,7 +34,7 @@ else:
     ENV = 'local'
 
 
-@APP.after_request
+@app.after_request
 def after_request(response):
     """ This handles CORS requests for all requests (including OPTIONS).  """
     response = security.set_cors_header(request, response)

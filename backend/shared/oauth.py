@@ -4,12 +4,12 @@ import logging
 from flask import url_for, session, request, jsonify, abort
 from flask_oauthlib.client import OAuth
 from shared import ApiResponse
-from shared import APP
+from shared import app
 from shared.security import ValidationError, AuthenticationError
 import shared.security as sec
 from models.credential import Credential
 
-OAUTH = OAuth(APP)
+OAUTH = OAuth(app)
 
 
 class OauthHandler(object):

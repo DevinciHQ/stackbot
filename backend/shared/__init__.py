@@ -1,7 +1,7 @@
 """Define a method to get the geo headers from the request and a method that returns
  response with empty payload and success == true in it"""
 from flask import Flask
-APP = Flask(__name__)
+app = Flask(__name__)
 
 
 class ApiResponse(dict):

@@ -4,13 +4,13 @@ import logging
 import urllib
 
 from flask import request, abort, jsonify
-from shared import APP
+from shared import app
 from shared import security, get_geo_data, ApiResponse
 from models.query import Query
 from user_agents import parse as parseUA
 
 
-@APP.route('/api/q', methods=['GET'])
+@app.route('/api/q', methods=['GET'])
 def query_handler():
     """ Handle the incoming request and create a Query entity if a query string was passed. """
 

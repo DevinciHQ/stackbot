@@ -2,13 +2,13 @@
 import logging
 
 from flask import request, abort, jsonify
-from shared import APP, ApiResponse, security
+from shared import app, ApiResponse, security
 
 # For use when dealing with the datastore.
 from google.appengine.ext import ndb
 
 
-@APP.route('/api/report', methods=['GET'])
+@app.route('/api/report', methods=['GET'])
 def report_handler():
     """ Returns a report with all of the most recent queries up to some limit
      in reverse chronological order. """

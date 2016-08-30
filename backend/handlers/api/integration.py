@@ -3,11 +3,11 @@ route"""
 import logging
 
 from flask import request, abort, jsonify
-from shared import APP, ApiResponse
+from shared import app, ApiResponse
 from shared.security import authenticate_user, ExpiredSignatureError
 
 
-@APP.route('/api/integration', methods=['GET'])
+@app.route('/api/integration', methods=['GET'])
 def get_integrations():
     """This method returns the integrations data if it passes the authentication test"""
     creds = []

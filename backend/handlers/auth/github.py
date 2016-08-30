@@ -1,7 +1,7 @@
 """This module defines the routes for github authentication process"""
 from werkzeug import security
 
-from shared.oauth import OauthHandler, APP, request
+from shared.oauth import OauthHandler, app, request
 
 from shared.settings import Settings
 
@@ -25,25 +25,25 @@ GITHUB_CONFIG = {
 GITHUB = OauthHandler('github', GITHUB_CONFIG)
 
 
-@APP.route('/auth/github')
+@app.route('/auth/github')
 def get():
     """Route for get."""
     return GITHUB.get()
 
 
-@APP.route('/auth/github/add')
+@app.route('/auth/github/add')
 def add():
     """Route for add"""
     return GITHUB.add()
 
 
-@APP.route('/auth/github/delete')
+@app.route('/auth/github/delete')
 def delete():
     """Route for delete"""
     return GITHUB.delete()
 
 
-@APP.route('/auth/github/authorized_callback')
+@app.route('/auth/github/authorized_callback')
 def authorized():
     """Route for authorize"""
     return GITHUB.authorized()
