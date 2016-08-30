@@ -206,7 +206,9 @@ def authenticate_user(req):
 
     user = User.get_by_user_id(user_id)
     if user is None:
-        raise AuthenticationError("User with user_id: %s not found." % user_id)
+        #raise AuthenticationError("User with user_id: %s not found." % user_id)
+        token = verify_jwt_token(req)
+        user = User(user_id=user_id,email=token.get('email'), username=token.get('name')).put().get()
 
     return user
 
