@@ -6,7 +6,7 @@ import sys
 from urlparse import urlparse
 
 from google.appengine.api import urlfetch
-from flask import abort, session, request
+from flask import session, request
 from models.user import User
 import jwt
 from jwt import ExpiredSignatureError
