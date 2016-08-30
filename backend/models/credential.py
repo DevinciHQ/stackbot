@@ -6,9 +6,8 @@ from google.appengine.ext import ndb
 # See https://cloud.google.com/appengine/docs/python/ndb/creating-entity-models
 class Credential(ndb.Model):
     """Define the individual columns of the Credential table"""
-    from models.user import User
 
-    user = ndb.KeyProperty(User, required=True)
+    user = ndb.KeyProperty(kind='User', required=True)
     type = ndb.StringProperty(choices=['github'])
     token = ndb.StringProperty()
     created = ndb.DateTimeProperty(auto_now_add=True)
