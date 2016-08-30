@@ -96,11 +96,11 @@ class PublicKey(object):
 
 # Takes a request and returns the payload of the Authorization JWT token,
 # including verifying it against google's public keys.
-def verify_jwt_token(request):
+def verify_jwt_token(req):
     """Verify the jwt token using the key obtained from firebase and return
     the decoded token"""
     # Make sure we actually have an Authorization header.
-    auth_header = request.headers.get('Authorization', False)
+    auth_header = req.headers.get('Authorization', False)
     if not auth_header:
         raise ValidationError("Authorization header is missing.")
 
@@ -141,7 +141,7 @@ def verify_jwt_token(request):
 
 
 # Return the object after setting the CORS header.
-def set_cors_header(request, response):
+def set_cors_header(req, res):
     """Set the CORS header for the approved hosts"""
 
     approved_hosts = [
@@ -152,33 +152,33 @@ def set_cors_header(request, response):
     ]
 
     # No need for CORS headers if there wasn't a referrer.
-    if request.referrer is None:
-        return response
+    if req.referrer is None:
+        return res
 
     url = urlparse(request.referrer)
     host = url.scheme + "://" + url.hostname
     if url.port:
         host += ":" + str(url.port)
     if url.hostname == 'localhost' or host in approved_hosts:
-        response.headers['Access-Control-Allow-Origin'] = host
+        res.headers['Access-Control-Allow-Origin'] = host
 
-    response.headers['Access-Control-Allow-Headers'] = 'Origin,' \
+    res.headers['Access-Control-Allow-Headers'] = 'Origin,' \
                                                        ' X-Requested-With,' \
                                                        ' Content-Type, ' \
                                                        'Accept, ' \
                                                        'Authorization'
-    response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
-    response.headers['Access-Control-Allow-Credentials'] = 'true'
-    return response
+    res.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
+    res.headers['Access-Control-Allow-Credentials'] = 'true'
+    return res
 
 
-def _jwt_authenticate(request):
+def _jwt_authenticate(req):
     """Authenticate the JWT token and get the user_id from it."""
-    user_id = verify_jwt_token(request).get('sub')
+    user_id = verify_jwt_token(req).get('sub')
     return user_id
 
 
-def authenticate_user(request):
+def authenticate_user(req):
     """
     Get the user from the JWT token. If not found there, check the session cookie
     to see if it is set there. Raise an error if it is not found at any of those places.
@@ -192,7 +192,7 @@ def authenticate_user(request):
     #     raise Exception("except_fn must be a function that will do exception handling.")
     # Plan A: Get their user_id from a jwt token.
     try:
-        user_id = _jwt_authenticate(request)
+        user_id = _jwt_authenticate(req)
     except (ValidationError, ExpiredSignatureError) as err:
         # Keep track of the original error.
         err_type, err_value, err_tb = sys.exc_info()
@@ -226,11 +226,11 @@ def delete_auth_session_cookie():
     session.pop('user_id', None)
 
 
-def get_referrer_insecure(request):
+def get_referrer_insecure(req):
     """check for an insecure referrer"""
-    if not request.referrer:
+    if not req.referrer:
         return None
-    url = urlparse(request.referrer)
+    url = urlparse(req.referrer)
     if url and url.scheme and url.netloc:
         return "%s://%s" % (url.scheme, url.netloc)
     else:
