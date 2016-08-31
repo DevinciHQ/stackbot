@@ -15,9 +15,9 @@ export class SearchComponent {
     constructor(private queryService: QueryService, private auth: AuthService) {
         this.preSearchText = this.populateSearch(window.location.href);
         this.recordOmniSearch(window.location.href);
-        this.auth.authEvent().subscribe(
-            token => {
-                if (token) {
+        this.auth.getUser().subscribe(
+            user => {
+                if (user) {
                         return this.disabled = '';
                 } else {
                     return this.disabled = 'disabled';

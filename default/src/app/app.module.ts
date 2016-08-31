@@ -2,17 +2,21 @@ import { NgModule, NgModuleMetadataType }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AuthService, AuthButtonComponent} from './auth/index';
-import { SearchComponent } from './search/index';
-import { HTTP_PROVIDERS } from '@angular/http';
-import { AppComponent }  from './app.component';
 import { AngularFireModule, AuthProviders, AuthMethods } from 'angularfire2';
-import { FocusMeDirective} from './shared/focus-me.directive';
 
-import {AUTH_PROVIDERS} from 'angular2-jwt';
-import {ReportComponent} from './report/index';
+import { HTTP_PROVIDERS } from '@angular/http';
+import { AUTH_PROVIDERS } from 'angular2-jwt';
+import { FocusMeDirective } from './shared/focus-me.directive';
+import { BackendService } from './shared/backend.service';
+import { KeysPipe } from './shared/keys.pipe';
 
-// DO NOT DELETE: This is needed of the compiler says, Cannot find namespace 'firebase'.
+
+import { AppComponent }  from './app.component';
+import { ReportComponent } from './report/index';
+import { AuthService, AuthButtonComponent, AuthIntegrationsComponent } from './auth/index';
+import { SearchComponent } from './search/index';
+
+// DO NOT DELETE: This is needed or the compiler says, Cannot find namespace 'firebase'.
 /* tslint:disable */
 import * as firebase from 'firebase';
 /* tslint:enable */
@@ -35,6 +39,7 @@ let providers = [
     AUTH_PROVIDERS,
     HTTP_PROVIDERS,
     AuthService,
+    BackendService,
 ];
 
 let declarations = [
@@ -42,7 +47,9 @@ let declarations = [
     ReportComponent,
     AuthButtonComponent,
     AppComponent,
-    FocusMeDirective
+    FocusMeDirective,
+    AuthIntegrationsComponent,
+    KeysPipe,
 ];
 
 let imports = [
