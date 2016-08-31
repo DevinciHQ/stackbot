@@ -1,5 +1,4 @@
-"""Define a method to get the geo headers from the request and a method that returns
- response with empty payload and success == true in it"""
+"""Generic dumping ground for shared functions and classes."""
 from flask import Flask
 app = Flask(__name__)
 

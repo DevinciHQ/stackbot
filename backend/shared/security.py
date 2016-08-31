@@ -16,56 +16,52 @@ jwt.register_algorithm('RS256', RSAAlgorithm(RSAAlgorithm.SHA256))
 
 
 class ValidationError(Exception):
-    """Do nothing with the Validation Error"""
+    """For when something is wrong with the jwt token."""
     pass
 
 
 class AuthenticationError(Exception):
-    """Do nothing with the Authentication Error"""
+    """For when something is wrong with authenticating the user."""
     pass
 
 class PublicKey(object):
-    """Define public key caches the keys and makes a request for new keys only if
-    the keys are expired"""
-    # This is called only the first time that the class is called.
-    # It initializes the default values.
+    """Acts as a function for getting google/firebase public key.
+     It's setup this way because it caches the list of keys in memory and only makes
+     a request for new keys if the keys are expired"""
+
     def __init__(self):
-        """Initialize the fields required by the key"""
+        """This is called only the first time that the class is called.
+        It initializes the default values."""
         self._expires = None
         self._keys = {}
         self.rfc_1123_format = "%a, %d %b %Y %H:%M:%S GMT"
         self._url = 'https://www.googleapis.com/robot/v1/metadata/x509/' \
                     'securetoken@system.gserviceaccount.com'
 
-    # This is called everytime the class is called.
     def __call__(self, kid):
-        """Get the actual keys from firebase"""
+        """Get the appropriate public key if found.
+        This is called everytime the class is called."""
         return self.get_public_cert(kid)
 
-    # Grabs the google certs from the cache or refreshes if they're missing or expired.
     def get_certs(self):
-        """Return the keys if they are not expired."""
+        """Grabs the firebase/google certs from the cache or refreshes if they're missing or expired"""
         now = time.gmtime()
         if self._expires is None or self._expires <= now:
             self.refresh()
 
         return self._keys
 
-    # Updates the cache of public google certs
     def refresh(self):
-        """Fetch the keys from firebase if they are expired"""
+        """Updates the cache of public google certs from firebase/google and store when they expire."""
         res = urlfetch.Fetch(self._url)
         expires = res.headers.data['expires']
         self._expires = time.strptime(expires, self.rfc_1123_format)
         self._keys = json.loads(res.content)
 
-    # Converts a public x509 cert into a public RSA key.
+
     @staticmethod
     def conv_509_to_rsa(cert):
         """Convert the x509 cert obtained into a public RSA key."""
-        from Crypto.Util.asn1 import DerSequence
-        from Crypto.PublicKey import RSA
-        from binascii import a2b_base64
 
         # Convert from PEM to DER
         lines = cert.replace(" ", '').split()
@@ -82,9 +78,8 @@ class PublicKey(object):
         rsa_key = RSA.importKey(subject_public_key_info)
         return rsa_key
 
-    # Pulls the public cert from the list of certs provided by google.
     def get_public_cert(self, kid):
-        """Get the public certs from firebase"""
+        """Pulls the public cert from the list of certs provided by google."""
         keys = self.get_certs()
         if kid not in keys.keys():
             raise Exception("kid not found in accepted public keys")
@@ -94,11 +89,9 @@ class PublicKey(object):
         return pkey.publickey().exportKey()
 
 
-# Takes a request and returns the payload of the Authorization JWT token,
-# including verifying it against google's public keys.
 def verify_jwt_token(req):
-    """Verify the jwt token using the key obtained from firebase and return
-    the decoded token"""
+    """Takes a request and returns the payload of the Authorization JWT token,
+    including verifying it against google's public keys."""
     # Make sure we actually have an Authorization header.
     auth_header = req.headers.get('Authorization', False)
     if not auth_header:
@@ -143,7 +136,7 @@ def verify_jwt_token(req):
 
 # Return the object after setting the CORS header.
 def set_cors_header(req, res):
-    """Set the CORS header for the approved hosts"""
+    """Setting the CORS headers on the response based on the request referrer and a whitelist of approved referrers."""
 
     approved_hosts = [
         'http://localhost:8080',
@@ -214,23 +207,23 @@ def authenticate_user(req):
 
 
 def set_auth_session_cookie():
-    """Set the user session cookie"""
+    """Set the current user_id to the session cookie"""
     user_id = _jwt_authenticate(request)
     session['user_id'] = user_id
 
 
 def get_auth_session_cookie():
-    """Get the user session cookie"""
+    """Get the user_id from the session cookie"""
     return session.get('user_id', None)
 
 
 def delete_auth_session_cookie():
-    """Delete the user session cookie"""
+    """Delete the entire user session cookie"""
     session.pop('user_id', None)
 
 
 def get_referrer_insecure(req):
-    """check for an insecure referrer"""
+    """get the referrer host (scheme + hostname + port) or None if not found or malformed."""
     if not req.referrer:
         return None
     url = urlparse(req.referrer)
@@ -240,5 +233,5 @@ def get_referrer_insecure(req):
         logging.warn("Got a malformed referrer.")
 
 
-# Create the global pubkey object so that other code can use it.
+# Create the global pubkey object so that other code can use it like a function.
 PUBKEY = PublicKey()
