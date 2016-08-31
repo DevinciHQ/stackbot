@@ -5,6 +5,9 @@ import logging
 import sys
 from urlparse import urlparse
 
+from Crypto.Util.asn1 import DerSequence
+from Crypto.PublicKey import RSA
+from binascii import a2b_base64
 from google.appengine.api import urlfetch
 from flask import session, request
 from models.user import User
