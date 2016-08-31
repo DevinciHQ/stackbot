@@ -87,7 +87,7 @@ class PublicKey(object):
         """Get the public certs from firebase"""
         keys = self.get_certs()
         if kid not in keys.keys():
-            raise Exception("kid not found in accepted public keys")
+            raise Exception("kid '%s' not found in accepted public keys" % kid)
 
         cert = keys[kid]
         pkey = self.conv_509_to_rsa(cert)
@@ -96,21 +96,9 @@ class PublicKey(object):
 
 # Takes a request and returns the payload of the Authorization JWT token,
 # including verifying it against google's public keys.
-def verify_jwt_token(req):
+def verify_jwt_token(raw_token):
     """Verify the jwt token using the key obtained from firebase and return
     the decoded token"""
-    # Make sure we actually have an Authorization header.
-    auth_header = req.headers.get('Authorization', False)
-    if not auth_header:
-        raise ValidationError("Authorization header is missing.")
-
-    # Pull out the token from the Authorization header.
-    parts = auth_header.split(" ")
-    if parts[0] != 'Bearer':
-        raise ValidationError("Authorization header is not of type 'Bearer'.")
-    if not parts[1] or len(parts[1]) <= 0:
-        raise ValidationError("Authorization header is missing token.")
-    raw_token = parts[1]
 
     # Decode the token without verification so that we can get the key id.
     jwt_header = jwt.get_unverified_header(raw_token)
@@ -123,7 +111,7 @@ def verify_jwt_token(req):
     if not alg:
         raise ValidationError("alg jwt header is missing.")
     if alg != 'RS256':
-        raise ValidationError("alg jwt header should be RS256, but is not.")
+        raise ValidationError("alg jwt header should be RS256, but is " + alg)
 
     # use the global PUBKEY object to fetch the key that matches the key id.
     # pylint: disable=W0602
@@ -175,7 +163,19 @@ def set_cors_header(req, res):
 
 def _jwt_authenticate(req):
     """Authenticate the JWT token and get the user_id from it."""
-    user_id = verify_jwt_token(req).get('sub')
+    # Make sure we actually have an Authorization header.
+    auth_header = req.headers.get('Authorization', False)
+    if not auth_header:
+        raise ValidationError("Authorization header is missing.")
+    # Pull out the token from the Authorization header.
+    parts = auth_header.split(" ")
+    if parts[0] != 'Bearer':
+        raise ValidationError("Authorization header is not of type 'Bearer'.")
+    if not parts[1] or len(parts[1]) <= 0:
+        raise ValidationError("Authorization header is missing token.")
+    raw_token = parts[1]
+
+    user_id = verify_jwt_token(raw_token).get('sub')
     return user_id
 
 
