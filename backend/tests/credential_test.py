@@ -43,3 +43,12 @@ class DatastoreTestCase(unittest.TestCase):
         except BadValueError:
             print("Credential type 'linkedin' is not supported.")
 
+
+    def testTokenType(self):
+        """ Test the type of the 'token' field of credential table """
+        user_key = User(user_id="fake", username="fake", email="fake").put()
+        credential = Credential(user=user_key, type="github",
+                                token="fgshADSF1324").put().get()
+
+        # Test to see if the 'token' field is of type string.
+        self.assertIsInstance(credential.token, unicode)
