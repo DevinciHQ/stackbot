@@ -1,0 +1,24 @@
+{
+  "iss": "https://securetoken.google.com/devinci-stackbot",
+  "name": "Test User",
+  "picture": "https://avatars.githubusercontent.com/u/377330?v=3",
+  "aud": "devinci-stackbot",
+  "auth_time": 1471834615,
+  "user_id": "fakeuser123",
+  "sub": "fakeuser123",
+  "iat": 1472359015,
+  "exp": 9472362615,
+  "email": "test@example.com",
+  "email_verified": false,
+  "firebase": {
+    "identities": {
+      "github.com": [
+        "377330"
+      ],
+      "email": [
+        "test@example.com"
+      ]
+    },
+    "sign_in_provider": "github.com"
+  }
+}
