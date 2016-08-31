@@ -5,6 +5,8 @@ from google.appengine.ext import ndb, testbed
 from shared.security import PUBKEY
 from shared import security
 import context
+from shared import app
+from flask import session
 
 # [START datastore_example_test]
 class DatastoreTestCase(unittest.TestCase):
@@ -29,6 +31,8 @@ class DatastoreTestCase(unittest.TestCase):
         self.testbed.init_urlfetch_stub()
 
         context.set_fake_certs()
+        app.debug = True
+        app.secret_key = 'development'
 
     # [START datastore_example_teardown]
     def tearDown(self):
@@ -53,7 +57,8 @@ class DatastoreTestCase(unittest.TestCase):
         self.assertIsNotNone(pkey)
         pub = open('./tests/test_data/fake_public_key.txt', 'r').read()
         # This tests if the public key returned is same as what we have on the file.
-        # Strip out the whitespace.
+        
+	# Strip out the whitespace.
         self.assertEqual(str(pkey).strip(), str(pub).strip())
 
     def test_token_decryption(self):
@@ -61,3 +66,11 @@ class DatastoreTestCase(unittest.TestCase):
         security.verify_jwt_token(fake_token)
 
 
+    # def test_set_auth_session_cookie(self):
+    #     with app.test_client() as c:
+    #         # with c.session_transaction() as sess:
+    #         #     #security.set_auth_session_cookie()
+    #         #     pass
+    #         session['user_id'] = "hey"
+    #         print security.get_auth_session_cookie()
+    #         print session['user_id']
