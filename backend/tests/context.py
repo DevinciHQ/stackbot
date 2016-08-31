@@ -1,13 +1,7 @@
-import sys
-import os
 import time
 import json
 
-#basedir = os.path.dirname(os.path.abspath(__file__))
-#sys.path.insert(0, basedir + '/../')
-
-from stackbot_backend import app
-from stackbot_backend import security
+import shared.security as security
 
 
 def get_fake_jwt_token():

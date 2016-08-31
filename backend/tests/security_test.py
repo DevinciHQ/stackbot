@@ -1,7 +1,5 @@
 """ Test the Query model."""
 import unittest
-import json
-import time
 
 from google.appengine.ext import ndb, testbed
 from shared.security import PUBKEY
@@ -39,20 +37,27 @@ class DatastoreTestCase(unittest.TestCase):
         context.remove_fake_certs()
     # [END datastore_example_teardown]
 
-    def testRefresh(self):
+    def test_refresh(self):
         """ Test if the cache holding the keys is refreshed. """
         context.remove_fake_certs()
         self.assertDictEqual(PUBKEY._keys, {})
         PUBKEY.refresh()
         self.assertIsNot(PUBKEY._keys, {})
 
-    def testGetPublicCerts(self):
+    def test_get_public_certs(self):
         """Test to check if we get back the public key back."""
         pkey = None
         # Obtain the CERT from the kid passed in which is converted into a public key and
         # returned to us.
-        pkey = security.PUBKEY.get_public_cert("fc2da7fa53d92e3bcba8a17e74b34da9dd585065")
+        pkey = security.PUBKEY.get_public_cert("fakecert123")
         self.assertIsNotNone(pkey)
-        pub = open('./tests/test_data/public_key.txt', 'r').read()
+        pub = open('./tests/test_data/fake_public_key.txt', 'r').read()
         # This tests if the public key returned is same as what we have on the file.
-        self.assertEqual(pkey, pub)
+        # Strip out the whitespace.
+        self.assertEqual(str(pkey).strip(), str(pub).strip())
+
+    def test_token_decryption(self):
+        fake_token = context.get_fake_jwt_token()
+        security.verify_jwt_token(fake_token)
+
+
