@@ -2,8 +2,10 @@
 import unittest
 
 from google.appengine.ext import ndb, testbed
+from google.appengine.ext.db import BadValueError
 
 from models.credential import Credential
+from models.user import User
 
 # [START datastore_example_test]
 class DatastoreTestCase(unittest.TestCase):
@@ -31,3 +33,13 @@ class DatastoreTestCase(unittest.TestCase):
         """ Tear down the test. """
         self.testbed.deactivate()
     # [END datastore_example_teardown]
+
+
+    def testCredentialType(self):
+        """ Test the 'type' field of the credential table"""
+        try:
+            user_key = User(user_id="fake", username="fake", email="fake").put()
+            Credential(user=user_key, type="linkedin", token="fgshADSF1324")
+        except BadValueError:
+            print("Credential type 'linkedin' is not supported.")
+
