@@ -5,7 +5,7 @@ threadsafe: true
 
 handlers:
 - url: (.*)
-  script: main.app
+  script: stackbot_backend.app
 
 libraries:
 - name: pycrypto

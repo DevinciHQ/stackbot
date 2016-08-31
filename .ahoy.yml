@@ -67,7 +67,7 @@ commands:
 
       cd backend &&
       python run_tests.py $APPENGINE tests
-      pylint -E handlers models shared tests main.py
+      pylint -E handlers models shared tests stackbot_backend.py
 
   test:
     usage: Run all the tests (backend and frontend)
