@@ -6,6 +6,7 @@ import time
 from google.appengine.ext import ndb, testbed
 from shared.security import PUBKEY
 from shared import security
+import context
 
 # [START datastore_example_test]
 class DatastoreTestCase(unittest.TestCase):
@@ -29,23 +30,24 @@ class DatastoreTestCase(unittest.TestCase):
         # the tests. See: http://stackoverflow.com/a/31975818
         self.testbed.init_urlfetch_stub()
 
+        context.set_fake_certs()
 
     # [START datastore_example_teardown]
     def tearDown(self):
         """ Tear down the test. """
         self.testbed.deactivate()
+        context.remove_fake_certs()
     # [END datastore_example_teardown]
 
     def testRefresh(self):
         """ Test if the cache holding the keys is refreshed. """
-        self.removeFakeCerts()
+        context.remove_fake_certs()
         self.assertDictEqual(PUBKEY._keys, {})
         PUBKEY.refresh()
         self.assertIsNot(PUBKEY._keys, {})
 
     def testGetPublicCerts(self):
         """Test to check if we get back the public key back."""
-        self.setFakeCerts()
         pkey = None
         # Obtain the CERT from the kid passed in which is converted into a public key and
         # returned to us.
@@ -54,16 +56,3 @@ class DatastoreTestCase(unittest.TestCase):
         pub = open('./tests/test_data/public_key.txt', 'r').read()
         # This tests if the public key returned is same as what we have on the file.
         self.assertEqual(pkey, pub)
-
-    def setFakeCerts(self):
-        """Set the fake CERTS from the local file"""
-        with open('./tests/test_data/firebase.certs.json') as data_file:
-            security.PUBKEY._keys = json.load(data_file)
-        now = time.time() + 60 * 60 * 24
-        future = time.gmtime(now)
-        security.PUBKEY._expires = future
-
-    def removeFakeCerts(self):
-        """Remove the fake CERTS and set the expiration time to None"""
-        security.PUBKEY._keys = {}
-        security.PUBKEY._expires = None

@@ -3,6 +3,7 @@ import unittest
 from google.appengine.ext import ndb, testbed
 from handlers.api.query import app
 from flask import Response, session
+from shared import security
 
 
 class QueryApiTestCase(unittest.TestCase):
