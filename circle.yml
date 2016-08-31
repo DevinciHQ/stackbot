@@ -1,5 +1,9 @@
 machine:
   environment:
+
+    # Setup the appengine path.
+    APPENGINE: ${HOME}/google_appengine
+
     # Add app engine sdk to pythonpath for local unit tests.
     PYTHONPATH: ${PYTHONPATH}:${HOME}/google_appengine
 
