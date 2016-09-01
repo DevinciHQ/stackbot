@@ -7,7 +7,7 @@ import { Integration } from '../shared/integration';
     moduleId: module.id,
     selector: 'auth-integrations',
     template: `
-         <div *ngIf="loggedIn">
+         <div *ngIf="loggedIn && featureEnabled">
              <h2> Integrations</h2>
              <div *ngFor="let item of integrations | keys ">
                  {{item.value.name}}
@@ -36,8 +36,16 @@ export class AuthIntegrationsComponent {
 
     private loggedIn: boolean = false;
 
+    private featureEnabled: boolean = false;
+
     constructor(public auth: AuthService) {
         // this.integrations.push(new Integration('linkedIn', true, false));
+
+        // Only show this item if it's feature flag is enabled.
+        let featureFlags = localStorage.getItem('featureFlags');
+        if (featureFlags) {
+            this.featureEnabled = true;
+        }
 
         let _self = this;
         console.log(_self.integrations);
