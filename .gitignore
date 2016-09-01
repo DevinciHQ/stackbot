@@ -7,3 +7,7 @@ node_modules
 default/dist
 default/tmp
 default/index.yaml
+
+# Ignore python metadata
+backend/lib/*info
+backend/lib/**/*.pyc
