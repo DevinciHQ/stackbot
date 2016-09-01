@@ -19,9 +19,9 @@ def query_handler():
     if len(query_string) <= 0:
         abort(400)
 
-    user_id = None
+    user = None
     try:
-        user_id = security.authenticate_user(request).user_id
+        user = security.authenticate_user(request)
     except security.ValidationError as err:
         # IF the user isn't logged in, then throw a 401 error.
         logging.debug(err)
@@ -46,8 +46,9 @@ def query_handler():
         city=geo['city'],
         city_lat_long=geo['city_lat_long'],
         ip=request.remote_addr,
-        uid=user_id,
-        source=source
+        uid=user.user_id,
+        source=source,
+        user=user
     )
     # Save to the datatore.
     query.put()
