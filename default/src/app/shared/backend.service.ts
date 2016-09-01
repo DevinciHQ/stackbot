@@ -29,7 +29,7 @@ export class BackendService {
         Object.keys(data).forEach(function (key) {
             getParams.push(encodeURIComponent(key) + '=' + encodeURIComponent(data[key]));
         });
-        if (getParams) {
+        if (getParams.length > 0) {
             requestUrl += '?' + getParams.join('&');
         }
 
