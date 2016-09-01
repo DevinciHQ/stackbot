@@ -42,7 +42,8 @@ def query_handler():
         city=geo['city'],
         city_lat_long=geo['city_lat_long'],
         ip=request.remote_addr,
-        uid=user_id
+        uid=user_id,
+        source=request.args.get('source')
     )
     # Save to the datatore.
     query.put()
