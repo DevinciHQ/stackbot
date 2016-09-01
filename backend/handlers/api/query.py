@@ -31,6 +31,10 @@ def query_handler():
     user_agent = parseUA(request.headers['User-Agent'])
     geo = get_geo_data(request)
 
+    source = request.args.get('source')
+    if source not in ['site-search', 'omnibox']:
+        abort(400) # The source field should be required.
+
     # Create a new Query entity from the q value.
     # TODO: Add the other values that we want from the request headers.
     query = Query(
@@ -43,7 +47,7 @@ def query_handler():
         city_lat_long=geo['city_lat_long'],
         ip=request.remote_addr,
         uid=user_id,
-        source=request.args.get('source')
+        source=source
     )
     # Save to the datatore.
     query.put()

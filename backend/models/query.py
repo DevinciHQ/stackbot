@@ -8,7 +8,7 @@ class Query(ndb.Model):
     query = ndb.StringProperty(required=True)
     os = ndb.StringProperty()
     browser = ndb.StringProperty()
-    timestamp = ndb.StringProperty()
+    timestamp = ndb.StringProperty()  # deprecated for created and updated fields.
     created = ndb.DateTimeProperty(auto_now_add=True)
     updated = ndb.DateTimeProperty(auto_now=True)
     country = ndb.StringProperty()
@@ -16,4 +16,4 @@ class Query(ndb.Model):
     city_lat_long = ndb.StringProperty()
     ip = ndb.StringProperty()
     uid = ndb.StringProperty()
-    source = ndb.StringProperty()
+    source = ndb.StringProperty(choices=['site-search', 'omnibox'], required=True)
