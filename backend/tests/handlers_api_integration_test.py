@@ -7,6 +7,7 @@ from context import get_fake_jwt_token, remove_fake_certs, set_fake_certs, setup
 from shared import ApiResponse
 from flask import Response
 from models.credential import Credential
+from models.user import User
 
 class QueryApiTestCase(unittest.TestCase):
     """ Create a test case. """
@@ -54,7 +55,10 @@ class QueryApiTestCase(unittest.TestCase):
 
     def test_get_integration(self):
         """Test to get the integration data. """
-        # Create mock credential data on the fly.
+        self.create_fake_test_user()
+
+        # Test to see if we get back the credentials.
+        # This also tests to see if we don't get back the fake_user's credentials
         self.create_mock_credential(user=self.user.put(), type="github")
         rv = self.open_with_auth("/api/integration", 'GET')
         # Suppressing the pylint error for no-member
@@ -74,3 +78,9 @@ class QueryApiTestCase(unittest.TestCase):
         )
         # Save to the datatore.
         cred.put()
+
+    # Create fake test user on the fly.
+    def create_fake_test_user(self):
+        # Create fake mock credential data on the fly.
+        fake_user = User(user_id="fake_user", username="fake_username", email="fake@example.com").put()
+        self.create_mock_credential(user=fake_user, type="github")
