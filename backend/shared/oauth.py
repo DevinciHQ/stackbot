@@ -141,7 +141,7 @@ class OauthHandler(object):
         # Set an auth session cookie for the user so they can proceed through the oauth flow
         # and we can keep track of which user the credential belongs to without a JWT token.
         # TODO: Can we move this to self.add() instead?
-        sec.set_auth_session_cookie()
+        sec.set_auth_session_cookie(request)
 
         # Set the referrer in the session cookie as well so that we can check (insecurely)
         # where the user was originally redirected from.
