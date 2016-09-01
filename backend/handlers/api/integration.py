@@ -25,11 +25,7 @@ def get_integrations():
             'type': cred.type
         })
 
-    output = {
-        'success': True,
-        'payload': {"integrations": data}
-    }
-    return jsonify(ApiResponse(output))
+    return jsonify(ApiResponse(payload={"integrations": data}))
 
 #
 # @app.route('/api/credential', methods=['GET'])
