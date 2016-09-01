@@ -58,9 +58,9 @@ class QueryApiTestCase(unittest.TestCase):
         now = datetime.datetime.utcnow()
         for i in range(3):
             self.create_mock_query(
-                self.user.user_id,
+                self.user,
                 query="test_query_"+str(i),
-                timestamp=now.replace(hour=now.hour-i)  # make each time further in the past
+                timestamp=str(now.replace(hour=now.hour-i)),  # make each time further in the past
             )
         rv = self.open_with_auth("/api/report", 'GET')
         # Suppressing the pylint error for no-member
@@ -76,7 +76,7 @@ class QueryApiTestCase(unittest.TestCase):
         return self.app.open(url, method=method, headers={"Authorization": "Bearer " + fake_token})
 
 
-    def create_mock_query(self, user_id, **kwargs):
+    def create_mock_query(self, user, **kwargs):
         query = Query(
             query=kwargs['query'],
             os="Mac OS X Version: 10.11.6",
@@ -86,7 +86,9 @@ class QueryApiTestCase(unittest.TestCase):
             city="new york",
             city_lat_long="40.714353,-74.005973",
             ip="127.0.0.1",
-            uid=user_id
+            uid=user.user_id,
+            user=user.key,
+            source="site-search"
         )
         # Save to the datatore.
         query.put()

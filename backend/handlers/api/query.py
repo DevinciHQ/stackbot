@@ -48,7 +48,7 @@ def query_handler():
         ip=request.remote_addr,
         uid=user.user_id,
         source=source,
-        user=user
+        user=user.key
     )
     # Save to the datatore.
     query.put()

@@ -48,11 +48,12 @@ class QueryApiTestCase(unittest.TestCase):
         rv = self.app.get("/api/q?q=TEST")  # type: Response
         self.assertEqual(rv.status_code, 401)  # An unauthorized user should get back a 401 code.
 
-        rv = self.open_with_auth("/api/q?q=TEST", "GET")  # type: Response
+        rv = self.open_with_auth("/api/q?q=TEST&source=site-search", "GET")  # type: Response
         # Suppressing the pylint error for no-member
         # pylint: disable=maybe-no-member
         self.assertEqual(rv.status_code, 200)  # An use should be able to authenticate.
 
     def open_with_auth(self, url, method):
         fake_token = get_fake_jwt_token()
-        return self.app.open(url, method=method, headers={"Authorization": "Bearer " + fake_token},  environ_base={'HTTP_USER_AGENT': 'Chrome'})
+        return self.app.open(url, method=method, headers={"Authorization": "Bearer " + fake_token},
+                             environ_base={'HTTP_USER_AGENT': 'Chrome', 'REMOTE_ADDR': '127.0.0.1'})
