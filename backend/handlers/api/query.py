@@ -23,8 +23,8 @@ def query_handler():
     try:
         user_id = security.authenticate_user(request).user_id
     except security.ValidationError as err:
-        # IF the user isn't logged in, then throw a 403 error.
-        logging.error(err)
+        # IF the user isn't logged in, then throw a 401 error.
+        logging.debug(err)
         abort(401)
 
     # Get the user-agent header from the request.

@@ -15,7 +15,7 @@ def get_integrations():
         user = authenticate_user(request)
         creds = user.credentials()
     except (ExpiredSignatureError, ValidationError) as err:
-        logging.warn(err)
+        logging.debug(err)
         abort(401)
 
     data = []
