@@ -8,6 +8,7 @@ user_agents-1.0.1.dist-info/metadata.json,sha256=6Fib4AnUXg6asb-9FrCm64cF-H1uAD7
 user_agents-1.0.1.dist-info/RECORD,,
 user_agents-1.0.1.dist-info/top_level.txt,sha256=zjLro7WPhO9c1Fgwdj7f-LVroJEeE26GO7oc40FBLVY,12
 user_agents-1.0.1.dist-info/WHEEL,sha256=54bVun1KfEBTJ68SHUmbxNPj80VxlQ0sHi4gZdGZXEY,92
+user_agents-1.0.1.dist-info/INSTALLER,sha256=zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg,4
 user_agents/parsers.pyc,,
 user_agents/tests.pyc,,
 user_agents/compat.pyc,,

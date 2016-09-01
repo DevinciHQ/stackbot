@@ -143,6 +143,7 @@ pycrypto-2.6.1.dist-info/RECORD,,
 pycrypto-2.6.1.dist-info/WHEEL,sha256=ik3fqPMJj7D-0Wemai2knvDSFoYiYBivUGU3xLcAFwY,111
 pycrypto-2.6.1.dist-info/metadata.json,sha256=cxusa7inXGR3Kid8_NRixjeV1qvrk3bSxKFp5NGL9oo,746
 pycrypto-2.6.1.dist-info/top_level.txt,sha256=-W2wTtkxc1QnPUPRqBZ0bMwrhD8xRD13HIobFX-wDOs,7
+pycrypto-2.6.1.dist-info/INSTALLER,sha256=zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg,4
 Crypto/PublicKey/pubkey.pyc,,
 Crypto/SelfTest/Random/OSRNG/test_generic.pyc,,
 Crypto/pct_warnings.pyc,,

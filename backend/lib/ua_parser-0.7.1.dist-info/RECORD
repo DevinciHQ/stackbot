@@ -8,6 +8,7 @@ ua_parser-0.7.1.dist-info/RECORD,,
 ua_parser-0.7.1.dist-info/WHEEL,sha256=o2k-Qa-RMNIJmUdIc7KU6VWR_ErNRbWNlxDIpl7lm34,110
 ua_parser-0.7.1.dist-info/metadata.json,sha256=EvwZ8xw7DDVSFuoj1mRvh8ec3usSLsxn-pno5ajY24g,1213
 ua_parser-0.7.1.dist-info/top_level.txt,sha256=SmuVcbgdjvq6yoTXedEHTi904KvxJOMW5ZOa--3DQzQ,10
+ua_parser-0.7.1.dist-info/INSTALLER,sha256=zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg,4
 ua_parser/user_agent_parser.pyc,,
 ua_parser/__init__.pyc,,
 ua_parser/_regexes.pyc,,

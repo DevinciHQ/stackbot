@@ -88,8 +88,9 @@ pystache-0.5.4.dist-info/WHEEL,sha256=bee59qcPjkyXfMaxNWjl2CGotqfumWx9pC1hlVLr2m
 pystache-0.5.4.dist-info/entry_points.txt,sha256=L-x6NqWUKsBoDSf2vgGlZOM0i5-98WHWPFCd5B6yn9Y,104
 pystache-0.5.4.dist-info/metadata.json,sha256=_0vHcH4cyQ4--pMrIsKXSLZwDvefm8SeKa_ZJit3km4,1225
 pystache-0.5.4.dist-info/top_level.txt,sha256=ABnjNyJLvaqlQGUD1kOtu2VJg73h3JpM5p-xXn98EAc,9
-/var/folders/19/61yxp09n63z9bpk2d8b2fnlw0000gn/T/tmpAZKTDU/bin/pystache,sha256=cpnjScJ_124VXUaFBmoIBuRPaiV2Qysxlr_pnX_Emwg,245
-/var/folders/19/61yxp09n63z9bpk2d8b2fnlw0000gn/T/tmpAZKTDU/bin/pystache-test,sha256=-0e-EIT8FJqzFqAD2sb6aQm5hCPudMh9WR90Rmr7RVA,243
+../../bin/pystache,sha256=cpnjScJ_124VXUaFBmoIBuRPaiV2Qysxlr_pnX_Emwg,245
+../../bin/pystache-test,sha256=-0e-EIT8FJqzFqAD2sb6aQm5hCPudMh9WR90Rmr7RVA,243
+pystache-0.5.4.dist-info/INSTALLER,sha256=zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg,4
 pystache/parsed.pyc,,
 pystache/tests/examples/double_section.pyc,,
 pystache/tests/test_specloader.pyc,,

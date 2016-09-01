@@ -21,6 +21,7 @@ bs4/tests/test_htmlparser.py,sha256=zFdQKGi255ZordULPqFOIeX9JGClPAOoKCvq4A2aTzA,
 bs4/tests/test_lxml.py,sha256=I5XrNqhQSZ0Kv-CjobiYWe3YEcdWxabw0s3514Xq2hQ,2382
 bs4/tests/test_soup.py,sha256=XfqJ2U7QwtwHfuBp4MVkNbgCMB8RuBkAxi-zZt2NhUw,20345
 bs4/tests/test_tree.py,sha256=8NCEdXqxWmRMJO42kjcsuJNJXB3PxjBKRa2_PwHrr6Q,78105
+beautifulsoup4-4.5.1.dist-info/INSTALLER,sha256=zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg,4
 bs4/tests/test_htmlparser.pyc,,
 bs4/element.pyc,,
 bs4/builder/__init__.pyc,,
