@@ -43,10 +43,10 @@ class DatastoreTestCase(unittest.TestCase):
 
     def testInsertInteger(self):
         """ Test to see that user_id cannot be an integer. """
-        try:
+        # Should not be able to insert user_id with an integer value.
+        with self.assertRaises(Exception) as cm:
             User(user_id=12, username="fake", email="fake").put()
-        except BadValueError:
-            print "Cannot insert user_id with an integer value"
+        self.assertEqual("Expected string, got 12", str(cm.exception))
 
     def testInsertDefualtFields(self):
         """ Test to see if the default fields are created by default. """
