@@ -6,6 +6,7 @@ from handlers.api.integration import app
 from context import get_fake_jwt_token, remove_fake_certs, set_fake_certs, setup_fake_user, MockRequest
 from shared import ApiResponse
 from flask import Response
+from models.credential import Credential
 
 class QueryApiTestCase(unittest.TestCase):
     """ Create a test case. """
@@ -31,24 +32,45 @@ class QueryApiTestCase(unittest.TestCase):
 
         self.app = app.test_client()
         set_fake_certs()
+        self.user = setup_fake_user()
 
     def tearDown(self):
         """ Tear down the test. """
         self.testbed.deactivate()
         remove_fake_certs()
 
-    def test_get_integration(self):
-        """Test to get the integration data if it exists. """
-
+    def test_integration_logged_out(self):
+        """ Ensure that integration data can't be fetched by an unauthorized user """
         rv = self.app.get("/api/integration")  # type: Response
         self.assertEqual(rv.status_code, 401)  # A query without the ?q= param should give a 400 code.
 
+    def test_report_logged_in(self):
+        """ Test to see if authorized user can get empty integration data. """
         rv = self.open_with_auth("/api/integration", 'GET')
         # Suppressing the pylint error for no-member
         # pylint: disable=maybe-no-member
         data = json.loads(rv.data)
         self.assertEqual(data, ApiResponse(payload={"integrations": []}))
 
+    def test_get_integration(self):
+        """Test to get the integration data. """
+        # Create mock credential data on the fly.
+        self.create_mock_credential(user=self.user.put(), type="github")
+        rv = self.open_with_auth("/api/integration", 'GET')
+        # Suppressing the pylint error for no-member
+        # pylint: disable=maybe-no-member
+        data = json.loads(rv.data)  # type: Response
+        self.assertEqual(len(data['payload']['integrations']), 1)
+        self.assertEqual(data['payload']['integrations'][0]['type'], 'github')
+
     def open_with_auth(self, url, method):
         fake_token = get_fake_jwt_token()
         return self.app.open(url, method=method, headers={"Authorization": "Bearer " + fake_token})
+
+    def create_mock_credential(self, user, type, **kwargs):
+        cred = Credential(
+            user=user,
+            type=type
+        )
+        # Save to the datatore.
+        cred.put()
