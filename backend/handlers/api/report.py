@@ -18,7 +18,7 @@ def report_handler():
         user = security.authenticate_user(request)
     except security.ValidationError as err:
         # IF the user isn't logged in, then throw a 401 error.
-        logging.error(err)
+        logging.debug(err)
         abort(401)
 
     # https://cloud.google.com/appengine/docs/python/ndb/queries#properties_by_string

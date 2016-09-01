@@ -1,7 +1,17 @@
 import time
 import json
-
 import shared.security as security
+
+
+class MockRequest:
+    def __init__(self, **kwds):
+        self.__dict__.update(kwds)
+
+
+def setup_fake_user():
+    fake_token = get_fake_jwt_token()
+    auth_request = MockRequest(headers={"Authorization": "Bearer " + fake_token})
+    return security.authenticate_user(auth_request)
 
 
 def get_fake_jwt_token():

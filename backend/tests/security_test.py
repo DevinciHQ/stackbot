@@ -5,15 +5,12 @@ from google.appengine.ext import ndb, testbed
 from shared.security import PUBKEY
 from shared import security
 from jwt import DecodeError
-import context
+from context import get_fake_jwt_token, MockRequest, remove_fake_certs, set_fake_certs
 import json
 from shared import app
 from flask import session
 
 
-class Request:
-    def __init__(self, **kwds):
-        self.__dict__.update(kwds)
 
 # [START datastore_example_test]
 class DatastoreTestCase(unittest.TestCase):
@@ -37,7 +34,7 @@ class DatastoreTestCase(unittest.TestCase):
         # the tests. See: http://stackoverflow.com/a/31975818
         self.testbed.init_urlfetch_stub()
 
-        context.set_fake_certs()
+        set_fake_certs()
         app.debug = True
         app.secret_key = 'development'
 
@@ -45,12 +42,12 @@ class DatastoreTestCase(unittest.TestCase):
     def tearDown(self):
         """ Tear down the test. """
         self.testbed.deactivate()
-        context.remove_fake_certs()
+        remove_fake_certs()
     # [END datastore_example_teardown]
 
     def test_refresh(self):
         """ Test if the cache holding the keys is refreshed. """
-        context.remove_fake_certs()
+        remove_fake_certs()
         self.assertDictEqual(PUBKEY._keys, {})
         PUBKEY.refresh()
         self.assertIsNot(PUBKEY._keys, {})
@@ -68,7 +65,7 @@ class DatastoreTestCase(unittest.TestCase):
         self.assertEqual(accepted_public_key, test_public_key)
 
     def test_token_decryption(self):
-        fake_token = context.get_fake_jwt_token()
+        fake_token = get_fake_jwt_token()
         decrypted_payload = security.verify_jwt_token(fake_token)
         with open('./tests/test_data/fake_jwt_payload.json', 'r') as payload_file:
             accepted_payload = json.loads(payload_file.read())
@@ -79,42 +76,42 @@ class DatastoreTestCase(unittest.TestCase):
 
         # Authorization header missing.
         with self.assertRaises(security.ValidationError) as cm:
-            request = Request(headers={})
+            request = MockRequest(headers={})
             user_id = security.get_user_id_from_token(security.verify_jwt_request(request))
         self.assertEqual("Authorization header is missing.", str(cm.exception))
 
         # Authorization header is not of type 'Bearer'.
         with self.assertRaises(security.ValidationError) as cm:
-            request = Request(headers={"Authorization": "Basic"})
+            request = MockRequest(headers={"Authorization": "Basic"})
             user_id = security.get_user_id_from_token(security.verify_jwt_request(request))
         self.assertEqual("Authorization header is not of type 'Bearer'.", str(cm.exception))
 
         # Not enough segments
         # TODO: We're not catching this DecodeError exception like we should be.
         with self.assertRaises(DecodeError) as cm:
-            request = Request(headers={"Authorization": "Bearer FAIL"})
+            request = MockRequest(headers={"Authorization": "Bearer FAIL"})
             user_id = security.get_user_id_from_token(security.verify_jwt_request(request))
         self.assertEqual("Not enough segments", str(cm.exception))
 
         # Signature verification failed
         # TODO: We're not catching this DecodeError exception like we should be.
         with self.assertRaises(DecodeError) as cm:
-            mangled_token = context.get_fake_jwt_token() + "F"
-            request = Request(headers={"Authorization": "Bearer " + mangled_token})
+            mangled_token = get_fake_jwt_token() + "F"
+            request = MockRequest(headers={"Authorization": "Bearer " + mangled_token})
             user_id = security.get_user_id_from_token(security.verify_jwt_request(request))
         self.assertEqual("Signature verification failed", str(cm.exception))
 
         # Using the proper fake_token, make sure the user can be authenticated.
-        fake_token = context.get_fake_jwt_token()
-        request = Request(headers={"Authorization": "Bearer " + fake_token})
+        fake_token = get_fake_jwt_token()
+        request = MockRequest(headers={"Authorization": "Bearer " + fake_token})
         user_id = security.get_user_id_from_token(security.verify_jwt_request(request))
         self.assertEqual(user_id, "fakeuser123")
 
     def test_set_auth_session_cookie(self):
         with app.test_request_context():
-            fake_token = context.get_fake_jwt_token()
+            fake_token = get_fake_jwt_token()
 
-            request = Request(headers={"Authorization": "Bearer "+fake_token})
+            request = MockRequest(headers={"Authorization": "Bearer "+fake_token})
             security.set_auth_session_cookie(request)
             test_user_id = session.get("user_id", "SHOULD NOT BE THIS")
             self.assertEqual(test_user_id, "fakeuser123")
@@ -128,9 +125,9 @@ class DatastoreTestCase(unittest.TestCase):
 
     def test_authentication(self):
         with app.test_request_context():
-            empty_request = Request(headers={})
-            fake_token = context.get_fake_jwt_token()
-            auth_request = Request(headers={"Authorization": "Bearer " + fake_token})
+            empty_request = MockRequest(headers={})
+            fake_token = get_fake_jwt_token()
+            auth_request = MockRequest(headers={"Authorization": "Bearer " + fake_token})
 
             with self.assertRaises(security.ValidationError) as cm:
                 security.set_auth_session_cookie(empty_request)
