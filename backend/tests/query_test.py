@@ -32,9 +32,7 @@ class DatastoreTestCase(unittest.TestCase):
         self.testbed.deactivate()
     # [END datastore_example_teardown]
 
-    # [START datastore_example_insert]
-    def testInsertEntity(self):
+    def test_insert_query(self):
         """ Test the Query can be inserted. """
-        Query().put()
-        self.assertEqual(1, len(Query.query().fetch(2)))
-    # [END datastore_example_insert]
+        test_query = Query(query="google").put()
+        self.assertEqual("google", test_query.get().query)
