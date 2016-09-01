@@ -56,9 +56,5 @@ def query_handler():
     escaped_q = urllib.urlencode({'q': query_string})
     redirect = 'http://google.com/#' + escaped_q
 
-    # Output for when we first land on the page (or when no query was entered)
     # response.headers['Content-Type'] = 'application/json'
-    output = {
-        'redirect': redirect
-    }
-    return jsonify(ApiResponse(output))
+    return jsonify(ApiResponse({'redirect': redirect}))
