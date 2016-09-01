@@ -39,6 +39,10 @@ class QueryApiTestCase(unittest.TestCase):
 
     def test_get_integration(self):
         """Test to get the integration data if it exists. """
+
+        rv = self.app.get("/api/integration")  # type: Response
+        self.assertEqual(rv.status_code, 401)  # A query without the ?q= param should give a 400 code.
+
         rv = self.open_with_auth("/api/integration", 'GET')
         # Suppressing the pylint error for no-member
         # pylint: disable=maybe-no-member
