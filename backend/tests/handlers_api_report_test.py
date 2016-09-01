@@ -50,6 +50,8 @@ class QueryApiTestCase(unittest.TestCase):
     def test_report_logged_in(self):
 
         rv = self.open_with_auth("/api/report", 'GET')
+        # Suppressing the pylint error for no-member
+        # pylint: disable=maybe-no-member
         self.assertEqual(json.loads(rv.data), ApiResponse([])) #Expect an empty, but successful response.
 
     def test_report_list(self):
@@ -60,6 +62,8 @@ class QueryApiTestCase(unittest.TestCase):
                 query="test_query_"+str(i)
             )
         rv = self.open_with_auth("/api/report", 'GET')
+        # Suppressing the pylint error for no-member
+        # pylint: disable=maybe-no-member
         data = json.loads(rv.data) # type: Response
         self.assertEqual(len(data['payload']), 3)  # Expect three items
         self.assertEqual(data['payload'][0]['query'], "test_query_0")
