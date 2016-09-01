@@ -13,9 +13,9 @@ def report_handler():
     """ Returns a report with all of the most recent queries up to some limit
      in reverse chronological order. """
 
-    user_id = None
+    user = None
     try:
-        user_id = security.verify_jwt_token(request).get('sub')
+        user = security.authenticate_user(request)
     except security.ValidationError as err:
         # IF the user isn't logged in, then throw a 401 error.
         logging.error(err)
@@ -24,7 +24,7 @@ def report_handler():
     # https://cloud.google.com/appengine/docs/python/ndb/queries#properties_by_string
     # https://cloud.google.com/appengine/docs/python/ndb/queries#cursors
     result = ndb.gql("SELECT query, timestamp FROM Query WHERE uid = :1 ORDER BY "
-                     "timestamp DESC LIMIT 20", user_id)
+                     "timestamp DESC LIMIT 20", user.user_id)
     data = []
     for query in result:
         # This is annoying.. maybe we should use another word instead of query?
