@@ -16,6 +16,13 @@ from shared import app
 from shared import security
 from shared.settings import Settings
 
+
+# Thread safety: The use of strptime is thread safe, but with one important caveat.  The first use of strptime is not
+# thread safe because the first use will import _strptime.  That import is not thread safe and may throw AttributeError
+# or ImportError.  To avoid this issue, import _strptime explicitly before starting threads,
+# or call strptime once before starting threads. FROM: http://bugs.python.org/issue7980
+import _strptime
+
 app.debug = True
 app.secret_key = 'development'
 

@@ -473,7 +473,7 @@ class OAuth2Provider(object):
         the data in your request body::
 
             def your_handler():
-                valid, req = oauth.verify_jwt_token(['email'])
+                valid, req = oauth.verify_request(['email'])
                 if valid:
                     return jsonify(user=req.user)
                 return jsonify(status='error')
@@ -859,7 +859,7 @@ class OAuth2RequestValidator(RequestValidator):
             'authorization_code', 'password',
             'client_credentials', 'refresh_token',
         )
-
+        
         # Grant type is allowed if it is part of the 'allowed_grant_types'
         # of the selected client or if it is one of the default grant types
         if hasattr(client, 'allowed_grant_types'):

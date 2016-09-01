@@ -4,7 +4,7 @@ import logging
 
 from flask import request, abort, jsonify
 from shared import app, ApiResponse
-from shared.security import authenticate_user, ExpiredSignatureError
+from shared.security import authenticate_user, ExpiredSignatureError, ValidationError
 
 
 @app.route('/api/integration', methods=['GET'])
@@ -14,8 +14,8 @@ def get_integrations():
     try:
         user = authenticate_user(request)
         creds = user.credentials()
-    except ExpiredSignatureError as err:
-        logging.warn(err)
+    except (ExpiredSignatureError, ValidationError) as err:
+        logging.debug(err)
         abort(401)
 
     data = []
@@ -25,11 +25,7 @@ def get_integrations():
             'type': cred.type
         })
 
-    output = {
-        'success': True,
-        'payload': {"integrations": data}
-    }
-    return jsonify(ApiResponse(output))
+    return jsonify(ApiResponse(payload={"integrations": data}))
 
 #
 # @app.route('/api/credential', methods=['GET'])

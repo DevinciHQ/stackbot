@@ -4,3 +4,5 @@ webapp2
 google
 pystache
 PyJWT
+pycrypto
+Flask-OAuthlib

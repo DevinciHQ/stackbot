@@ -61,7 +61,6 @@ class OAuth(object):
         app.extensions[self.state_key] = self
 
     def remote_app(self, name, register=True, **kwargs):
-        # type: (object, object, object) -> object
         """Registers a new remote application.
 
         :param name: the name of the remote application

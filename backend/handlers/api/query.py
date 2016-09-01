@@ -19,17 +19,21 @@ def query_handler():
     if len(query_string) <= 0:
         abort(400)
 
-    user_id = None
+    user = None
     try:
-        user_id = security.authenticate_user(request)
+        user = security.authenticate_user(request)
     except security.ValidationError as err:
-        # IF the user isn't logged in, then throw a 403 error.
-        logging.error(err)
+        # IF the user isn't logged in, then throw a 401 error.
+        logging.debug(err)
         abort(401)
 
     # Get the user-agent header from the request.
     user_agent = parseUA(request.headers['User-Agent'])
     geo = get_geo_data(request)
+
+    source = request.args.get('source')
+    if source not in ['site-search', 'omnibox']:
+        abort(400) # The source field should be required.
 
     # Create a new Query entity from the q value.
     # TODO: Add the other values that we want from the request headers.
@@ -42,7 +46,9 @@ def query_handler():
         city=geo['city'],
         city_lat_long=geo['city_lat_long'],
         ip=request.remote_addr,
-        uid=user_id
+        uid=user.user_id,
+        source=source,
+        user=user.key
     )
     # Save to the datatore.
     query.put()
@@ -51,9 +57,5 @@ def query_handler():
     escaped_q = urllib.urlencode({'q': query_string})
     redirect = 'http://google.com/#' + escaped_q
 
-    # Output for when we first land on the page (or when no query was entered)
     # response.headers['Content-Type'] = 'application/json'
-    output = {
-        'redirect': redirect
-    }
-    return jsonify(ApiResponse(output))
+    return jsonify(ApiResponse({'redirect': redirect}))
