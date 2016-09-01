@@ -14,6 +14,7 @@ class Query(ndb.Model):
     country = ndb.StringProperty()
     city = ndb.StringProperty()
     city_lat_long = ndb.StringProperty()
-    ip = ndb.StringProperty()
-    uid = ndb.StringProperty()
+    ip = ndb.StringProperty(required=True)
+    uid = ndb.StringProperty()  # deprecated for user.
+    user = ndb.KeyProperty(kind='User', required=True)
     source = ndb.StringProperty(choices=['site-search', 'omnibox'], required=True)
