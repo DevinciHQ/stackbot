@@ -59,7 +59,8 @@ class QueryApiTestCase(unittest.TestCase):
         for i in range(3):
             self.create_mock_query(
                 self.user.user_id,
-                query="test_query_"+str(i)
+                query="test_query_"+str(i),
+                timestamp=now.replace(hour=now.hour-i)  # make each time further in the past
             )
         rv = self.open_with_auth("/api/report", 'GET')
         # Suppressing the pylint error for no-member
@@ -80,6 +81,7 @@ class QueryApiTestCase(unittest.TestCase):
             query=kwargs['query'],
             os="Mac OS X Version: 10.11.6",
             browser="Chrome",
+            timestamp=kwargs.get('timestamp', datetime.datetime.utcnow().isoformat()),
             country="US",
             city="new york",
             city_lat_long="40.714353,-74.005973",
