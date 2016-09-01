@@ -21,7 +21,7 @@ def query_handler():
 
     user_id = None
     try:
-        user_id = security.authenticate_user(request)
+        user_id = security.authenticate_user(request).user_id
     except security.ValidationError as err:
         # IF the user isn't logged in, then throw a 403 error.
         logging.error(err)
