@@ -50,7 +50,7 @@ commands:
         export JUNIT_DIR=$CIRCLE_TEST_REPORTS
         FLAGS='--reporters=junit,progress'
       fi
-      npm run test -- --watch=false $FLAGS
+      npm run test -- $FLAGS {{args}}
       npm run lint
 
   test-backend:
