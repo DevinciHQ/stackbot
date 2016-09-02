@@ -1,0 +1,6 @@
+cron:
+- description: Stackbot Daily Backup
+  # Note that we need to specify the kind for each collection we have. If we don't add them, they won't be backed up!
+  url: /_ah/datastore_admin/backup.create?name=Stackbot-Backup-&kind=Query&kind=User&kind=Credential&kind=Setting&filesystem=gs&gs_bucket_name=devinci-stackbot-backups
+  schedule: every 12 hours
+  target: ah-builtin-python-bundle
