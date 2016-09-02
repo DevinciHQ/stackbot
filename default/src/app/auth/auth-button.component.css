@@ -1,7 +1,7 @@
 button.upper-right {
-    position: fixed;
-    right: 100px;
-    top: 20px;
+    position: absolute;
+    right: 52px;
+    top: -60px;
 }
 
 button {
