@@ -31,7 +31,9 @@ const firebaseConfig = {
 // Put provider and method for authentication in separate constant.
 const firebaseAuthConfig = {
     provider: AuthProviders.Github,
-    method: AuthMethods.Popup
+    method: AuthMethods.Popup,
+    remember: 'default',
+    scope: ['user:email']
 };
 
 
