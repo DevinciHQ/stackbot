@@ -11,12 +11,12 @@ handlers:
   upload: opensearch.xml
 
 - url: /robots.txt
-  static_files: robots.txt
-  upload: robots.txt
+  static_files: dist/robots.txt
+  upload: dist/robots.txt
 
 - url: /favicon.ico
-  static_files: favicon.ico
-  upload: favicon.ico
+  static_files: dist/favicon.ico
+  upload: dist/favicon.ico
 
 - url: (.*)/
   static_files: dist\1/index.html
