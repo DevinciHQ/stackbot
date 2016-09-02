@@ -1,0 +1,14 @@
+.day {
+    background-color: #358fa5;
+    color: #fff;
+    /*font-weight: bold;*/
+
+}
+
+.day td {
+    border-top: none;
+    font-size: 17px;
+}
+.query span {
+    /*margin-left: 10px;*/
+}

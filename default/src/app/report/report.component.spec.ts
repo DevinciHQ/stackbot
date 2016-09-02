@@ -62,7 +62,7 @@ describe('SearchComponent', () => {
             spyOn(querySrv, 'getQueries').and.callFake(() => {
                 return Observable.create(
                     (observer: Observer<any>) => {
-                        observer.next(null);
+                        observer.next([]);
                         observer.complete();
                     }
                 );
@@ -104,43 +104,49 @@ describe('SearchComponent', () => {
             let accepted_data = [
                 {
                     'type' : 'day',
-                    'name': 'thursday',
-                    'timestamp': '2016-09-02T00:00:00.00000'
+                    'name': 'Thursday',
+                    'timestamp': '2016-09-01T23:59:59-04:00'
                 },
                 {
                     'type' : 'query',
                     'query': 'asdfasdf',
-                    'timestamp': '2016-09-01T22:04:38.787362'
+                    'timestamp': '2016-09-01T22:04:38-04:00'
                 },
                 {
                     'type' : 'query',
                     'query': 'asdf',
-                    'timestamp': '2016-09-01T20:52:51.506263'
+                    'timestamp': '2016-09-01T20:52:51-04:00'
                 },
                 {
                     'type' : 'day',
-                    'name': 'friday',
-                    'timestamp': '2016-09-02T00:00:00.00000'
+                    'name': 'Friday',
+                    'timestamp': '2016-08-26T23:59:59-04:00'
                 },
                 {
                     'type' : 'query',
                     'query': 'asdfasdf',
-                    'timestamp': '2016-08-26T21:08:36.131316'
+                    'timestamp': '2016-08-26T21:08:36-04:00'
                 },
                 {
                     'type' : 'day',
-                    'name': 'thursday',
-                    'timestamp': '2016-09-02T00:00:00.00000'
+                    'name': 'Thursday',
+                    'timestamp': '2016-08-25T23:59:59-04:00'
                 },
                 {
                     'type' : 'query',
                     'query': 'asdfasdf',
-                    'timestamp': '2016-08-25T21:43:19.979162'
+                    'timestamp': '2016-08-25T21:43:19-04:00'
                 }
-            ]
+            ];
 
             auth.login();
-            expect(querySrv.getQueries).toHaveBeenCalled();
+            expect(component.data.length).toEqual(7);
+            for (let i = 0; i < component.data.length; i++) {
+                // console.log(component.data[i]);
+                expect(component.data[i]).toEqual(accepted_data[i]);
+
+            }
+            expect(component.data).toEqual(accepted_data);
         })
     );
 });
