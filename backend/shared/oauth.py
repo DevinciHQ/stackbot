@@ -1,7 +1,7 @@
 """Implementation of the oauth functions"""
 import logging
 
-from flask import url_for, session, request, jsonify, abort
+from flask import url_for, session, request, jsonify, abort, Response
 from flask_oauthlib.client import OAuth
 from shared import ApiResponse
 from shared import app
@@ -89,23 +89,35 @@ class OauthHandler(object):
         if credentials:
             credentials[0].key.delete()
 
-    def update_credential(self, user, access_token):
+    def update_credential(self, user, response):
         """ Create or update an existing user's credential of this type.
 
         Args:
-            access_token (str): The OAuth access_token to update this Credential with.
             user (User): The user who should have the Credential updated.
+            response: A response object that contains the access_token and scopes.
 
         Returns (Credential):
             The key of the Credential.
         """
+
+        oauth_access_token = response.get("access_token")
+        scopes = response.get('scope')
+
+        if not oauth_access_token:
+            raise Exception("OAuth access_token is missing from response.")
+
+        if not scopes:
+            raise Exception("OAuth scopes are missing from response.")
+
+        scopes = str(scopes).split(',')
+
         # First check if there is an existing credential.
         credential = self.get_credential(user)  # type: Credential
         if credential:
-            credential.token = access_token
+            credential.token = oauth_access_token
             return credential.put()
         # Otherwise, save a new credential.
-        credential = Credential(user=user.key, type=self.cred_type, token=access_token)
+        credential = Credential(user=user.key, type=self.cred_type, token=oauth_access_token, scopes=scopes)
         return credential.put()
 
 
@@ -235,7 +247,7 @@ class OauthHandler(object):
                 request.args['error_description']
             )
 
-        self.update_credential(user, resp['access_token'])
+        self.update_credential(user, resp)
 
         popup_closer = """
         <html>
