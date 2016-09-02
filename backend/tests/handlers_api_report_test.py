@@ -1,7 +1,7 @@
 """ Test the Query API."""
 import unittest
 import json
-import datetime
+from datetime import datetime, timedelta
 from google.appengine.ext import ndb, testbed
 from handlers.api.report import app
 from flask import Response, jsonify
@@ -55,12 +55,13 @@ class QueryApiTestCase(unittest.TestCase):
         self.assertEqual(json.loads(rv.data), ApiResponse([])) #Expect an empty, but successful response.
 
     def test_report_list(self):
-        now = datetime.datetime.utcnow()
+        now = datetime.utcnow()
         for i in range(3):
+            ago = now - timedelta(hours=i)
             self.create_mock_query(
                 self.user,
                 query="test_query_"+str(i),
-                timestamp=str(now.replace(hour=now.hour-i)),  # make each time further in the past
+                timestamp=str(ago),  # make each time further in the past
             )
         rv = self.open_with_auth("/api/report", 'GET')
         # Suppressing the pylint error for no-member
@@ -81,7 +82,7 @@ class QueryApiTestCase(unittest.TestCase):
             query=kwargs['query'],
             os="Mac OS X Version: 10.11.6",
             browser="Chrome",
-            timestamp=kwargs.get('timestamp', datetime.datetime.utcnow().isoformat()),
+            timestamp=kwargs.get('timestamp', datetime.utcnow().isoformat()),
             country="US",
             city="new york",
             city_lat_long="40.714353,-74.005973",

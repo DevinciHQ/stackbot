@@ -14,7 +14,7 @@ GITHUB_CONFIG = {
     # TODO: These settings don't trigger an issue on startup, only when a request is made.
     'consumer_key': Settings.get('github_consumer_key'),
     'consumer_secret': Settings.get('github_consumer_secret'),
-    'request_token_params': {'scope': 'user:email', 'state': lambda: security.gen_salt(10)},
+    'request_token_params': {'scope': 'user:email, read:org, repo:status', 'state': lambda: security.gen_salt(10)},
     'base_url': 'https://api.github.com/',
     'request_token_url': None,
     'access_token_method': 'POST',
