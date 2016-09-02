@@ -12,7 +12,7 @@ machine:
 
 dependencies:
   cache_directories:
-    - "frontend/node_modules"
+    - "default/node_modules"
   pre:
     # Download App Engine SDK
     # This is not necessary to deploy, its only necessary  to run local tests importing the App Engine SDK
