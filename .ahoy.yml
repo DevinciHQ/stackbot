@@ -75,3 +75,7 @@ commands:
       set -e
       ahoy test-backend
       ahoy test-frontend
+  proxy:
+    usage: Run a local proxy to use a dev version of stackbot.
+    cmd: |
+      cd default && sudo node proxy-server.js
