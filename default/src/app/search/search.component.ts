@@ -11,16 +11,16 @@ import {AuthService} from '../auth/auth.service';
 export class SearchComponent {
 
     private preSearchText: any;
-    private disabled = '';
+    private disabled = true;
     constructor(private queryService: QueryService, private auth: AuthService) {
         this.preSearchText = this.populateSearch(window.location.href);
         this.recordOmniSearch(window.location.href);
         this.auth.getUser().subscribe(
             user => {
                 if (user) {
-                        return this.disabled = '';
+                    this.disabled = false;
                 } else {
-                    return this.disabled = 'disabled';
+                    this.disabled = true;
                 }
             },
             err => {
