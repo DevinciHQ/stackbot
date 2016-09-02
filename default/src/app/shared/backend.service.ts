@@ -16,6 +16,10 @@ export class BackendService {
             // Use the production backend when serving from the live site.
             this._backendUrl = 'https://backend-dot-devinci-stackbot.appspot.com';
         }
+        let url = localStorage.getItem('backendUrl');
+        if (url) {
+            this._backendUrl = url;
+        }
     }
 
     getBackendUrl() {
