@@ -19,11 +19,11 @@ export class ReportComponent {
     public data: any;
 
     public formatMonth(dateTime: string): string {
-        return  moment(dateTime).format('MMM');
+        return  moment.utc(dateTime).format('MMM');
     }
 
     public formatDayOfMonth(dateTime: string): string {
-        return  moment(dateTime).format('D');
+        return  moment.utc(dateTime).format('D');
     }
 
     constructor(private queryService: QueryService, private auth: AuthService) {
@@ -48,10 +48,11 @@ export class ReportComponent {
     }
 
     processData(items: any[]) {
+        let timezone = jstz.determine();
         let currDay: any = null;
         let newData: any[] = [];
         for (let item of items) {
-            let date = moment(item.timestamp, moment.ISO_8601);
+            let date = moment.utc(item.timestamp);
             let endOfDay = moment(date).endOf('day');
             if (currDay === null || currDay > endOfDay ) {
                 currDay = endOfDay;
@@ -70,7 +71,7 @@ export class ReportComponent {
         return newData;
     }
     formatTime(dateTime: string) {
-        return moment(dateTime).format('LT');
+        return moment.utc(dateTime).format('LT');
 
     }
 }
