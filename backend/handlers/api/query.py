@@ -15,9 +15,12 @@ def query_handler():
     """ Handle the incoming request and create a Query entity if a query string was passed. """
 
     # Make sure the length of the query string is at least 1 char.
-    query_string = request.args.get('q', '')
-    if len(query_string) <= 0:
+    search_string = request.args.get('q', '')
+    if len(search_string) <= 0:
         abort(400)
+
+    tags = get_tags(search_string)
+    query_string = get_query(search_string)
 
     user = None
     try:
@@ -48,7 +51,8 @@ def query_handler():
         ip=request.remote_addr,
         uid=user.user_id,
         source=source,
-        user=user.key
+        user=user.key,
+        tags=tags
     )
     # Save to the datatore.
     query.put()
@@ -59,3 +63,31 @@ def query_handler():
 
     # response.headers['Content-Type'] = 'application/json'
     return jsonify(ApiResponse({'redirect': redirect}))
+
+
+def get_tags(search_string):
+    tags = []
+    for i in search_string.split():
+        if i.startswith("#"):
+            # Remove the '#' from the hashtag and append it to tags list.
+            tags.append(i[1:])
+        else:
+            return tags
+    # To handle the case where we only have hashtags and not actual search query.
+    # However, the user should never be able to search with hashtags only.
+    return tags
+
+
+def get_query(search_string):
+    search_query = []
+    cursor = True
+    for i in search_string.split():
+        # The cursor condition keeps track of the tags which are at the beginning of
+        # the search string. Other tags should be treated as a part of the search
+        # query.
+        if i.startswith("#") and cursor:
+            pass
+        else:
+            search_query.append(i)
+            cursor = False
+    return " ".join(search_query)
