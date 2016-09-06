@@ -1,0 +1,43 @@
+button {
+    color: #f0f0f0;
+    background-color: #da4649;
+    text-transform: uppercase;
+    border-radius: 2px;
+
+}
+
+button:hover {
+    color: #ffffff;
+    background-color: #da4649;
+}
+
+.input-group {
+    box-shadow: 0 4px 5px 0 rgba(0,0,0,.14),0 1px 10px 0 rgba(0,0,0,.12),0 2px 4px -1px rgba(0,0,0,.2);
+}
+
+.form-control {
+    border-radius: 2px;
+}
+
+.inner-addon {
+    position: relative;
+}
+
+/* style icon */
+.inner-addon .glyphicon {
+  position: absolute;
+  padding: 10px;
+  pointer-events: none;
+    z-index: 10;
+    color: grey;
+}
+
+/* align icon */
+.left-addon .glyphicon  { left:  0px;}
+.right-addon .glyphicon { right: 0px;}
+
+/* add padding  */
+.left-addon input  { padding-left:  30px; }
+.right-addon input { padding-right: 30px; }
+
+

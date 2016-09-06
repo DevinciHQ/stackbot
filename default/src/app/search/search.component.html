@@ -1,9 +1,10 @@
 
-<div class="input-group">
-    <input focusMe type="text" class="form-control" (keypress)="onPressEnter($event, searchField.value)"
-           value={{preSearchText}} #searchField [disabled]=disabled>
+<div class="input-group inner-addon left-addon">
+    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+    <input autofocus type="text" class="form-control" (keypress)="onPressEnter($event, searchField.value)"
+           value={{preSearchText}} #searchField [disabled]=disabled >
     <span class="input-group-btn">
-        <button class="btn btn-secondary" type="button" (click)="submit(searchField.value)" id="search-button" [disabled]=disabled>Search</button>
+        <button class="btn" type="button" (click)="submit(searchField.value)" id="search-button" [disabled]=disabled>Search</button>
     </span>
 </div>
 

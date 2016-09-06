@@ -6,6 +6,7 @@ import {AuthService} from '../auth/auth.service';
 @Component({
     selector: 'search',
     templateUrl: 'search.component.html',
+    styleUrls: ['search.component.css'],
     providers: [QueryService],
 })
 export class SearchComponent {
