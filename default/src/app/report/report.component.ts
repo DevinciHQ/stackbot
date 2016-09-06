@@ -5,6 +5,7 @@
 import { Component } from '@angular/core';
 import { QueryService } from '../query/query.service';
 import { AuthService } from '../auth/index';
+// Note that this also imports moment itself.
 import * as moment from 'moment-timezone';
 
 @Component({
@@ -25,6 +26,11 @@ export class ReportComponent {
 
     public formatDayOfMonth(dateTime: moment.Moment): string {
         return  dateTime.format('D');
+    }
+
+    formatTime(dateTime: moment.Moment) {
+        return dateTime.format('LT');
+
     }
 
     public setTimezone(timezone: string = null) {
@@ -64,8 +70,8 @@ export class ReportComponent {
         let newData: any[] = [];
         for (let item of items) {
             let date = moment.utc(item.timestamp);
-            date = moment.utc(item.timestamp).tz(this.tz);
-            let endOfDay = moment(date).local().endOf('day');
+            let localDate = moment.tz(date, this.tz);
+            let endOfDay = moment.tz(date, this.tz).endOf('day');
             if (currDay === null || currDay > endOfDay ) {
                 currDay = endOfDay;
                 newData.push({
@@ -77,13 +83,9 @@ export class ReportComponent {
             newData.push({
                     'type' : 'query',
                     'query': item.query,
-                    'timestamp': date.local()
+                    'timestamp': localDate
             });
         }
         return newData;
-    }
-    formatTime(dateTime: moment.Moment) {
-        return dateTime.format('LT');
-
     }
 }

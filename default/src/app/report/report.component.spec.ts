@@ -4,6 +4,8 @@ import { QueryService } from '../query/index';
 import { AuthService} from '../auth/auth.service';
 import { Observable, BehaviorSubject, Observer }   from 'rxjs';
 import { User } from '../shared/user';
+// Note that this also imports moment itself.
+import * as moment from 'moment-timezone';
 
 class MockQueryService {
 
@@ -72,11 +74,45 @@ describe('SearchComponent', () => {
         })
     );
 
+    it('should format the month.',
+        inject([ReportComponent, QueryService, AuthService],
+            (component: ReportComponent, querySrv: QueryService, auth: MockAuthService) => {
+                component.setTimezone('America/Phoenix');
+                let date = moment('2016-09-01T23:59:59-07:00');
+                let month = component.formatMonth(date);
+                expect(month).toEqual('Sep');
+            }
+        )
+    );
+
+    it('should format the time.',
+        inject([ReportComponent, QueryService, AuthService],
+            (component: ReportComponent, querySrv: QueryService, auth: MockAuthService) => {
+                component.setTimezone('America/Phoenix');
+                let date = moment('2016-09-01T23:59:59-07:00');
+                let time = component.formatTime(date);
+                expect(time).toEqual('11:59 PM');
+            }
+        )
+    );
+
+    it('should format the day of the month.',
+        inject([ReportComponent, QueryService, AuthService],
+            (component: ReportComponent, querySrv: QueryService, auth: MockAuthService) => {
+                component.setTimezone('America/Phoenix');
+                let date = moment('2016-09-01T23:59:59-07:00');
+                let day = component.formatDayOfMonth(date);
+                expect(day).toEqual('1');
+            }
+        )
+    );
+
+
     it('should add days QueryService.getQueries() when user is logged in.',
         inject([ReportComponent, QueryService, AuthService],
             (component: ReportComponent, querySrv: QueryService, auth: MockAuthService) => {
 
-            component.setTimezone('America/New_York');
+            component.setTimezone('America/Phoenix');
 
             spyOn(querySrv, 'getQueries').and.callFake(() => {
                 return Observable.create(
@@ -108,37 +144,37 @@ describe('SearchComponent', () => {
                 {
                     'type' : 'day',
                     'name': 'Thursday',
-                    'timestamp': '2016-09-01T23:59:59-04:00'
+                    'timestamp': '2016-09-01T23:59:59-07:00'
                 },
                 {
                     'type' : 'query',
                     'query': 'asdfasdf',
-                    'timestamp': '2016-09-01T18:04:38-04:00'
+                    'timestamp': '2016-09-01T15:04:38-07:00'
                 },
                 {
                     'type' : 'query',
                     'query': 'asdf',
-                    'timestamp': '2016-09-01T16:52:51-04:00'
+                    'timestamp': '2016-09-01T13:52:51-07:00'
                 },
                 {
                     'type' : 'day',
                     'name': 'Friday',
-                    'timestamp': '2016-08-26T23:59:59-04:00'
+                    'timestamp': '2016-08-26T23:59:59-07:00'
                 },
                 {
                     'type' : 'query',
                     'query': 'asdfasdf',
-                    'timestamp': '2016-08-26T17:08:36-04:00'
+                    'timestamp': '2016-08-26T14:08:36-07:00'
                 },
                 {
                     'type' : 'day',
                     'name': 'Thursday',
-                    'timestamp': '2016-08-25T23:59:59-04:00'
+                    'timestamp': '2016-08-25T23:59:59-07:00'
                 },
                 {
                     'type' : 'query',
                     'query': 'asdfasdf',
-                    'timestamp': '2016-08-25T17:43:19-04:00'
+                    'timestamp': '2016-08-25T14:43:19-07:00'
                 }
             ];
 
