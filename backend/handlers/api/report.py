@@ -29,6 +29,11 @@ def report_handler():
     for query in result:
         # This is annoying.. maybe we should use another word instead of query?
         # We couldn't use 'query.query' like we can for other values because that's a reserved word?
+        if not query.tags:
+            tags = []
+        if not isinstance(query.tags, list):
+            abort(500)
+
         query_out = {
             'query': query.query,
             'timestamp': query.timestamp,

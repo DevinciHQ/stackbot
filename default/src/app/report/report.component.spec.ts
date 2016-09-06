@@ -149,12 +149,14 @@ describe('SearchComponent', () => {
                 {
                     'type' : 'query',
                     'query': 'asdfasdf',
-                    'timestamp': '2016-09-01T15:04:38-07:00'
+                    'timestamp': '2016-09-01T15:04:38-07:00',
+                    'tags': <string[]>[],
                 },
                 {
                     'type' : 'query',
                     'query': 'asdf',
-                    'timestamp': '2016-09-01T13:52:51-07:00'
+                    'timestamp': '2016-09-01T13:52:51-07:00',
+                    'tags': <string[]>[],
                 },
                 {
                     'type' : 'day',
@@ -164,7 +166,8 @@ describe('SearchComponent', () => {
                 {
                     'type' : 'query',
                     'query': 'asdfasdf',
-                    'timestamp': '2016-08-26T14:08:36-07:00'
+                    'timestamp': '2016-08-26T14:08:36-07:00',
+                    'tags': <string[]>[],
                 },
                 {
                     'type' : 'day',
@@ -174,7 +177,8 @@ describe('SearchComponent', () => {
                 {
                     'type' : 'query',
                     'query': 'asdfasdf',
-                    'timestamp': '2016-08-25T14:43:19-07:00'
+                    'timestamp': '2016-08-25T14:43:19-07:00',
+                    'tags': <string[]>[],
                 }
             ];
 
@@ -193,13 +197,15 @@ describe('SearchComponent', () => {
     it('should display tags after the query in the reports',
         inject([ReportComponent, QueryService, AuthService],
             (component: ReportComponent, querySrv: QueryService, auth: MockAuthService) => {
+            component.setTimezone('America/Phoenix');
+
             spyOn(querySrv, 'getQueries').and.callFake(() => {
                 return Observable.create(
                     (observer: Observer<any>) => {
                         observer.next([
                             {
                               'query': 'asdfasdf',
-                              'tags': 'fake-tag',
+                              'tags': ['fake-tag'],
                               'timestamp': '2016-09-01T22:04:38.787362'
                             }
                         ]);
@@ -212,13 +218,13 @@ describe('SearchComponent', () => {
                 {
                     'type' : 'day',
                     'name': 'Thursday',
-                    'timestamp': '2016-09-01T23:59:59-04:00'
+                    'timestamp': '2016-09-01T23:59:59-07:00'
                 },
                 {
                     'type' : 'query',
                     'query': 'asdfasdf',
-                    'tags' : 'fake-tag',
-                    'timestamp': '2016-09-01T22:04:38-04:00'
+                    'tags' : ['fake-tag'],
+                    'timestamp': '2016-09-01T15:04:38-07:00'
                 },
             ];
 
@@ -226,6 +232,7 @@ describe('SearchComponent', () => {
             expect(component.data.length).toEqual(2);
             for (let i = 0; i < component.data.length; i++) {
                 // console.log(component.data[i]);
+                component.data[i].timestamp =  component.data[i].timestamp.format();
                 expect(component.data[i]).toEqual(accepted_data[i]);
 
             }
