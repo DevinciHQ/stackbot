@@ -6,4 +6,11 @@ button.upper-right {
 
 button {
     margin: 20px;
+    background-color: #da4649;
+    color: #ffffff;
+}
+
+button:hover {
+    background-color: #da4649;
+    color: #ffffff;
 }
