@@ -110,12 +110,12 @@ describe('SearchComponent', () => {
                 {
                     'type' : 'query',
                     'query': 'asdfasdf',
-                    'timestamp': '2016-09-01T22:04:38-04:00'
+                    'timestamp': '2016-09-01T18:04:38-04:00'
                 },
                 {
                     'type' : 'query',
                     'query': 'asdf',
-                    'timestamp': '2016-09-01T20:52:51-04:00'
+                    'timestamp': '2016-09-01T16:52:51-04:00'
                 },
                 {
                     'type' : 'day',
@@ -125,7 +125,7 @@ describe('SearchComponent', () => {
                 {
                     'type' : 'query',
                     'query': 'asdfasdf',
-                    'timestamp': '2016-08-26T21:08:36-04:00'
+                    'timestamp': '2016-08-26T17:08:36-04:00'
                 },
                 {
                     'type' : 'day',
@@ -135,7 +135,7 @@ describe('SearchComponent', () => {
                 {
                     'type' : 'query',
                     'query': 'asdfasdf',
-                    'timestamp': '2016-08-25T21:43:19-04:00'
+                    'timestamp': '2016-08-25T17:43:19-04:00'
                 }
             ];
 
@@ -143,6 +143,7 @@ describe('SearchComponent', () => {
             expect(component.data.length).toEqual(7);
             for (let i = 0; i < component.data.length; i++) {
                 // console.log(component.data[i]);
+                component.data[i].timestamp =  component.data[i].timestamp.format();
                 expect(component.data[i]).toEqual(accepted_data[i]);
 
             }
