@@ -15,7 +15,7 @@ module.exports = {
   },
 
   resolve: {
-    extensions: ['', '.js', '.ts']
+    extensions: ['', '.js', '.ts', '.json']
   },
 
   module: {
@@ -27,6 +27,10 @@ module.exports = {
       {
         test: /\.html$/,
         loader: 'html'
+      },
+      {
+        include: /\.json$/,
+        loaders: ["json-loader"]
       },
       {
         test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,

@@ -5,7 +5,7 @@
 import { Component } from '@angular/core';
 import { QueryService } from '../query/query.service';
 import { AuthService } from '../auth/index';
-import * as moment from 'moment';
+import * as moment from 'moment-timezone';
 
 @Component({
     selector: 'report',
@@ -13,20 +13,24 @@ import * as moment from 'moment';
     styleUrls: ['report.component.css'],
     providers: [QueryService]
 })
-
 export class ReportComponent {
 
     public data: any;
 
-    public formatMonth(dateTime: string): string {
-        return  moment.utc(dateTime).format('MMM');
+    public tz: string;
+
+    public formatMonth(dateTime: moment.Moment): string {
+        return  dateTime.format('MMM');
     }
 
-    public formatDayOfMonth(dateTime: string): string {
-        return  moment.utc(dateTime).format('D');
+    public formatDayOfMonth(dateTime: moment.Moment): string {
+        return  dateTime.format('D');
     }
 
     constructor(private queryService: QueryService, private auth: AuthService) {
+        this.tz = moment.tz.guess();
+        moment.tz.setDefault(moment.tz.guess());
+
         this.auth.getUser().subscribe(
             user => {
                 if (user) {
@@ -48,30 +52,30 @@ export class ReportComponent {
     }
 
     processData(items: any[]) {
-        let timezone = jstz.determine();
         let currDay: any = null;
         let newData: any[] = [];
         for (let item of items) {
             let date = moment.utc(item.timestamp);
-            let endOfDay = moment(date).endOf('day');
+            date = moment.utc(item.timestamp).tz(this.tz);
+            let endOfDay = moment(date).local().endOf('day');
             if (currDay === null || currDay > endOfDay ) {
                 currDay = endOfDay;
                 newData.push({
                     'type' : 'day',
                     'name': endOfDay.format('dddd'),
-                    'timestamp': endOfDay.format()
+                    'timestamp': endOfDay
                 });
             }
             newData.push({
                     'type' : 'query',
                     'query': item.query,
-                    'timestamp': date.format()
+                    'timestamp': date.local()
             });
         }
         return newData;
     }
-    formatTime(dateTime: string) {
-        return moment.utc(dateTime).format('LT');
+    formatTime(dateTime: moment.Moment) {
+        return dateTime.format('LT');
 
     }
 }
