@@ -1,3 +1,29 @@
 h1 {
     text-align: center;
+    color: white;
+    text-shadow: 0px 2px #565656;
+}
+
+:host div.header {
+
+    background-color: #2d8196;
+    background-image: url('http://www.intrawallpaper.com/static/images/abstract-mosaic-background.png');
+    background-size: cover;
+    background-position: center;
+    background-blend-mode: luminosity;
+    box-shadow: 0 4px 5px 0 rgba(0,0,0,.14),0 1px 10px 0 rgba(0,0,0,.12),0 2px 4px -1px rgba(0,0,0,.2);
+}
+
+
+:host > div.header > div.container {
+    padding-top: 50px;
+    padding-bottom: 50px;
+    /*background-color: rgba(156, 26, 28, 0.22);
+    */
+    margin: 0px;
+    width: 100%;
+}
+
+:host body {
+    background-color: black;
 }
