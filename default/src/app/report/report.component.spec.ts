@@ -189,4 +189,47 @@ describe('SearchComponent', () => {
             expect(component.data).toEqual(accepted_data);
         })
     );
+
+    it('should display tags after the query in the reports',
+        inject([ReportComponent, QueryService, AuthService],
+            (component: ReportComponent, querySrv: QueryService, auth: MockAuthService) => {
+            spyOn(querySrv, 'getQueries').and.callFake(() => {
+                return Observable.create(
+                    (observer: Observer<any>) => {
+                        observer.next([
+                            {
+                              'query': 'asdfasdf',
+                              'tags': 'fake-tag',
+                              'timestamp': '2016-09-01T22:04:38.787362'
+                            }
+                        ]);
+                        observer.complete();
+                    }
+                );
+            });
+
+            let accepted_data = [
+                {
+                    'type' : 'day',
+                    'name': 'Thursday',
+                    'timestamp': '2016-09-01T23:59:59-04:00'
+                },
+                {
+                    'type' : 'query',
+                    'query': 'asdfasdf',
+                    'tags' : 'fake-tag',
+                    'timestamp': '2016-09-01T22:04:38-04:00'
+                },
+            ];
+
+            auth.login();
+            expect(component.data.length).toEqual(2);
+            for (let i = 0; i < component.data.length; i++) {
+                // console.log(component.data[i]);
+                expect(component.data[i]).toEqual(accepted_data[i]);
+
+            }
+            expect(component.data).toEqual(accepted_data);
+        })
+    );
 });
