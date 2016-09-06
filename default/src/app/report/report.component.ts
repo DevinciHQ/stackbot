@@ -27,9 +27,17 @@ export class ReportComponent {
         return  dateTime.format('D');
     }
 
+    public setTimezone(timezone: string = null) {
+        if (timezone) {
+           this.tz = timezone;
+        } else {
+            this.tz = moment.tz.guess();
+        }
+        moment.tz.setDefault(this.tz);
+    }
+
     constructor(private queryService: QueryService, private auth: AuthService) {
-        this.tz = moment.tz.guess();
-        moment.tz.setDefault(moment.tz.guess());
+        this.setTimezone();
 
         this.auth.getUser().subscribe(
             user => {

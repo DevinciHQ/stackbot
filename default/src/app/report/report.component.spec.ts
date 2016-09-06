@@ -75,6 +75,9 @@ describe('SearchComponent', () => {
     it('should add days QueryService.getQueries() when user is logged in.',
         inject([ReportComponent, QueryService, AuthService],
             (component: ReportComponent, querySrv: QueryService, auth: MockAuthService) => {
+
+            component.setTimezone('America/New_York');
+
             spyOn(querySrv, 'getQueries').and.callFake(() => {
                 return Observable.create(
                     (observer: Observer<any>) => {
