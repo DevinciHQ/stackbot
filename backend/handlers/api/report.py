@@ -24,7 +24,7 @@ def report_handler():
     # https://cloud.google.com/appengine/docs/python/ndb/queries#properties_by_string
     # https://cloud.google.com/appengine/docs/python/ndb/queries#cursors
     result = ndb.gql("SELECT query, timestamp FROM Query WHERE uid = :1 ORDER BY "
-                     "timestamp DESC LIMIT 20", user.user_id)
+                     "timestamp DESC LIMIT 100", user.user_id)
     data = []
     for query in result:
         # This is annoying.. maybe we should use another word instead of query?
