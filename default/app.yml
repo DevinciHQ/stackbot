@@ -14,17 +14,17 @@ handlers:
   static_files: robots.txt
   upload: robots.txt
 
-- url: /favicon.ico
-  static_files: favicon.ico
-  upload: favicon.ico
-
 - url: (.*)/
   static_files: dist\1/index.html
   upload: dist
 
-- url: (.*)
-  static_files: dist\1
+- url: /(.*\.(js|map))$
+  static_files: dist/\1
   upload: dist
+
+- url: /(.*)$
+  static_files: src/icons/\1
+  upload: src/icons
 
 
 skip_files:
