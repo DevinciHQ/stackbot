@@ -28,6 +28,8 @@ def report_handler():
     # (we believe it's a bug) where the result contains duplicate records for each of the
     # tags in the tags list. This issue(or a functionality) which is caused by the 'repeated'
     # property of a column is not documented on the GAE's site.
+    # We use the cursor feature of GAE to take note of the last data fetched from the database.
+    # See: https://cloud.google.com/appengine/docs/python/ndb/queries#cursors
     cursor = Cursor(urlsafe=request.args.get('cursor', None))
     result, next_cursor, more = ndb.gql("SELECT * FROM Query WHERE uid = :1 ORDER BY "
                      "timestamp DESC", user.user_id).fetch_page(5, start_cursor=cursor)
@@ -47,8 +49,10 @@ def report_handler():
             'tags': query.tags
         }
         data.append(query_out)
-    next_cursor = {
-        'cursor': next_cursor.urlsafe()
-    }
-    data.append(next_cursor)
+    # Append the cursor to the data if it exists.
+    if next_cursor is not None:
+        next_cursor = {
+            'cursor': next_cursor.urlsafe()
+        }
+        data.append(next_cursor)
     return jsonify(ApiResponse(data))
