@@ -22,6 +22,11 @@ def report_handler():
         logging.debug(err)
         abort(401)
 
+    # Allow the frontend (and our tests) to request a limit of less than 100 items.
+    limit = int(request.args.get('limit', 0))
+    if not limit or limit > 100:
+        limit = 100
+
     # https://cloud.google.com/appengine/docs/python/ndb/queries#properties_by_string
     # https://cloud.google.com/appengine/docs/python/ndb/queries#cursors
     # We are fetching all the columns instead of the specific columns because of a bug
@@ -32,7 +37,7 @@ def report_handler():
     # See: https://cloud.google.com/appengine/docs/python/ndb/queries#cursors
     cursor = Cursor(urlsafe=request.args.get('cursor', None))
     result, next_cursor, more = ndb.gql("SELECT * FROM Query WHERE uid = :1 ORDER BY "
-                     "timestamp DESC", user.user_id).fetch_page(5, start_cursor=cursor)
+                     "timestamp DESC", user.user_id).fetch_page(limit, start_cursor=cursor)
 
     data = []
     for query in result:
