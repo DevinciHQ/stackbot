@@ -262,9 +262,9 @@ describe('SearchComponent', () => {
                         );
                     });
 
-                    console.log("add more");
+                    console.log('add more');
                     expect(component.data.length = 1);
-                    component.addMore();
+                    component.getMoreData('cursor_coming_through');
                     expect(component.data.length = 2);
                 }
             )
