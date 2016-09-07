@@ -16,12 +16,11 @@ def query_handler():
 
     # Make sure the length of the query string is at least 1 char.
     search_string = request.args.get('q', '')
-    if len(search_string) <= 0:
-        abort(400)
 
     tags = get_tags(search_string)
     query_string = get_query(search_string)
-
+    if len(query_string) == 0:
+        abort(400)
     user = None
     try:
         user = security.authenticate_user(request)
