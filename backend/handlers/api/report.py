@@ -23,6 +23,10 @@ def report_handler():
 
     # https://cloud.google.com/appengine/docs/python/ndb/queries#properties_by_string
     # https://cloud.google.com/appengine/docs/python/ndb/queries#cursors
+    # We are fetching all the columns instead of the specific columns because of a bug
+    # (we believe it's a bug) where the result contains duplicate records for each of the
+    # tags in the tags list. This issue(or a functionality) which is caused by the 'repeated'
+    # property of a column is not documented on the GAE's site.
     result = ndb.gql("SELECT * FROM Query WHERE uid = :1 ORDER BY "
                      "timestamp DESC LIMIT 100", user.user_id)
     data = []
