@@ -3,6 +3,7 @@ import logging
 
 from flask import request, abort, jsonify
 from shared import app, ApiResponse, security
+from google.appengine.datastore.datastore_query import Cursor
 
 # For use when dealing with the datastore.
 from google.appengine.ext import ndb
@@ -27,8 +28,10 @@ def report_handler():
     # (we believe it's a bug) where the result contains duplicate records for each of the
     # tags in the tags list. This issue(or a functionality) which is caused by the 'repeated'
     # property of a column is not documented on the GAE's site.
-    result = ndb.gql("SELECT * FROM Query WHERE uid = :1 ORDER BY "
-                     "timestamp DESC LIMIT 100", user.user_id)
+    cursor = Cursor(urlsafe=request.args.get('cursor', None))
+    result, next_cursor, more = ndb.gql("SELECT * FROM Query WHERE uid = :1 ORDER BY "
+                     "timestamp DESC", user.user_id).fetch_page(5, start_cursor=cursor)
+
     data = []
     for query in result:
         # This is annoying.. maybe we should use another word instead of query?
@@ -44,5 +47,8 @@ def report_handler():
             'tags': query.tags
         }
         data.append(query_out)
-
+    next_cursor = {
+        'cursor': next_cursor.urlsafe()
+    }
+    data.append(next_cursor)
     return jsonify(ApiResponse(data))
