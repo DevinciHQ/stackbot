@@ -77,6 +77,9 @@ export class ReportComponent {
                 this.cursor = item.cursor;
                 continue;
             }
+            if (item.cursor === 'None') {
+                this.cursor = null;
+            }
             let date = moment.utc(item.timestamp);
             let localDate = moment.tz(date, this.tz);
             let endOfDay = moment.tz(date, this.tz).endOf('day');
