@@ -32,6 +32,8 @@
                 </span>
             </td>
         </tr>
-        <tr *ngIf="cursor"><button>Show more</button></tr>
     </table>
+    <div id="show-more">
+        <button class="btn btn-secondary" (click)="getMoreData(cursor)" *ngIf="cursor">Show more</button>
+    </div>
 </div>

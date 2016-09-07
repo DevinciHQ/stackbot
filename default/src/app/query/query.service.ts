@@ -19,7 +19,13 @@ export class QueryService {
     }
 
     // Get the search history as a JSON response.
-    public getQueries(): Observable<Object> {
-        return this.backend.request('/api/report', {});
+    // This function takes a cursor parameter and makes a backend request by passing it as a GET param.
+    // This is done to get more data on pressing the "Show more" button.
+    public getQueries(cursor?: any): Observable<Object> {
+        if (cursor) {
+            return this.backend.request('/api/report', {cursor: cursor});
+        } else {
+            return this.backend.request('/api/report', {});
+        }
     };
 }

@@ -16,11 +16,13 @@ import * as moment from 'moment-timezone';
 })
 export class ReportComponent {
 
-    public data: any;
+    public data: any = [];
 
     public tz: string;
 
-    public cursor: any;
+    public cursor: any = null;
+
+    public currDay: moment.Moment = null;
 
     public formatMonth(dateTime: moment.Moment): string {
         return  dateTime.format('MMM');
@@ -53,7 +55,6 @@ export class ReportComponent {
                     this.queryService.getQueries().subscribe(
                         (data: any[]) => {
                             this.data = this.processData(data);
-                            console.log(data);
                         }, error => {
                             console.log('Error happened: ' + error);
                         }
@@ -69,17 +70,18 @@ export class ReportComponent {
     }
 
     processData(items: any[]) {
-        let currDay: any = null;
         let newData: any[] = [];
         for (let item of items) {
+            // Set the global cursor if the cursor exist in the data.
             if (item.cursor) {
                 this.cursor = item.cursor;
+                continue;
             }
             let date = moment.utc(item.timestamp);
             let localDate = moment.tz(date, this.tz);
             let endOfDay = moment.tz(date, this.tz).endOf('day');
-            if (currDay === null || currDay > endOfDay ) {
-                currDay = endOfDay;
+            if (this.currDay === null || this.currDay > endOfDay ) {
+                this.currDay = endOfDay;
                 newData.push({
                     'type' : 'day',
                     'name': endOfDay.format('dddd'),
@@ -94,5 +96,22 @@ export class ReportComponent {
             });
         }
         return newData;
+    }
+
+    getMoreData(cursor) {
+        this.queryService.getQueries(cursor).subscribe(
+            (data: any[]) => {
+                // Check if the data returned isn't empty.
+                if (data.length !== 0) {
+                    this.data = this.data.concat(this.processData(data));
+                } else {
+                    // This sets the cursor to null when we get an empty response back.
+                    // This signifies that we don't have any more data.
+                    this.cursor = null;
+                }
+            }, error => {
+                console.log('Error happened: ' + error);
+            }
+        );
     }
 }
