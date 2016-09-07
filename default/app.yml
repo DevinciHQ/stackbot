@@ -23,8 +23,8 @@ handlers:
   upload: dist
 
 - url: /(.*)$
-  static_files: src/icons/\1
-  upload: src/icons
+  static_files: icons/\1
+  upload: icons
 
 
 skip_files:
