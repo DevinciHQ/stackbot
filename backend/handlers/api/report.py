@@ -27,15 +27,17 @@ def report_handler():
     if not limit or limit > 100:
         limit = 100
 
+
+    # We use the cursor feature of GAE to take note of the last data fetched from the database.
+    # See: https://cloud.google.com/appengine/docs/python/ndb/queries#cursors
+    cursor = Cursor(urlsafe=request.args.get('cursor', None))
+
     # https://cloud.google.com/appengine/docs/python/ndb/queries#properties_by_string
     # https://cloud.google.com/appengine/docs/python/ndb/queries#cursors
     # We are fetching all the columns instead of the specific columns because of a bug
     # (we believe it's a bug) where the result contains duplicate records for each of the
     # tags in the tags list. This issue(or a functionality) which is caused by the 'repeated'
     # property of a column is not documented on the GAE's site.
-    # We use the cursor feature of GAE to take note of the last data fetched from the database.
-    # See: https://cloud.google.com/appengine/docs/python/ndb/queries#cursors
-    cursor = Cursor(urlsafe=request.args.get('cursor', None))
     result, next_cursor, more = ndb.gql("SELECT * FROM Query WHERE uid = :1 ORDER BY "
                      "timestamp DESC", user.user_id).fetch_page(limit, start_cursor=cursor)
 
@@ -54,10 +56,10 @@ def report_handler():
             'tags': query.tags
         }
         data.append(query_out)
-    # Append the cursor to the data if it exists.
-    if next_cursor is not None:
-        next_cursor = {
-            'cursor': next_cursor.urlsafe()
-        }
-        data.append(next_cursor)
-    return jsonify(ApiResponse(data))
+
+    # If there are more items and we have a cursor, then return it.
+    if more and next_cursor:
+        next_cursor = next_cursor.urlsafe()
+    else:
+        next_cursor = None
+    return jsonify(ApiResponse(payload=data, cursor=next_cursor))

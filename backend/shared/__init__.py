@@ -7,10 +7,11 @@ app = Flask(__name__)
 class ApiResponse(dict):
     """ A standard API response object that defaults to an empty payload and success == true. """
 
-    def __init__(self, payload=None, success=None):
+    def __init__(self, payload=None, success=None, cursor=None):
         payload = payload if payload is not None else {}
         success = success if success is not None else True
-        dict.__init__(self, success=success, payload=payload)
+        cursor = cursor if cursor is not None else None
+        dict.__init__(self, success=success, payload=payload, cursor=cursor)
 
 
 def get_geo_data(request):
