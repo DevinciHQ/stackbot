@@ -4,6 +4,8 @@ from google.appengine.ext import ndb, testbed
 from handlers.api.query import app
 from flask import Response, session
 from context import get_fake_jwt_token, remove_fake_certs, set_fake_certs, setup_fake_user
+import handlers.api.query as query
+
 
 class QueryApiTestCase(unittest.TestCase):
     """ Create a test case. """
@@ -52,6 +54,35 @@ class QueryApiTestCase(unittest.TestCase):
         # Suppressing the pylint error for no-member
         # pylint: disable=maybe-no-member
         self.assertEqual(rv.status_code, 200)  # An use should be able to authenticate.
+
+    def test_empty_hashtag(self):
+        """ Testing the empty hashtag case."""
+        # Empty hashtag should be considered a part of the actual query.
+        query_string = query.get_query("# #this is test")
+        tags = query.get_tags("# #this is test")
+        self.assertEqual(query_string, "# #this is test")
+        self.assertEqual(tags, [])
+
+    def test_hashtag(self):
+        """ Testing the hashtag feature."""
+        # Test to check if hashtag starts with a '#' symbol.
+        tags = query.get_tags("#this is a test")
+        self.assertEqual(tags, ["this"])
+
+        # Test to see if multiple hash tags work.
+        tags = query.get_tags("#this-is #testing the hashtag")
+        self.assertEqual(tags, ["this-is", "testing"])
+
+        # Test to not include a hashtag if it is not at the beginning of the query
+        tags = query.get_tags("#this-is for #testing the hashtag")
+        self.assertEqual(tags, ["this-is"])
+
+    def test_remove_hashtags(self):
+        """ Test to remove the hashtags out of the search query for storing it
+        in the query column."""
+
+        search_query = query.get_query("#this is a #test")
+        self.assertEqual(search_query, "is a #test")
 
     def open_with_auth(self, url, method):
         fake_token = get_fake_jwt_token()

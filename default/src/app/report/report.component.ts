@@ -77,13 +77,14 @@ export class ReportComponent {
                 newData.push({
                     'type' : 'day',
                     'name': endOfDay.format('dddd'),
-                    'timestamp': endOfDay
+                    'timestamp': endOfDay,
                 });
             }
             newData.push({
                     'type' : 'query',
                     'query': item.query,
-                    'timestamp': localDate
+                    'timestamp': localDate,
+                    'tags' : item.tags || <string[]>[],
             });
         }
         return newData;

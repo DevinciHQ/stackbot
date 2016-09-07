@@ -11,6 +11,7 @@
                 <span *ngSwitchCase="'query'">
                     <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                     {{item.query}}
+                    <span *ngFor="let tag of item.tags" class="tags">#{{tag}}</span>
                 </span>
                 <span *ngSwitchCase="'day'" >{{item.name}}</span>
                 <span *ngSwitchDefault>{{item.type}}</span>

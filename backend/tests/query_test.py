@@ -43,3 +43,8 @@ class DatastoreTestCase(unittest.TestCase):
         """ Test the Query can be inserted. """
         test_query = Query(query="google", ip='127.0.0.1', source='site-search', user=self.user.key).put()
         self.assertEqual("google", test_query.get().query)
+
+    def test_query_tag(self):
+        """ Test to see if we can insert the tag in the Query and retrieve it. """
+        test_query = Query(query="google", ip='127.0.0.1', source='site-search', user=self.user.key, tags=['test']).put()
+        self.assertEqual(["test"], test_query.get().tags)

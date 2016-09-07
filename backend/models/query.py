@@ -18,3 +18,4 @@ class Query(ndb.Model):
     uid = ndb.StringProperty()  # deprecated for user.
     user = ndb.KeyProperty(kind='User', required=True)
     source = ndb.StringProperty(choices=['site-search', 'omnibox'], required=True)
+    tags = ndb.StringProperty(repeated=True)

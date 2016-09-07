@@ -62,6 +62,7 @@ class QueryApiTestCase(unittest.TestCase):
                 self.user,
                 query="test_query_"+str(i),
                 timestamp=str(ago),  # make each time further in the past
+                tags=["test"]
             )
         rv = self.open_with_auth("/api/report", 'GET')
         # Suppressing the pylint error for no-member
@@ -70,7 +71,16 @@ class QueryApiTestCase(unittest.TestCase):
         self.assertEqual(len(data['payload']), 3)  # Expect three items
         self.assertEqual(data['payload'][0]['query'], "test_query_0")
 
+    def test_report_tag(self):
+        """Test to check if we can retrieve the tag field from the database"""
 
+        self.create_mock_query(self.user, query="#test test_query", tags=["test"])
+
+        rv = self.open_with_auth("/api/report", 'GET')
+        # Suppressing the pylint error for no-member
+        # pylint: disable=maybe-no-member
+        data = json.loads(rv.data) # type: Response
+        self.assertEqual(data['payload'][0]['tags'], ["test"])
 
     def open_with_auth(self, url, method):
         fake_token = get_fake_jwt_token()
@@ -89,7 +99,8 @@ class QueryApiTestCase(unittest.TestCase):
             ip="127.0.0.1",
             uid=user.user_id,
             user=user.key,
-            source="site-search"
+            source="site-search",
+            tags=kwargs['tags']
         )
         # Save to the datatore.
         query.put()
