@@ -7,7 +7,8 @@ h1 {
 :host div.header {
 
     background-color: #2d8196;
-    background-image: url('http://www.intrawallpaper.com/static/images/abstract-mosaic-background.png');
+    /*background-image: url('http://www.intrawallpaper.com/static/images/abstract-mosaic-background.png');
+    */
     background-size: cover;
     background-position: center;
     background-blend-mode: luminosity;
@@ -24,6 +25,7 @@ h1 {
     width: 100%;
 }
 
-:host body {
+body {
     background-color: black;
+    font-family: "Roboto","Helvetica Neue",Helvetica,Arial,sans-serif;
 }
