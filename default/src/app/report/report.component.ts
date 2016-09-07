@@ -20,6 +20,8 @@ export class ReportComponent {
 
     public tz: string;
 
+    public cursor: any;
+
     public formatMonth(dateTime: moment.Moment): string {
         return  dateTime.format('MMM');
     }
@@ -51,6 +53,7 @@ export class ReportComponent {
                     this.queryService.getQueries().subscribe(
                         (data: any[]) => {
                             this.data = this.processData(data);
+                            console.log(data);
                         }, error => {
                             console.log('Error happened: ' + error);
                         }
@@ -69,6 +72,9 @@ export class ReportComponent {
         let currDay: any = null;
         let newData: any[] = [];
         for (let item of items) {
+            if (item.cursor) {
+                this.cursor = item.cursor;
+            }
             let date = moment.utc(item.timestamp);
             let localDate = moment.tz(date, this.tz);
             let endOfDay = moment.tz(date, this.tz).endOf('day');
