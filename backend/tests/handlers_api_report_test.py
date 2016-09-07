@@ -82,6 +82,41 @@ class QueryApiTestCase(unittest.TestCase):
         data = json.loads(rv.data) # type: Response
         self.assertEqual(data['payload'][0]['tags'], ["test"])
 
+    def test_send_more_data(self):
+        """ Test to check if we can send more data upon request. """
+        now = datetime.utcnow()
+        for i in range(3):
+            ago = now - timedelta(hours=i)
+            self.create_mock_query(
+                self.user,
+                query=str(i),
+                timestamp=str(ago),  # make each time further in the past
+                tags=["test"]
+            )
+        rv = self.open_with_auth("/api/report", 'GET')
+        # Suppressing the pylint error for no-member
+        # pylint: disable=maybe-no-member
+        data = json.loads(rv.data) # type: Response
+        self.assertEqual(len(data['payload']), 3)  # Expect three items
+        for i in range(3):
+            self.assertEqual(data['payload'][i]['query'], str(i))
+
+        for i in range(3):
+            ago = now - timedelta(hours=i)
+            self.create_mock_query(
+                self.user,
+                query=str(i),
+                timestamp=str(ago),  # make each time further in the past
+                tags=["test"]
+            )
+        rv = self.open_with_auth("/api/report", 'GET')
+        # Suppressing the pylint error for no-member
+        # pylint: disable=maybe-no-member
+        data = json.loads(rv.data)  # type: Response
+        self.assertEqual(len(data['payload']), 3)  # Expect three items
+        for i in range(3):
+            self.assertEqual(data['payload'][i]['query'], str(i+3))
+
     def open_with_auth(self, url, method):
         fake_token = get_fake_jwt_token()
         return self.app.open(url, method=method, headers={"Authorization": "Bearer " + fake_token})
