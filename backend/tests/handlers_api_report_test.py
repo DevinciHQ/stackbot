@@ -8,6 +8,7 @@ from flask import Response, jsonify
 from context import get_fake_jwt_token, remove_fake_certs, set_fake_certs, setup_fake_user
 from shared import ApiResponse, security
 from models.query import Query
+import handlers.api.report as Report
 
 class QueryApiTestCase(unittest.TestCase):
     """ Create a test case. """
@@ -116,6 +117,15 @@ class QueryApiTestCase(unittest.TestCase):
         self.assertEqual(len(data['payload']), 3)  # Expect three items
         for i in range(3):
             self.assertEqual(data['payload'][i]['query'], str(i+3))
+
+    def test_end_of_the_database(self):
+        """ Test if the end of the database is hit. """
+        # Add fake data to the database.
+        last_item = Report.getLastItem()
+        data = Report.getMoreData()
+        for i in len(data):
+            if data['payload'][i]['final'] == True:
+                self.assertEqual(data.query, last_item)  # Expect three items
 
     def open_with_auth(self, url, method):
         fake_token = get_fake_jwt_token()
