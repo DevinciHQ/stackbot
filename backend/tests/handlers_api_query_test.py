@@ -4,6 +4,8 @@ from google.appengine.ext import ndb, testbed
 from handlers.api.query import app
 from flask import Response, session
 from context import get_fake_jwt_token, remove_fake_certs, set_fake_certs, setup_fake_user
+import handlers.api.query as query
+
 
 class QueryApiTestCase(unittest.TestCase):
     """ Create a test case. """
@@ -52,6 +54,14 @@ class QueryApiTestCase(unittest.TestCase):
         # Suppressing the pylint error for no-member
         # pylint: disable=maybe-no-member
         self.assertEqual(rv.status_code, 200)  # An use should be able to authenticate.
+
+    def test_empty_hashtag(self):
+        """ Testing the empty hashtag case."""
+        # Empty hashtag should be considered a part of the actual query.
+        query_string = query.get_query("# #this is test")
+        tags = query.get_tags("# #this is test")
+        self.assertEqual(query_string, "# #this is test")
+        self.assertEqual(tags, [])
 
     def open_with_auth(self, url, method):
         fake_token = get_fake_jwt_token()
