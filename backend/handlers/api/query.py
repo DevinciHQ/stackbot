@@ -19,6 +19,8 @@ def query_handler():
 
     tags = get_tags(search_string)
     query_string = get_query(search_string)
+    # Return 400 bad request error if the search_string contains only
+    # hashtags and no actual search query.
     if len(query_string) == 0:
         abort(400)
     user = None
@@ -67,9 +69,14 @@ def query_handler():
 def get_tags(search_string):
     tags = []
     for i in search_string.split():
-        if i.startswith("#"):
+        # The len(i) condition checks for empty hashtags and doesn't add them
+        # to the tags list.
+        if i.startswith("#") and len(i) > 1:
             # Remove the '#' from the hashtag and append it to tags list.
             tags.append(i[1:])
+        # The else condition ignores the hashtags within the actual query and
+        # considers them a part of query. Eg: "#test is #good" will add just
+        # the 'test' to the tags. 'good' will be a part of the search query.
         else:
             return tags
     # To handle the case where we only have hashtags and not actual search query.
@@ -83,8 +90,9 @@ def get_query(search_string):
     for i in search_string.split():
         # The cursor condition keeps track of the tags which are at the beginning of
         # the search string. Other tags should be treated as a part of the search
-        # query.
-        if i.startswith("#") and cursor:
+        # query. The len(i) condition checks for empty hashtags and includes it as a
+        # part of query.
+        if i.startswith("#") and cursor and len(i) > 1:
             pass
         else:
             search_query.append(i)
