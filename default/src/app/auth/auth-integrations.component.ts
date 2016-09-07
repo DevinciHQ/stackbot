@@ -48,7 +48,6 @@ export class AuthIntegrationsComponent {
         }
 
         let _self = this;
-        console.log(_self.integrations);
         this.auth.getUser().subscribe(
             user => {
                 if (user != null) {
@@ -58,7 +57,6 @@ export class AuthIntegrationsComponent {
                     this.auth.getIntegrations(true).subscribe(
                         integrations => {
                             _self.integrations = integrations;
-                            console.log(_self.integrations);
                         }
                     );
                 } else {
@@ -82,7 +80,6 @@ export class AuthIntegrationsComponent {
             this.auth.disableIntegration(integration.name).subscribe({
                 complete: () => {
                     integration.pending = false;
-                    console.log('complete');
                 }}
             );
             return;

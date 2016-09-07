@@ -39,7 +39,6 @@ export class AuthService {
                         // which will change more often as the token needs to be updated for auth purposes.
                         // Also, only update the user ONCE, so that user events don't cause infinite loops.
                         if (! _self.user.getValue()) {
-                             console.log('update user');
                              _self.user.next(_self.userFromAuth(authEvent));
                         }
                     }).catch(function(error) {
@@ -68,7 +67,6 @@ export class AuthService {
         this.token.subscribe(
             (token: string) => {
                 if (token) {
-                    console.log('update token');
                     localStorage.setItem('id_token', token);
                 } else {
                     localStorage.removeItem('id_token');
