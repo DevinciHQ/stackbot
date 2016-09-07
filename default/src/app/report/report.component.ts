@@ -60,7 +60,7 @@ export class ReportComponent {
                         }
                     );
                 } else {
-                    this.data = null;
+                    this.data = [];
                 }
             },
             err => {
