@@ -104,4 +104,8 @@ export class ReportComponent {
             }
         );
     }
+
+    edit() {
+        console.log("test");
+    }
 }
