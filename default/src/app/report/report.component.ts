@@ -16,9 +16,13 @@ import * as moment from 'moment-timezone';
 })
 export class ReportComponent {
 
-    public data: any;
+    public data: any = [];
 
     public tz: string;
+
+    public cursor: string = null;
+
+    public currDay: moment.Moment = null;
 
     public formatMonth(dateTime: moment.Moment): string {
         return  dateTime.format('MMM');
@@ -50,13 +54,13 @@ export class ReportComponent {
                 if (user) {
                     this.queryService.getQueries().subscribe(
                         (data: any[]) => {
-                            this.data = this.processData(data);
+                            this.data = this.processData(data['payload'], data['cursor']);
                         }, error => {
                             console.log('Error happened: ' + error);
                         }
                     );
                 } else {
-                    this.data = null;
+                    this.data = [];
                 }
             },
             err => {
@@ -65,15 +69,15 @@ export class ReportComponent {
         );
     }
 
-    processData(items: any[]) {
-        let currDay: any = null;
+    processData(items: any[], cursor: string) {
         let newData: any[] = [];
+        this.cursor = cursor;
         for (let item of items) {
             let date = moment.utc(item.timestamp);
             let localDate = moment.tz(date, this.tz);
             let endOfDay = moment.tz(date, this.tz).endOf('day');
-            if (currDay === null || currDay > endOfDay ) {
-                currDay = endOfDay;
+            if (this.currDay === null || this.currDay > endOfDay ) {
+                this.currDay = endOfDay;
                 newData.push({
                     'type' : 'day',
                     'name': endOfDay.format('dddd'),
@@ -88,5 +92,15 @@ export class ReportComponent {
             });
         }
         return newData;
+    }
+
+    getMoreData(cursor: string) {
+        this.queryService.getQueries(cursor).subscribe(
+            (data: any[]) => {
+                this.data = this.data.concat(this.processData(data['payload'], data['cursor']));
+            }, error => {
+                console.log('Error happened: ' + error);
+            }
+        );
     }
 }

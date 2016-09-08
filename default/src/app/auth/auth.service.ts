@@ -176,11 +176,11 @@ export class AuthService {
 
         this.backend.request('/auth/' + type, {}).subscribe(
             data => {
-                if (! data['redirect_for_auth']) {
+                if (! data['payload']['redirect_for_auth']) {
                     console.log('payload missing redirect_for_auth:', data);
                 }
                 // Update the location of the popup to the redirect path to initiate the process.
-                popup.location.href = data['redirect_for_auth'];
+                popup.location.href = data['payload']['redirect_for_auth'];
                 let message_trigger = Observable.interval(1000).takeUntil(oauthEvent);
                 message_trigger.subscribe(
                     x => {

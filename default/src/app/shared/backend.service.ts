@@ -94,7 +94,7 @@ export class BackendService {
             console.log('Request to ' +  res.url + ' (query service) failed.');
             throw new Error('Request to ' +  res.url + ' (backend) failed.');
         }
-        return body['payload'] || { };
+        return body || { };
     }
 
  // Handling the errors in case the GET request above throws an error.

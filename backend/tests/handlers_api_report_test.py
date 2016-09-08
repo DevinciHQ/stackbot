@@ -9,6 +9,7 @@ from context import get_fake_jwt_token, remove_fake_certs, set_fake_certs, setup
 from shared import ApiResponse, security
 from models.query import Query
 
+
 class QueryApiTestCase(unittest.TestCase):
     """ Create a test case. """
 
@@ -82,10 +83,40 @@ class QueryApiTestCase(unittest.TestCase):
         data = json.loads(rv.data) # type: Response
         self.assertEqual(data['payload'][0]['tags'], ["test"])
 
+    def test_send_more_data(self):
+        """ Test to check if we can send more data upon request. """
+        now = datetime.utcnow()
+        for i in range(6):
+            ago = now - timedelta(hours=i)
+            self.create_mock_query(
+                self.user,
+                query=str(i),
+                timestamp=str(ago),  # make each time further in the past
+                tags=["test"]
+            )
+
+        # Make a request to fetch 3 items.
+        rv = self.open_with_auth("/api/report?limit=3", 'GET')
+        # Suppressing the pylint error for no-member
+        # pylint: disable=maybe-no-member
+        data = json.loads(rv.data) # type: Response
+        cursor = data['cursor']
+        self.assertEqual(len(data['payload']), 3)  # Expect three items
+
+        # Make a request to send 3 more items.
+        rv = self.open_with_auth("/api/report?limit=3&cursor="+cursor, 'GET')
+        # Suppressing the pylint error for no-member
+        # pylint: disable=maybe-no-member
+        data = json.loads(rv.data)  # type: Response
+        cursor = data['cursor']
+        self.assertEqual(len(data['payload']), 3)  # Expect three more items
+
+        # Test if we hit the end of the datastore
+        self.assertEqual(cursor, None)
+
     def open_with_auth(self, url, method):
         fake_token = get_fake_jwt_token()
         return self.app.open(url, method=method, headers={"Authorization": "Bearer " + fake_token})
-
 
     def create_mock_query(self, user, **kwargs):
         query = Query(
