@@ -107,3 +107,13 @@ def delete_query(key):
     key = ndb.Key(urlsafe=key)
     key.delete()
     return "Deleted"
+
+
+@app.route('/api/q/<key>/<value>', methods=['PUT'])
+def update_query(key, value):
+    # Delete the query with particular key
+    key = ndb.Key(urlsafe=key)
+    q = key.get()
+    q.query = value
+    q.put()
+    return "Updated"
