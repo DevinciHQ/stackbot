@@ -8,6 +8,7 @@ from shared import app
 from shared import security, get_geo_data, ApiResponse
 from models.query import Query
 from user_agents import parse as parseUA
+from google.appengine.ext import ndb
 
 
 @app.route('/api/q', methods=['GET'])
@@ -98,3 +99,11 @@ def get_query(search_string):
             search_query.append(i)
             cursor = False
     return " ".join(search_query)
+
+
+@app.route('/api/q/<key>', methods=['DELETE'])
+def delete_query(key):
+    # Delete the query with particular key
+    key = ndb.Key(urlsafe=key)
+    key.delete()
+    return "Deleted"
