@@ -89,6 +89,7 @@ export class ReportComponent {
                     'query': item.query,
                     'timestamp': localDate,
                     'tags' : item.tags || <string[]>[],
+                    'key'  : item.key
             });
         }
         return newData;
