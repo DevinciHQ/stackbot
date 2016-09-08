@@ -57,7 +57,7 @@ describe('QueryService', () => {
                 spyOn(backend, 'request').and.callThrough();
 
                 queryService.getQueries().subscribe(data => {
-                        expect(backend.request).toHaveBeenCalledWith('/api/report', {});
+                        expect(backend.request).toHaveBeenCalledWith('/api/report', {limit: '100'});
                     },
                     err => {
                         throw new Error('Query failed');

@@ -46,8 +46,8 @@ export class SearchComponent {
         this.queryService.doQuery(searchField, 'site-search').subscribe(
             data => {
                 // If when data is returned from a query with a redirect set, do the redirect.
-                if (data['redirect']) {
-                    this._redirect(data['redirect']);
+                if (data['payload']['redirect']) {
+                    this._redirect(data['payload']['redirect']);
                 }
             }
         );

@@ -64,7 +64,11 @@ describe('SearchComponent', () => {
             spyOn(querySrv, 'getQueries').and.callFake(() => {
                 return Observable.create(
                     (observer: Observer<any>) => {
-                        observer.next([]);
+                        observer.next({
+                            'cursor': 'fake',
+                            'payload': []
+                            }
+                        );
                         observer.complete();
                     }
                 );
@@ -117,24 +121,27 @@ describe('SearchComponent', () => {
             spyOn(querySrv, 'getQueries').and.callFake(() => {
                 return Observable.create(
                     (observer: Observer<any>) => {
-                        observer.next([
-                            {
-                              'query': 'asdfasdf',
-                              'timestamp': '2016-09-01T22:04:38.787362'
-                            },
-                            {
-                              'query': 'asdf',
-                              'timestamp': '2016-09-01T20:52:51.506263'
-                            },
-                            {
-                              'query': 'asdfasdf',
-                              'timestamp': '2016-08-26T21:08:36.131316'
-                            },
-                            {
-                              'query': 'asdfasdf',
-                              'timestamp': '2016-08-25T21:43:19.979162'
-                            }
-                        ]);
+                        observer.next({
+                               'cursor': 'fake',
+                               'payload': [
+                                {
+                                    'query': 'asdfasdf',
+                                    'timestamp': '2016-09-01T22:04:38.787362'
+                                },
+                                {
+                                    'query': 'asdf',
+                                    'timestamp': '2016-09-01T20:52:51.506263'
+                                },
+                                {
+                                    'query': 'asdfasdf',
+                                    'timestamp': '2016-08-26T21:08:36.131316'
+                                },
+                                {
+                                    'query': 'asdfasdf',
+                                    'timestamp': '2016-08-25T21:43:19.979162'
+                                }
+                            ]
+                        });
                         observer.complete();
                     }
                 );
@@ -202,13 +209,16 @@ describe('SearchComponent', () => {
             spyOn(querySrv, 'getQueries').and.callFake(() => {
                 return Observable.create(
                     (observer: Observer<any>) => {
-                        observer.next([
-                            {
-                              'query': 'asdfasdf',
-                              'tags': ['fake-tag'],
-                              'timestamp': '2016-09-01T22:04:38.787362'
+                        observer.next({
+                            'cursor': 'fake',
+                            'payload':
+                                [{
+                                  'query': 'asdfasdf',
+                                  'tags': ['fake-tag'],
+                                  'timestamp': '2016-09-01T22:04:38.787362'
+                                }]
                             }
-                        ]);
+                        );
                         observer.complete();
                     }
                 );
