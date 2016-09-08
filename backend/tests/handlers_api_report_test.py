@@ -86,7 +86,7 @@ class QueryApiTestCase(unittest.TestCase):
     def test_send_more_data(self):
         """ Test to check if we can send more data upon request. """
         now = datetime.utcnow()
-        for i in range(3):
+        for i in range(6):
             ago = now - timedelta(hours=i)
             self.create_mock_query(
                 self.user,
@@ -94,7 +94,7 @@ class QueryApiTestCase(unittest.TestCase):
                 timestamp=str(ago),  # make each time further in the past
                 tags=["test"]
             )
-        rv = self.open_with_auth("/api/report", 'GET')
+        rv = self.open_with_auth("/api/report?limit=3", 'GET')
         # Suppressing the pylint error for no-member
         # pylint: disable=maybe-no-member
         data = json.loads(rv.data) # type: Response
