@@ -53,7 +53,8 @@ def report_handler():
         query_out = {
             'query': query.query,
             'timestamp': query.timestamp,
-            'tags': query.tags
+            'tags': query.tags,
+            'key': query.key.urlsafe()
         }
         data.append(query_out)
 
