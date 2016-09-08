@@ -239,4 +239,35 @@ describe('SearchComponent', () => {
             expect(component.data).toEqual(accepted_data);
         })
     );
+    describe('Add More', () => {
+        // it('should display a "more" button at the bottom of the report.', inject([ReportComponent, QueryService, AuthService],
+        //     (component: ReportComponent, querySrv: QueryService, auth: MockAuthService) => {
+        // }));
+        it('should add items to the list when the more button is clicked. ',
+            inject([ReportComponent, QueryService, AuthService],
+                (component: ReportComponent, querySrv: QueryService, auth: MockAuthService) => {
+
+                    spyOn(querySrv, 'getQueries').and.callFake(() => {
+                        return Observable.create(
+                            (observer: Observer<any>) => {
+                                observer.next([
+                                    {
+                                      'query': 'asdfasdf',
+                                      'tags': ['fake-tag'],
+                                      'timestamp': '2016-09-01T22:04:38.787362'
+                                    }
+                                ]);
+                                observer.complete();
+                            }
+                        );
+                    });
+
+                    console.log('add more');
+                    expect(component.data.length = 1);
+                    component.getMoreData('cursor_coming_through');
+                    expect(component.data.length = 2);
+                }
+            )
+        );
+    });
 });
