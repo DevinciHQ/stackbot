@@ -89,7 +89,8 @@ export class ReportComponent {
                     'query': item.query,
                     'timestamp': localDate,
                     'tags' : item.tags || <string[]>[],
-                    'key'  : item.key
+                    'key'  : item.key,
+                    'isEdit' : false
             });
         }
         return newData;
@@ -108,4 +109,9 @@ export class ReportComponent {
     edit() {
         console.log("test");
     }
+
+    updateValue(item: any) {
+        console.log(item);
+    }
+
 }

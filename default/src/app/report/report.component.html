@@ -8,11 +8,11 @@
         </tr>
         <tr *ngFor="let item of data" class="{{item.type}}">
             <td [ngSwitch]="item.type" (click)="edit($event)">
-                <span *ngSwitchCase="'query'">
+                <span *ngSwitchCase="'query'" (click)="item.isEdit = true">
                     <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                    {{item.query}}
+                    <span *ngIf="!item.isEdit">{{item.query}}</span>
                     <span *ngFor="let tag of item.tags" class="tags">#{{tag}}</span>
-                    <span hidden="true"><input type="text" value="Edit" /></span>
+                    <span *ngIf="item.isEdit"><input type="text" [value]="item.query" (keydown.enter)="updateValue(item)"/></span>
                 </span>
                 <span *ngSwitchCase="'day'" >{{item.name}}</span>
                 <span *ngSwitchDefault>{{item.type}}</span>
