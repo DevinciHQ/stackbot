@@ -106,9 +106,13 @@ export class ReportComponent {
         );
     }
 
-    updateValue(value: string, item: any) {
-        item.isEdit = false;
-        console.log(value);
+    updateValue(query: any, tags: any) {
+        console.log(query);
+        console.log(tags);
+    }
+
+    updateTag(tag: any) {
+        console.log(tag);
     }
 
 }
