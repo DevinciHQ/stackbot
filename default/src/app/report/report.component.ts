@@ -106,13 +106,4 @@ export class ReportComponent {
         );
     }
 
-    updateValue(query: any, tags: any) {
-        console.log(query);
-        console.log(tags);
-    }
-
-    updateTag(tag: any) {
-        console.log(tag);
-    }
-
 }
