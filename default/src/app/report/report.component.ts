@@ -106,12 +106,9 @@ export class ReportComponent {
         );
     }
 
-    edit() {
-        console.log("test");
-    }
-
-    updateValue(item: any) {
-        console.log(item);
+    updateValue(value: string, item: any) {
+        item.isEdit = false;
+        console.log(value);
     }
 
 }

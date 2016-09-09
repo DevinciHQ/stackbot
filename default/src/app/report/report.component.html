@@ -7,12 +7,12 @@
             <p *ngSwitchCase="0">0, increment again</p>
         </tr>
         <tr *ngFor="let item of data" class="{{item.type}}">
-            <td [ngSwitch]="item.type" (click)="edit($event)">
-                <span *ngSwitchCase="'query'" (click)="item.isEdit = true">
+            <td [ngSwitch]="item.type" (click)="item.isEdit = true">
+                <span *ngSwitchCase="'query'">
                     <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                    <span *ngIf="!item.isEdit">{{item.query}}</span>
+                    <span *ngIf="!item.isEdit" id="query" (keydown.enter)="query.value = editedValue">{{item.query}}</span>
                     <span *ngFor="let tag of item.tags" class="tags">#{{tag}}</span>
-                    <span *ngIf="item.isEdit"><input type="text" [value]="item.query" (keydown.enter)="updateValue(item)"/></span>
+                    <span *ngIf="item.isEdit"><input type="text" [value]="item.query" (keydown.enter)="item.query = editField.value; item.isEdit = false" #editField /></span>
                 </span>
                 <span *ngSwitchCase="'day'" >{{item.name}}</span>
                 <span *ngSwitchDefault>{{item.type}}</span>
