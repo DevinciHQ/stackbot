@@ -1,4 +1,14 @@
+
+<div *ngIf="data.length == 0">
+    <h1 class="test">TEST</h1>
+</div>
+
+<div *ngIf="true">
+    <h1 class="test">WTF</h1>
+</div>
+
 <div *ngIf="data.length != 0">
+    <h1 class="test">YAY!</h1>
     <table class="table">
         <thead>
         </thead>
@@ -39,3 +49,4 @@
         <button class="btn btn-secondary" (click)="getMoreData(cursor)" *ngIf="cursor">Show more</button>
     </div>
 </div>
+<h1 class="test">LAST</h1>
