@@ -2,9 +2,9 @@
 <div class="input-group inner-addon left-addon">
     <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
     <input autofocus type="text" class="form-control" (keypress)="onPressEnter($event, searchField.value)"
-           value={{preSearchText}} #searchField [disabled]=disabled >
+           value={{preSearchText}} #searchField>
     <span class="input-group-btn">
-        <button class="btn" type="button" (click)="submit(searchField.value)" id="search-button" [disabled]=disabled>Search</button>
+        <button class="btn" type="button" (click)="submit(searchField.value)" id="search-button">Search</button>
     </span>
 </div>
 

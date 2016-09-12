@@ -27,9 +27,9 @@ def query_handler():
     try:
         user = security.authenticate_user(request)
     except security.ValidationError as err:
-        # IF the user isn't logged in, then throw a 401 error.
-        logging.debug(err)
-        abort(401)
+        escaped_q = urllib.urlencode({'q': query_string})
+        redirect = 'http://google.com/#' + escaped_q
+        return jsonify(ApiResponse({'redirect': redirect}))
 
     # Get the user-agent header from the request.
     user_agent = parseUA(request.headers['User-Agent'])
