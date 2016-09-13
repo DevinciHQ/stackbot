@@ -50,7 +50,7 @@ export class AuthIntegrationsComponent {
         let _self = this;
         this.auth.getUser().subscribe(
             user => {
-                if (user != null) {
+                if (user && user.loggedIn) {
                     // Setup the available integrations.
                     this.integrations['github'] = new Integration({name: 'github', pending: true});
                     this.loggedIn = true;

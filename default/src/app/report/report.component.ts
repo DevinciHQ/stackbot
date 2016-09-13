@@ -51,7 +51,7 @@ export class ReportComponent {
 
         this.auth.getUser().subscribe(
             user => {
-                if (user) {
+                if (user && user.loggedIn) {
                     this.queryService.getQueries().subscribe(
                         (data: any[]) => {
                             this.data = this.processData(data['payload'], data['cursor']);
