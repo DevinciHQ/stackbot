@@ -19,17 +19,24 @@ def query_handler():
 
     tags = get_tags(search_string)
     query_string = get_query(search_string)
+
     # Return 400 bad request error if the search_string contains only
     # hashtags and no actual search query.
     if len(query_string) == 0:
         abort(400)
     user = None
+
+    # If we get an unauthenticated query request, just go ahead and redirect them to google for now
+    # without recording it in the database. (We may change this behavior soon)
+    if not security.is_request_with_auth(request):
+        return jsonify(ApiResponse({'redirect': create_google_redirect(query_string)}))
+
+    # The request WAS trying to authenticate, so let's try to get the authenticated user.
     try:
         user = security.authenticate_user(request)
     except security.ValidationError as err:
-        escaped_q = urllib.urlencode({'q': query_string})
-        redirect = 'http://google.com/#' + escaped_q
-        return jsonify(ApiResponse({'redirect': redirect}))
+        logging.debug(err)
+        abort(401)
 
     # Get the user-agent header from the request.
     user_agent = parseUA(request.headers['User-Agent'])
@@ -58,12 +65,7 @@ def query_handler():
     # Save to the datatore.
     query.put()
     logging.debug('query: %s', str(query))
-
-    escaped_q = urllib.urlencode({'q': query_string})
-    redirect = 'http://google.com/#' + escaped_q
-
-    # response.headers['Content-Type'] = 'application/json'
-    return jsonify(ApiResponse({'redirect': redirect}))
+    return jsonify(ApiResponse({'redirect': create_google_redirect(query_string)}))
 
 
 def get_tags(search_string):
@@ -98,3 +100,10 @@ def get_query(search_string):
             search_query.append(i)
             cursor = False
     return " ".join(search_query)
+
+
+def create_google_redirect(search_string):
+    """convert a string into a google url that will show search results."""
+    escaped_q = urllib.urlencode({'q': search_string})
+    redirect = 'https://google.com/#' + escaped_q
+    return redirect

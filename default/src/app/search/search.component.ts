@@ -12,22 +12,9 @@ import {AuthService} from '../auth/auth.service';
 export class SearchComponent {
 
     private preSearchText: any;
-    private disabled = true;
     constructor(private queryService: QueryService, private auth: AuthService) {
         this.preSearchText = this.populateSearch(window.location.href);
         this.recordOmniSearch(window.location.href);
-        this.auth.getUser().subscribe(
-            user => {
-                if (user && user.loggedIn) {
-                    this.disabled = false;
-                } else {
-                    this.disabled = true;
-                }
-            },
-            err => {
-                console.log('authEvent', err);
-            }
-        );
     }
 
     submit(searchField: string) {
@@ -46,7 +33,7 @@ export class SearchComponent {
         this.queryService.doQuery(searchField, 'site-search').subscribe(
             data => {
                 // If when data is returned from a query with a redirect set, do the redirect.
-                if (data['payload']['redirect']) {
+                if (data['payload'] && data['payload']['redirect']) {
                     this._redirect(data['payload']['redirect']);
                 }
             }
