@@ -49,6 +49,7 @@ export class SearchComponent {
     doSearch(searchField: any) {
         this.queryService.doQuery(searchField, 'site-search').subscribe(
             data => {
+                ga('send', 'event', 'Search', 'source', 'site-search');
                 // If when data is returned from a query with a redirect set, do the redirect.
                 if (data['payload']['redirect']) {
                     this._redirect(data['payload']['redirect']);
@@ -67,6 +68,7 @@ export class SearchComponent {
         if (parameters['q'] != null) {
             this.queryService.doQuery(parameters['q'], 'omnibox').subscribe(
               response => {
+                  ga('send', 'event', 'Search', 'source', 'omnibox');
                   return;
               }, error => {
                   console.log('Error happened: ' + error);
