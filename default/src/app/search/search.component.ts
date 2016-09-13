@@ -2,6 +2,7 @@
 import { Component } from '@angular/core';
 import { QueryService } from '../query/index';
 import {AuthService} from '../auth/auth.service';
+import { GoogleAnalyticsService } from '../shared/google.analytics.service';
 
 @Component({
     selector: 'search',
@@ -12,7 +13,7 @@ import {AuthService} from '../auth/auth.service';
 export class SearchComponent {
 
     private preSearchText: any;
-    constructor(private queryService: QueryService, private auth: AuthService) {
+    constructor(private queryService: QueryService, private auth: AuthService, private ga: GoogleAnalyticsService) {
         this.preSearchText = this.populateSearch(window.location.href);
         this.recordOmniSearch(window.location.href);
     }
@@ -20,16 +21,19 @@ export class SearchComponent {
     submit(searchField: string) {
         if (searchField !== '') {
           this.doSearch(searchField)  ;
+          this.ga.event('Search', 'submit', 'clicking submit button');
         }
     }
 
     onPressEnter(e: any, searchField: any) {
         if (e.keyCode === 13 && searchField !== '') {
             this.doSearch(searchField);
+            this.ga.event('Search', 'submit', 'pressing enter');
         }
     }
 
     doSearch(searchField: any) {
+        this.ga.event('Search', 'source', 'site-search');
         this.queryService.doQuery(searchField, 'site-search').subscribe(
             data => {
                 // If when data is returned from a query with a redirect set, do the redirect.
@@ -50,6 +54,7 @@ export class SearchComponent {
         if (parameters['q'] != null) {
             this.queryService.doQuery(parameters['q'], 'omnibox').subscribe(
               response => {
+                  this.ga.event('Search', 'source', 'omnibox');
                   return;
               }, error => {
                   console.log('Error happened: ' + error);

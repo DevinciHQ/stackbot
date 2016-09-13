@@ -9,7 +9,7 @@ import { AUTH_PROVIDERS } from 'angular2-jwt';
 import { FocusMeDirective } from './shared/focus-me.directive';
 import { BackendService } from './shared/backend.service';
 import { KeysPipe } from './shared/keys.pipe';
-
+import {GoogleAnalyticsService} from './shared/google.analytics.service';
 
 import { AppComponent }  from './app.component';
 import { ReportComponent } from './report/index';
@@ -42,6 +42,7 @@ let providers = [
     HTTP_PROVIDERS,
     AuthService,
     BackendService,
+    GoogleAnalyticsService,
 ];
 
 let declarations = [

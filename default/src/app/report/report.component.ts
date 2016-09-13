@@ -5,6 +5,7 @@
 import { Component } from '@angular/core';
 import { QueryService } from '../query/query.service';
 import { AuthService } from '../auth/index';
+import { GoogleAnalyticsService } from '../shared/google.analytics.service';
 // Note that this also imports moment itself.
 import * as moment from 'moment-timezone';
 
@@ -46,7 +47,7 @@ export class ReportComponent {
         moment.tz.setDefault(this.tz);
     }
 
-    constructor(private queryService: QueryService, private auth: AuthService) {
+    constructor(private queryService: QueryService, private auth: AuthService, private ga: GoogleAnalyticsService) {
         this.setTimezone();
 
         this.auth.getUser().subscribe(
@@ -95,6 +96,7 @@ export class ReportComponent {
     }
 
     getMoreData(cursor: string) {
+        this.ga.event('Report', 'Show more', 'click');
         this.queryService.getQueries(cursor).subscribe(
             (data: any[]) => {
                 this.data = this.data.concat(this.processData(data['payload'], data['cursor']));
