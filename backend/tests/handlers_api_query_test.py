@@ -5,6 +5,7 @@ from handlers.api.query import app
 from flask import Response, session
 from context import get_fake_jwt_token, remove_fake_certs, set_fake_certs, setup_fake_user
 import handlers.api.query as query
+import json
 
 
 class QueryApiTestCase(unittest.TestCase):
@@ -47,13 +48,19 @@ class QueryApiTestCase(unittest.TestCase):
         rv = self.app.get("/api/q")  # type: Response
         self.assertEqual(rv.status_code, 400)  # A query without the ?q= param should give a 400 code.
 
-        rv = self.app.get("/api/q?q=TEST")  # type: Response
-        self.assertEqual(rv.status_code, 401)  # An unauthorized user should get back a 401 code.
-
         rv = self.open_with_auth("/api/q?q=TEST&source=site-search", "GET")  # type: Response
         # Suppressing the pylint error for no-member
         # pylint: disable=maybe-no-member
         self.assertEqual(rv.status_code, 200)  # An use should be able to authenticate.
+
+    def test_anon_query(self):
+        """ Test if an anonymous user gets a response back without the query being
+            recorded in the database."""
+        rv = self.app.get("/api/q?q=test")  # type: Response
+        # Suppressing the pylint error for no-member
+        # pylint: disable=maybe-no-member
+        data = json.loads(rv.data) # type: Response
+        self.assertEqual(data['payload']['redirect'], "http://google.com/#q=test")
 
     def test_empty_hashtag(self):
         """ Testing the empty hashtag case."""
