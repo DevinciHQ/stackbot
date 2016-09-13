@@ -245,5 +245,11 @@ def get_referrer_insecure(req):
         logging.warn("Got a malformed referrer.")
 
 
+def is_request_with_auth(req):
+    """Check if the request has an auth header."""
+    auth_header = req.headers.get('Authorization', False)
+    if not auth_header:
+        return False
+    return True
 # Create the global pubkey object so that other code can use it.
 PUBKEY = PublicKey()

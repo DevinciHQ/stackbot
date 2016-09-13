@@ -60,7 +60,7 @@ class QueryApiTestCase(unittest.TestCase):
         # Suppressing the pylint error for no-member
         # pylint: disable=maybe-no-member
         data = json.loads(rv.data) # type: Response
-        self.assertEqual(data['payload']['redirect'], "http://google.com/#q=test")
+        self.assertEqual(data['payload']['redirect'], "https://google.com/#q=test")
 
     def test_empty_hashtag(self):
         """ Testing the empty hashtag case."""
@@ -90,6 +90,10 @@ class QueryApiTestCase(unittest.TestCase):
 
         search_query = query.get_query("#this is a #test")
         self.assertEqual(search_query, "is a #test")
+
+    def test_create_google_redirect(self):
+        redirect = query.create_google_redirect("&? Search test")
+        self.assertEqual(redirect, "https://google.com/#q=%26%3F+Search+test")
 
     def open_with_auth(self, url, method):
         fake_token = get_fake_jwt_token()

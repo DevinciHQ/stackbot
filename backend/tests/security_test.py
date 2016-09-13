@@ -147,5 +147,12 @@ class DatastoreTestCase(unittest.TestCase):
             security.set_auth_session_cookie(auth_request)
             user = security.authenticate_user(empty_request)
 
+    def test_is_request_with_auth(self):
+        with app.test_request_context():
+            # Expect that requests without an Authorization header return False
+            empty_request = MockRequest(headers={})
+            self.assertEqual(security.is_request_with_auth(empty_request), False)
 
-
+            # Expect that requests with an Authorization header return True;
+            auth_request = MockRequest(headers={"Authorization": "anything"})
+            self.assertEqual(security.is_request_with_auth(auth_request), True)
