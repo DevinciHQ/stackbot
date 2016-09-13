@@ -3,6 +3,8 @@ import { Component } from '@angular/core';
 import { QueryService } from '../query/index';
 import {AuthService} from '../auth/auth.service';
 
+declare var ga: Function;
+
 @Component({
     selector: 'search',
     templateUrl: 'search.component.html',
@@ -33,12 +35,14 @@ export class SearchComponent {
     submit(searchField: string) {
         if (searchField !== '') {
           this.doSearch(searchField)  ;
+          ga('send', 'event', 'Search', 'submit', 'clicking submit button');
         }
     }
 
     onPressEnter(e: any, searchField: any) {
         if (e.keyCode === 13 && searchField !== '') {
             this.doSearch(searchField);
+            ga('send', 'event', 'Search', 'submit', 'pressing enter');
         }
     }
 
