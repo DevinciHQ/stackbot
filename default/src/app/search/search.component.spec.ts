@@ -79,7 +79,7 @@ describe('SearchComponent', () => {
         })
     );
 
-    it('anonymous should be able to search using stackbot services',
+    it('anonymous should be able to search and then get redirected.',
         inject([SearchComponent, QueryService, AuthService], (component: SearchComponent, querySrv: MockQueryService,
                                                               auth: MockAuthService) => {
             spyOn(querySrv, 'doQuery').and.callFake(() => {
@@ -96,9 +96,14 @@ describe('SearchComponent', () => {
                     }
                 );
             });
+
+            // We can get around private method issues like this.
+            let redirect = spyOn(component, '_redirect');
             auth.logout();
             component.submit('whatever');
-            expect(component.redirect).toBe('http://google.com/q#=whatever');
+            expect(querySrv.doQuery).toHaveBeenCalled();
+            expect(redirect).toHaveBeenCalledWith('http://google.com/q#=whatever');
         })
+
     );
 });

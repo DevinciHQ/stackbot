@@ -28,7 +28,7 @@ export class QueryService {
         } else {
             // If the user is still pending (null), then don't do anything yet.
             console.log('Not making any request until the user\'s loggedIn status is resolved.');
-            return;
+            return Observable.empty();
         }
         // Save the search query and get the JSON response (which also contains link to redirect) in return.
         return this.backend.request('/api/q', {q: query, source: source }, use_auth);
