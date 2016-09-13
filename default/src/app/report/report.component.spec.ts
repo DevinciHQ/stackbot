@@ -4,6 +4,7 @@ import { QueryService } from '../query/index';
 import { AuthService} from '../auth/auth.service';
 import { Observable, BehaviorSubject, Observer }   from 'rxjs';
 import { User } from '../shared/user';
+import { GoogleAnalyticsService } from '../shared/google.analytics.service';
 // Note that this also imports moment itself.
 import * as moment from 'moment-timezone';
 
@@ -38,6 +39,15 @@ class MockAuthService {
 
 }
 
+class MockGoogleAnalyticsService {
+    event(eventCategory: string, eventAction: string, eventLabel: string) {
+    }
+    setUserId(userId: string) {
+    }
+    unsetUserId() {
+    }
+}
+
 // TODO: This isn't actually testing the component on the webpage, but is calling the items directly.
 // TODO: RC5 adds TestBed Class.. see
 // TODO: We can use https://developers.livechatinc.com/blog/testing-angular-2-apps-dependency-injection-and-components/
@@ -46,7 +56,8 @@ describe('SearchComponent', () => {
         addProviders([
             ReportComponent,
             {provide: QueryService, useClass: MockQueryService},
-            {provide: AuthService, useClass: MockAuthService}
+            {provide: AuthService, useClass: MockAuthService},
+            {provide: GoogleAnalyticsService, useClass: MockGoogleAnalyticsService}
         ]);
     });
     it('should not call QueryService.getQueries() when user is logged out.',
