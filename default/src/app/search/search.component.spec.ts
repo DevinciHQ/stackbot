@@ -2,7 +2,7 @@ import {addProviders, inject } from '@angular/core/testing';
 import { SearchComponent } from './index';
 import { QueryService } from '../query/index';
 import { AuthService} from '../auth/auth.service';
-import { Observable, BehaviorSubject }   from 'rxjs';
+import { Observable, BehaviorSubject, Observer }   from 'rxjs';
 import { User } from '../shared/user';
 
 class MockQueryService {
@@ -76,6 +76,29 @@ describe('SearchComponent', () => {
         inject([SearchComponent], (component: SearchComponent) => {
             let value = component.populateSearch('http://localhost:8080/?q=some+search+stuff');
             expect(value).toBe('some search stuff');
+        })
+    );
+
+    it('anonymous should be able to search using stackbot services',
+        inject([SearchComponent, QueryService, AuthService], (component: SearchComponent, querySrv: MockQueryService,
+                                                              auth: MockAuthService) => {
+            spyOn(querySrv, 'doQuery').and.callFake(() => {
+                return Observable.create(
+                    (observer: Observer<any>) => {
+                        observer.next({
+                               'success': 'true',
+                               'payload': {
+                                    'redirect': 'http://google.com/q#=whatever',
+                                },
+                               'cursor': null
+                        });
+                        observer.complete();
+                    }
+                );
+            });
+            auth.logout();
+            component.submit('whatever');
+            expect(component.redirect).toBe('http://google.com/q#=whatever');
         })
     );
 });
