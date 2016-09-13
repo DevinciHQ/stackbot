@@ -27,3 +27,12 @@ motivates you to be more productive and helps you to search coding related quest
 ## Setting up the IDE
 
 * Ensure that you are using the typescript compiler from the node_modules instead of the typescript compiler bundled with your IDE. This can be done by following Preferences > Languages & Frameworks > Typescript and changing the typescript version to the one from node_modules directory.
+
+## Setting up the debugger for Karma (Pycharm, Webstorm,etc)
+
+* Install karma plugin.
+* Go to Run > Edit Configurations and click on the '+' sign and select karma.
+* Fill all the configurations related to karma and click 'ok'
+* Write 'debugger;' anywhere in the test file for it to stop in chrome while running the tests.
+* You can now set more debug points through chrome javascript debugger in any of the test files.
+* Click refresh for the new debug points to take into effect.
