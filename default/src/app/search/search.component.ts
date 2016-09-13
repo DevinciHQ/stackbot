@@ -12,8 +12,6 @@ import {AuthService} from '../auth/auth.service';
 export class SearchComponent {
 
     private preSearchText: any;
-    private disabled = true;
-    public redirect: string = null;
     constructor(private queryService: QueryService, private auth: AuthService) {
         this.preSearchText = this.populateSearch(window.location.href);
         this.recordOmniSearch(window.location.href);
@@ -34,10 +32,9 @@ export class SearchComponent {
     doSearch(searchField: any) {
         this.queryService.doQuery(searchField, 'site-search').subscribe(
             data => {
-                this.redirect = data['payload']['redirect'];
                 // If when data is returned from a query with a redirect set, do the redirect.
-                if (this.redirect) {
-                    this._redirect(this.redirect);
+                if (data['payload'] && data['payload']['redirect']) {
+                    this._redirect(data['payload']['redirect']);
                 }
             }
         );
