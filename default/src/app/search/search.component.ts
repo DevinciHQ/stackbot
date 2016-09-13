@@ -18,7 +18,7 @@ export class SearchComponent {
         this.recordOmniSearch(window.location.href);
         this.auth.getUser().subscribe(
             user => {
-                if (user) {
+                if (user && user.loggedIn) {
                     this.disabled = false;
                 } else {
                     this.disabled = true;

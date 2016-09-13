@@ -25,11 +25,11 @@ class MockAuthService {
     private user = new BehaviorSubject<User>(null);
 
     login() {
-       this.user.next(new User({uid: '123abc', email: 'fake.test@example.com'}));
+       this.user.next(new User({uid: '123abc', email: 'fake.test@example.com', loggedIn: true}));
     }
 
     logout() {
-        this.user.next(null);
+        this.user.next(new User());
     }
 
     getUser() {

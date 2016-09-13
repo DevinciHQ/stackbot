@@ -16,7 +16,11 @@ declare var ga: Function;
 @Injectable()
 export class AuthService {
 
+    // Start with a null user object which represents a pending state where we don't know yet
+    // if the user is logged in or out. We need to wait for the firebase auth processs to complete to
+    // resolve the state of the user. If a user logs out, the user Object is an empty one (no uid, loggedIn == false)
     private user = new BehaviorSubject<User>(null);
+    // Note that setting the default value of BehaviorSubject to null actually causes subscriptions to fire.
     private token = new BehaviorSubject<string>(null);
     private integrations = new BehaviorSubject<{ [key: string]: Integration}>(
         {
@@ -38,7 +42,8 @@ export class AuthService {
                         // Update user only AFTER we get the token so that clients can just Subscribe to user and not jwt token,
                         // which will change more often as the token needs to be updated for auth purposes.
                         // Also, only update the user ONCE, so that user events don't cause infinite loops.
-                        if (! _self.user.getValue()) {
+                        let user = _self.user.getValue();
+                        if (!user || !user.loggedIn) {
                              _self.user.next(_self.userFromAuth(authEvent));
                         }
                     }).catch(function(error) {
@@ -46,25 +51,28 @@ export class AuthService {
                     });
                 // The user logged out, or hasn't logged in yet.
                 } else {
-                    this.user.next(null);
+                    // Set to a blank, logged out user and not null.
+                    // null represents a pending state of the user where we don't yet know if they're logged in or not.
+                    this.user.next(new User());
                     this.token.next(null);
                 }
             }
         );
 
         // Register the user_id with google analytics.
-        this.user.subscribe(
+        this.getUser().subscribe(
             (user: User) => {
-                if (user) {
+                if (user && user.loggedIn) {
                     ga('set', 'userId', user.uid); // Set the user ID using signed-in user_id.
-                } else {
+                }
+                if (user && !user.loggedIn) {
                     ga('unset', 'userId', null);
                 }
             }
         );
 
         // Add and remove the token from local storage.
-        this.token.subscribe(
+        this.getToken().subscribe(
             (token: string) => {
                 if (token) {
                     localStorage.setItem('id_token', token);
@@ -108,10 +116,11 @@ export class AuthService {
     }
 
     userFromAuth(auth: any): User {
-        let fields = {
-            uid: auth.uid
-        };
-        return new User(fields);
+        let user = new User({
+            uid: auth.uid,
+            loggedIn: true
+        });
+        return user;
     }
 
     refreshIntegrations() {
