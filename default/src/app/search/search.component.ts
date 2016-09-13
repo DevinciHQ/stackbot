@@ -3,6 +3,8 @@ import { Component } from '@angular/core';
 import { QueryService } from '../query/index';
 import {AuthService} from '../auth/auth.service';
 
+declare var ga: Function;
+
 @Component({
     selector: 'search',
     templateUrl: 'search.component.html',
@@ -20,18 +22,21 @@ export class SearchComponent {
     submit(searchField: string) {
         if (searchField !== '') {
           this.doSearch(searchField)  ;
+          ga('send', 'event', 'Search', 'submit', 'clicking submit button');
         }
     }
 
     onPressEnter(e: any, searchField: any) {
         if (e.keyCode === 13 && searchField !== '') {
             this.doSearch(searchField);
+            ga('send', 'event', 'Search', 'submit', 'pressing enter');
         }
     }
 
     doSearch(searchField: any) {
         this.queryService.doQuery(searchField, 'site-search').subscribe(
             data => {
+                ga('send', 'event', 'Search', 'source', 'site-search');
                 // If when data is returned from a query with a redirect set, do the redirect.
                 if (data['payload'] && data['payload']['redirect']) {
                     this._redirect(data['payload']['redirect']);
@@ -50,6 +55,7 @@ export class SearchComponent {
         if (parameters['q'] != null) {
             this.queryService.doQuery(parameters['q'], 'omnibox').subscribe(
               response => {
+                  ga('send', 'event', 'Search', 'source', 'omnibox');
                   return;
               }, error => {
                   console.log('Error happened: ' + error);

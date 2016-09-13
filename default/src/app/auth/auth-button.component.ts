@@ -4,6 +4,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from './auth.service';
 
+declare var ga: Function;
 
 @Component({
     selector: 'auth-button',
@@ -25,9 +26,11 @@ export class AuthButtonComponent {
         );
     }
     login() {
+        ga('send', 'event', 'Auth', 'Login', 'click');
         this.auth.login();
     }
     logout() {
+        ga('send', 'event', 'Auth', 'Logout', 'click');
         this.auth.logout();
     }
 }

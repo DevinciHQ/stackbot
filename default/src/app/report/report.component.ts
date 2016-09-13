@@ -8,6 +8,8 @@ import { AuthService } from '../auth/index';
 // Note that this also imports moment itself.
 import * as moment from 'moment-timezone';
 
+declare var ga: Function;
+
 @Component({
     selector: 'report',
     templateUrl: 'report.component.html',
@@ -95,6 +97,7 @@ export class ReportComponent {
     }
 
     getMoreData(cursor: string) {
+        ga('send', 'event', 'Report', 'Show more', 'click');
         this.queryService.getQueries(cursor).subscribe(
             (data: any[]) => {
                 this.data = this.data.concat(this.processData(data['payload'], data['cursor']));
