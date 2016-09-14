@@ -2,7 +2,7 @@
 import datetime
 import logging
 import urllib
-import requests
+import urllib2
 
 from flask import request, abort, jsonify
 from shared import app
@@ -114,7 +114,10 @@ def create_google_redirect(search_string):
 
 def get_bing_data(query_string):
     """ Get the search result using Bing's api. """
-    url = 'http://api.cognitive.microsoft.com/bing/v5.0/search'
-    payload = {'q': query_string}
+    url = 'https://api.cognitive.microsoft.com/bing/v5.0/search'
+    data = urllib.urlencode({'q': query_string})
+    print data
     headers = {'Ocp-Apim-Subscription-Key': 'd4ded470d517472da9b40836ab319538'}
-    return requests.get(url, params=payload, headers=headers).content;
+    req = urllib2.Request(url, data, headers)
+    response = urllib2.urlopen(req).read()
+    return response
