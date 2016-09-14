@@ -2,7 +2,7 @@
 import datetime
 import logging
 import urllib
-import urllib2
+from google.appengine.api import urlfetch
 
 from flask import request, abort, jsonify
 from shared import app
@@ -18,8 +18,12 @@ def query_handler():
     # Make sure the length of the query string is at least 1 char.
     search_string = request.args.get('q', '')
 
+
+
     tags = get_tags(search_string)
     query_string = get_query(search_string)
+
+    resp = get_bing_data(query_string)
 
     # Return 400 bad request error if the search_string contains only
     # hashtags and no actual search query.
@@ -47,7 +51,7 @@ def query_handler():
     if source not in ['site-search', 'omnibox']:
         abort(400) # The source field should be required.
 
-    print get_bing_data(query_string)
+
 
     # Create a new Query entity from the q value.
     # TODO: Add the other values that we want from the request headers.
@@ -114,19 +118,18 @@ def create_google_redirect(search_string):
 
 def get_bing_data(query_string):
     """ Get the search result using Bing's api. """
-    url = 'https://api.cognitive.microsoft.com/bing/v5.0/search'
-    data = urllib.urlencode({'q': query_string})
-    print data
-    headers = {'Ocp-Apim-Subscription-Key': 'd4ded470d517472da9b40836ab319538',
-               'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) '
-                             'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116'
-                             ' Safari/537.36'
-    }
-    req = urllib2.Request(url, data, headers)
+    url = 'https://api.cognitive.microsoft.com/bing/v5.0/search?q=asdf'
+    #url = 'http://www.bbc.co.uk/radio1/playlist.json'
+
     try:
-        req = urllib2.Request(url, data, headers)
-        response = urllib2.urlopen(req).read()
-    except urllib2.HTTPError as err:
-        print err
-    print 'hey'
-    return response
+        headers = {'Ocp-Apim-Subscription-Key': 'd4ded470d517472da9b40836ab319538'}
+        result = urlfetch.fetch(
+            url=url,
+            method=urlfetch.GET,
+            headers=headers)
+        print(result.content)
+    except urlfetch.Error:
+        logging.exception('Caught exception fetching url')
+
+
+    return result
