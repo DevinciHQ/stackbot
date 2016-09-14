@@ -2,6 +2,7 @@
 import datetime
 import logging
 import urllib
+import requests
 
 from flask import request, abort, jsonify
 from shared import app
@@ -45,6 +46,8 @@ def query_handler():
     source = request.args.get('source')
     if source not in ['site-search', 'omnibox']:
         abort(400) # The source field should be required.
+
+    print get_bing_data(query_string)
 
     # Create a new Query entity from the q value.
     # TODO: Add the other values that we want from the request headers.
@@ -107,3 +110,11 @@ def create_google_redirect(search_string):
     escaped_q = urllib.urlencode({'q': search_string})
     redirect = 'https://google.com/#' + escaped_q
     return redirect
+
+
+def get_bing_data(query_string):
+    """ Get the search result using Bing's api. """
+    url = 'http://api.cognitive.microsoft.com/bing/v5.0/search'
+    payload = {'q': query_string}
+    headers = {'Ocp-Apim-Subscription-Key': 'd4ded470d517472da9b40836ab319538'}
+    return requests.get(url, params=payload, headers=headers).content;
