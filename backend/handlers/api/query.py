@@ -2,6 +2,7 @@
 import datetime
 import logging
 import urllib
+import json
 from google.appengine.api import urlfetch
 
 from flask import request, abort, jsonify
@@ -23,8 +24,6 @@ def query_handler():
     tags = get_tags(search_string)
     query_string = get_query(search_string)
 
-    resp = get_bing_data(query_string)
-
     # Return 400 bad request error if the search_string contains only
     # hashtags and no actual search query.
     if len(query_string) == 0:
@@ -34,8 +33,19 @@ def query_handler():
     # If we get an unauthenticated query request, just go ahead and redirect them to google for now
     # without recording it in the database. (We may change this behavior soon)
     if not security.is_request_with_auth(request):
-        return jsonify(ApiResponse({'redirect': create_google_redirect(query_string)}))
-
+        data = get_bing_data(query_string)['webPages']['value']
+        payload = []
+        count = 0
+        for i in data:
+            count += 1
+            data = {
+                'name': i['name'],
+                'url': i['url']
+            }
+            payload.append(data)
+            if count == 3:
+                break
+        return jsonify(ApiResponse(payload))
     # The request WAS trying to authenticate, so let's try to get the authenticated user.
     try:
         user = security.authenticate_user(request)
@@ -72,7 +82,19 @@ def query_handler():
     # Save to the datatore.
     query.put()
     logging.debug('query: %s', str(query))
-    return jsonify(ApiResponse({'redirect': create_google_redirect(query_string)}))
+    data = get_bing_data(query_string)['webPages']['value']
+    payload = []
+    count = 0
+    for i in data:
+        count += 1
+        data = {
+            'name': i['name'],
+            'url': i['url']
+        }
+        payload.append(data)
+        if count == 3:
+            break
+    return jsonify(ApiResponse(payload))
 
 
 def get_tags(search_string):
@@ -118,8 +140,7 @@ def create_google_redirect(search_string):
 
 def get_bing_data(query_string):
     """ Get the search result using Bing's api. """
-    url = 'https://api.cognitive.microsoft.com/bing/v5.0/search?q=asdf'
-    #url = 'http://www.bbc.co.uk/radio1/playlist.json'
+    url = 'https://api.cognitive.microsoft.com/bing/v5.0/search?'+urllib.urlencode({'q':query_string})
 
     try:
         headers = {'Ocp-Apim-Subscription-Key': 'd4ded470d517472da9b40836ab319538'}
@@ -127,9 +148,6 @@ def get_bing_data(query_string):
             url=url,
             method=urlfetch.GET,
             headers=headers)
-        print(result.content)
     except urlfetch.Error:
         logging.exception('Caught exception fetching url')
-
-
-    return result
+    return json.loads(result.content)
