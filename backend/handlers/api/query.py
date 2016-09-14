@@ -33,7 +33,11 @@ def query_handler():
     # If we get an unauthenticated query request, just go ahead and redirect them to google for now
     # without recording it in the database. (We may change this behavior soon)
     if not security.is_request_with_auth(request):
-        data = get_bing_data(query_string)['webPages']['value']
+        data = get_bing_data(query_string)
+        if 'webPages' in data:
+            data = data['webPages']['value']
+        else:
+            return jsonify(ApiResponse(success=False))
         payload = []
         count = 0
         for i in data:
@@ -82,7 +86,11 @@ def query_handler():
     # Save to the datatore.
     query.put()
     logging.debug('query: %s', str(query))
-    data = get_bing_data(query_string)['webPages']['value']
+    data = get_bing_data(query_string)
+    if 'webPages' in data:
+        data = data['webPages']['value']
+    else:
+        return jsonify(ApiResponse(success=False))
     payload = []
     count = 0
     for i in data:
