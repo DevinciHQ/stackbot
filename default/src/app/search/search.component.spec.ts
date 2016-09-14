@@ -117,4 +117,57 @@ describe('SearchComponent', () => {
         })
 
     );
+
+    it('should record the GA event for submit button on clicking it or pressing enter key',
+        inject([SearchComponent, GoogleAnalyticsService], (component: SearchComponent,
+                                                           ga: MockGoogleAnalyticsService
+        ) => {
+            spyOn(component, 'doSearch').and.callFake(() => {
+                return Observable.create(
+                    (observer: Observer<any>) => {
+                        observer.next({
+                               'success': 'true',
+                               'payload': {
+                                    'redirect': 'http://google.com/q#=whatever',
+                                },
+                               'cursor': null
+                        });
+                        observer.complete();
+                    }
+                );
+            });
+            spyOn(ga, 'event');
+            component.submit('whatever');
+            expect(ga.event).toHaveBeenCalledWith('Search', 'submit', 'clicking submit button');
+            component.onPressEnter({'keyCode' : 13}, 'whatever');
+            expect(ga.event).toHaveBeenCalledWith('Search', 'submit', 'pressing enter');
+        })
+    );
+
+    it('should record the GA event for source',
+        inject([SearchComponent, QueryService, GoogleAnalyticsService], (component: SearchComponent,
+                                                                         querySrv: MockQueryService,
+                                                                         ga: MockGoogleAnalyticsService
+        ) => {
+            spyOn(querySrv, 'doQuery').and.callFake(() => {
+                return Observable.create(
+                    (observer: Observer<any>) => {
+                        observer.next({
+                               'success': 'true',
+                               'payload': {
+                                    'redirect': 'http://google.com/q#=whatever',
+                                },
+                               'cursor': null
+                        });
+                        observer.complete();
+                    }
+                );
+            });
+            spyOn(ga, 'event');
+            component.doSearch('whatever');
+            expect(ga.event).toHaveBeenCalledWith('Search', 'source', 'site-search');
+            component.recordOmniSearch('http://localhost:8080/?q=hello');
+            expect(ga.event).toHaveBeenCalledWith('Search', 'source', 'omnibox');
+        })
+    );
 });

@@ -292,5 +292,34 @@ describe('SearchComponent', () => {
                 }
             )
         );
+
+        it('should record GA event when clicking Show more button',
+            inject([ReportComponent, QueryService, GoogleAnalyticsService],
+                (component: ReportComponent, querySrv: QueryService, ga: MockGoogleAnalyticsService) => {
+
+                    spyOn(querySrv, 'getQueries').and.callFake(() => {
+                        return Observable.create(
+                            (observer: Observer<any>) => {
+                                observer.next({
+                                    'cursor': 'fake',
+                                    'payload': [
+                                        {
+                                            'query': 'asdfasdf',
+                                            'tags': ['fake-tag'],
+                                            'timestamp': '2016-09-01T22:04:38.787362'
+                                        }
+                                    ]
+                                });
+                                observer.complete();
+                            }
+                        );
+                    });
+
+                    spyOn(ga, 'event');
+                    component.getMoreData('cursor_coming_through');
+                    expect(ga.event).toHaveBeenCalledWith('Report', 'Show more', 'click');
+                }
+            )
+        );
     });
 });

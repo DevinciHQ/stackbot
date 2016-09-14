@@ -75,4 +75,17 @@ describe('AuthButtonComponent', () => {
         expect(authButtonComponent.loggedIn).toBe(false);
 
     }));
+
+    it('should record GA event for login and logout', inject(
+                // Note that we pass AuthService, NOT MockAuthService
+                [AuthButtonComponent, GoogleAnalyticsService], (authButtonComponent: AuthButtonComponent,
+                                                                             ga: MockGoogleAnalyticsService
+        ) => {
+
+        spyOn(ga, 'event');
+        authButtonComponent.login();
+        expect(ga.event).toHaveBeenCalledWith('Auth', 'Login', 'click');
+        authButtonComponent.logout();
+        expect(ga.event).toHaveBeenCalledWith('Auth', 'Logout', 'click');
+    }));
 });
