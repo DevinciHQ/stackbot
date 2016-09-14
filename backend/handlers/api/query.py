@@ -117,7 +117,11 @@ def get_bing_data(query_string):
     url = 'https://api.cognitive.microsoft.com/bing/v5.0/search'
     data = urllib.urlencode({'q': query_string})
     print data
-    headers = {'Ocp-Apim-Subscription-Key': 'd4ded470d517472da9b40836ab319538'}
+    headers = {'Ocp-Apim-Subscription-Key': 'd4ded470d517472da9b40836ab319538',
+               'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) '
+                             'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116'
+                             ' Safari/537.36'
+    }
     req = urllib2.Request(url, data, headers)
     response = urllib2.urlopen(req).read()
     return response
