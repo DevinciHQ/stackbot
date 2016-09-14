@@ -123,5 +123,10 @@ def get_bing_data(query_string):
                              ' Safari/537.36'
     }
     req = urllib2.Request(url, data, headers)
-    response = urllib2.urlopen(req).read()
+    try:
+        req = urllib2.Request(url, data, headers)
+        response = urllib2.urlopen(req).read()
+    except urllib2.HTTPError as err:
+        print err
+    print 'hey'
     return response
