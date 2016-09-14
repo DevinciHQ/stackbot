@@ -106,4 +106,30 @@ describe('SearchComponent', () => {
         })
 
     );
+
+    it('should get the Bing search data from the backend',
+        inject([SearchComponent, QueryService, AuthService], (component: SearchComponent, querySrv: MockQueryService,
+                                                              auth: MockAuthService) => {
+            spyOn(querySrv, 'doQuery').and.callFake(() => {
+                return Observable.create(
+                    (observer: Observer<any>) => {
+                        observer.next({
+                               'success': 'true',
+                               'payload': {
+                                    'redirect': 'http://google.com/q#=whatever',
+                                },
+                               'cursor': null
+                        });
+                        observer.complete();
+                    }
+                );
+            });
+
+            spyOn(component, 'getBingData');
+            component.getBingData('search text');
+            expect(component.data).toBe('whatever results bing api gives us');
+        })
+
+    );
+
 });
