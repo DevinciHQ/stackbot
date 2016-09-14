@@ -4,6 +4,7 @@ import { QueryService } from '../query/index';
 import { AuthService} from '../auth/auth.service';
 import { Observable, BehaviorSubject, Observer }   from 'rxjs';
 import { User } from '../shared/user';
+import { GoogleAnalyticsService } from '../shared/google.analytics.service';
 
 class MockQueryService {
 
@@ -38,6 +39,15 @@ class MockAuthService {
 
 }
 
+class MockGoogleAnalyticsService {
+    event(eventCategory: string, eventAction: string, eventLabel: string) {
+    }
+    setUserId(userId: string) {
+    }
+    unsetUserId() {
+    }
+}
+
 // TODO: This isn't actually testing the component on the webpage, but is calling the items directly.
 // TODO: RC5 adds TestBed Class.. see
 // TODO: We can use https://developers.livechatinc.com/blog/testing-angular-2-apps-dependency-injection-and-components/
@@ -46,7 +56,8 @@ describe('SearchComponent', () => {
         addProviders([
             SearchComponent,
             {provide: QueryService, useClass: MockQueryService},
-            {provide: AuthService, useClass: MockAuthService}
+            {provide: AuthService, useClass: MockAuthService},
+            {provide: GoogleAnalyticsService, useClass: MockGoogleAnalyticsService}
         ]);
     });
     it('submit button should NOT send a query if search field is empty',
@@ -105,5 +116,58 @@ describe('SearchComponent', () => {
             expect(redirect).toHaveBeenCalledWith('http://google.com/q#=whatever');
         })
 
+    );
+
+    it('should record the GA event for submit button on clicking it or pressing enter key',
+        inject([SearchComponent, GoogleAnalyticsService], (component: SearchComponent,
+                                                           ga: MockGoogleAnalyticsService
+        ) => {
+            spyOn(component, 'doSearch').and.callFake(() => {
+                return Observable.create(
+                    (observer: Observer<any>) => {
+                        observer.next({
+                               'success': 'true',
+                               'payload': {
+                                    'redirect': 'http://google.com/q#=whatever',
+                                },
+                               'cursor': null
+                        });
+                        observer.complete();
+                    }
+                );
+            });
+            spyOn(ga, 'event');
+            component.submit('whatever');
+            expect(ga.event).toHaveBeenCalledWith('Search', 'submit', 'clicking submit button');
+            component.onPressEnter({'keyCode' : 13}, 'whatever');
+            expect(ga.event).toHaveBeenCalledWith('Search', 'submit', 'pressing enter');
+        })
+    );
+
+    it('should record the GA event for source',
+        inject([SearchComponent, QueryService, GoogleAnalyticsService], (component: SearchComponent,
+                                                                         querySrv: MockQueryService,
+                                                                         ga: MockGoogleAnalyticsService
+        ) => {
+            spyOn(querySrv, 'doQuery').and.callFake(() => {
+                return Observable.create(
+                    (observer: Observer<any>) => {
+                        observer.next({
+                               'success': 'true',
+                               'payload': {
+                                    'redirect': 'http://google.com/q#=whatever',
+                                },
+                               'cursor': null
+                        });
+                        observer.complete();
+                    }
+                );
+            });
+            spyOn(ga, 'event');
+            component.doSearch('whatever');
+            expect(ga.event).toHaveBeenCalledWith('Search', 'source', 'site-search');
+            component.recordOmniSearch('http://localhost:8080/?q=hello');
+            expect(ga.event).toHaveBeenCalledWith('Search', 'source', 'omnibox');
+        })
     );
 });

@@ -12,6 +12,7 @@ import { AuthService } from './auth.service';
 import { AuthButtonComponent } from './auth-button.component';
 import {BehaviorSubject}    from 'rxjs/Rx';
 import { User } from '../shared/user';
+import { GoogleAnalyticsService } from '../shared/google.analytics.service';
 
 
 
@@ -35,11 +36,21 @@ class MockAuthService {
 
 }
 
+class MockGoogleAnalyticsService {
+    event(eventCategory: string, eventAction: string, eventLabel: string) {
+    }
+    setUserId(userId: string) {
+    }
+    unsetUserId() {
+    }
+}
+
 describe('AuthButtonComponent', () => {
     beforeEach(() => {
         addProviders([
             AuthButtonComponent,
-            {provide: AuthService, useClass: MockAuthService}
+            {provide: AuthService, useClass: MockAuthService},
+            {provide: GoogleAnalyticsService, useClass: MockGoogleAnalyticsService}
         ]);
     });
 
@@ -63,5 +74,18 @@ describe('AuthButtonComponent', () => {
         expect(auth.logout).toHaveBeenCalled();
         expect(authButtonComponent.loggedIn).toBe(false);
 
+    }));
+
+    it('should record GA event for login and logout', inject(
+                // Note that we pass AuthService, NOT MockAuthService
+                [AuthButtonComponent, GoogleAnalyticsService], (authButtonComponent: AuthButtonComponent,
+                                                                             ga: MockGoogleAnalyticsService
+        ) => {
+
+        spyOn(ga, 'event');
+        authButtonComponent.login();
+        expect(ga.event).toHaveBeenCalledWith('Auth', 'Login', 'click');
+        authButtonComponent.logout();
+        expect(ga.event).toHaveBeenCalledWith('Auth', 'Logout', 'click');
     }));
 });

@@ -4,6 +4,7 @@ import { QueryService } from '../query/index';
 import { AuthService} from '../auth/auth.service';
 import { Observable, BehaviorSubject, Observer }   from 'rxjs';
 import { User } from '../shared/user';
+import { GoogleAnalyticsService } from '../shared/google.analytics.service';
 // Note that this also imports moment itself.
 import * as moment from 'moment-timezone';
 
@@ -38,6 +39,15 @@ class MockAuthService {
 
 }
 
+class MockGoogleAnalyticsService {
+    event(eventCategory: string, eventAction: string, eventLabel: string) {
+    }
+    setUserId(userId: string) {
+    }
+    unsetUserId() {
+    }
+}
+
 // TODO: This isn't actually testing the component on the webpage, but is calling the items directly.
 // TODO: RC5 adds TestBed Class.. see
 // TODO: We can use https://developers.livechatinc.com/blog/testing-angular-2-apps-dependency-injection-and-components/
@@ -46,7 +56,8 @@ describe('SearchComponent', () => {
         addProviders([
             ReportComponent,
             {provide: QueryService, useClass: MockQueryService},
-            {provide: AuthService, useClass: MockAuthService}
+            {provide: AuthService, useClass: MockAuthService},
+            {provide: GoogleAnalyticsService, useClass: MockGoogleAnalyticsService}
         ]);
     });
     it('should not call QueryService.getQueries() when user is logged out.',
@@ -278,6 +289,35 @@ describe('SearchComponent', () => {
                     expect(component.data.length = 1);
                     component.getMoreData('cursor_coming_through');
                     expect(component.data.length = 2);
+                }
+            )
+        );
+
+        it('should record GA event when clicking Show more button',
+            inject([ReportComponent, QueryService, GoogleAnalyticsService],
+                (component: ReportComponent, querySrv: QueryService, ga: MockGoogleAnalyticsService) => {
+
+                    spyOn(querySrv, 'getQueries').and.callFake(() => {
+                        return Observable.create(
+                            (observer: Observer<any>) => {
+                                observer.next({
+                                    'cursor': 'fake',
+                                    'payload': [
+                                        {
+                                            'query': 'asdfasdf',
+                                            'tags': ['fake-tag'],
+                                            'timestamp': '2016-09-01T22:04:38.787362'
+                                        }
+                                    ]
+                                });
+                                observer.complete();
+                            }
+                        );
+                    });
+
+                    spyOn(ga, 'event');
+                    component.getMoreData('cursor_coming_through');
+                    expect(ga.event).toHaveBeenCalledWith('Report', 'Show more', 'click');
                 }
             )
         );

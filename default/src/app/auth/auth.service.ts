@@ -8,10 +8,7 @@ import { Observable, BehaviorSubject }  from 'rxjs/Rx';
 import { User } from '../shared/user';
 import { BackendService } from '../shared/backend.service';
 import { Integration } from '../shared/integration';
-
-
-// Declare ga function as ambient
-declare var ga: Function;
+import { GoogleAnalyticsService } from '../shared/google.analytics.service';
 
 @Injectable()
 export class AuthService {
@@ -28,7 +25,7 @@ export class AuthService {
         }
     );
 
-    constructor(private fb_auth: AngularFireAuth, private backend: BackendService) {
+    constructor(private fb_auth: AngularFireAuth, private backend: BackendService, private ga: GoogleAnalyticsService) {
 
         this.fb_auth.subscribe(
             // An auth event happened.
@@ -63,10 +60,10 @@ export class AuthService {
         this.getUser().subscribe(
             (user: User) => {
                 if (user && user.loggedIn) {
-                    ga('set', 'userId', user.uid); // Set the user ID using signed-in user_id.
+                    this.ga.setUserId(user.uid); // Set the user ID using signed-in user_id.
                 }
                 if (user && !user.loggedIn) {
-                    ga('unset', 'userId', null);
+                    this.ga.unsetUserId();
                 }
             }
         );
