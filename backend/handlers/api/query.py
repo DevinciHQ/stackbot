@@ -37,7 +37,7 @@ def query_handler():
         if 'webPages' in data:
             data = data['webPages']['value']
         else:
-            return jsonify(ApiResponse(success=False))
+            return jsonify(ApiResponse())
         payload = []
         count = 0
         for i in data:
@@ -90,7 +90,7 @@ def query_handler():
     if 'webPages' in data:
         data = data['webPages']['value']
     else:
-        return jsonify(ApiResponse(success=False))
+        return jsonify(ApiResponse())
     payload = []
     count = 0
     for i in data:
