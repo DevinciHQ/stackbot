@@ -4,6 +4,7 @@ import { QueryService } from '../query/index';
 import { AuthService} from '../auth/auth.service';
 import { Observable, BehaviorSubject, Observer }   from 'rxjs';
 import { User } from '../shared/user';
+import { ToggleReportService } from '../shared/toggle.report.service';
 
 class MockQueryService {
 
@@ -46,7 +47,8 @@ describe('SearchComponent', () => {
         addProviders([
             SearchComponent,
             {provide: QueryService, useClass: MockQueryService},
-            {provide: AuthService, useClass: MockAuthService}
+            {provide: AuthService, useClass: MockAuthService},
+            {provide: ToggleReportService, useClass: ToggleReportService}
         ]);
     });
     it('submit button should NOT send a query if search field is empty',
@@ -115,9 +117,16 @@ describe('SearchComponent', () => {
                     (observer: Observer<any>) => {
                         observer.next({
                                'success': 'true',
-                               'payload': {
-                                    'redirect': 'http://google.com/q#=whatever',
-                                },
+                               'payload': [
+                                   {
+                                       'name': 'fake',
+                                       'url': 'fake.com',
+                                       'snippet': 'this is fake'
+                                   },
+                                   {
+                                       'redirect': 'http://google.com/q#=whatever',
+                                   }
+                                ],
                                'cursor': null
                         });
                         observer.complete();
@@ -125,9 +134,19 @@ describe('SearchComponent', () => {
                 );
             });
 
-            spyOn(component, 'getBingData');
-            component.getBingData('search text');
-            expect(component.data).toBe('whatever results bing api gives us');
+            spyOn(component, 'processData');
+            component.doSearch('search text');
+            expect(component.processData).toHaveBeenCalledWith([
+               {
+                   'name': 'fake',
+                   'url': 'fake.com',
+                   'snippet': 'this is fake'
+               },
+               {
+                   'redirect': 'http://google.com/q#=whatever',
+               }
+            ]
+            );
         })
 
     );

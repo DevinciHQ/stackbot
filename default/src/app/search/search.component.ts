@@ -90,8 +90,8 @@ export class SearchComponent {
     processData(items: any[]) {
         let newData: any = [];
         for (let item of items) {
-            if(item['googleRedirectLink']) {
-                this.googleRedirectLink = item['googleRedirectLink']
+            if (item['googleRedirectLink']) {
+                this.googleRedirectLink = item['googleRedirectLink'];
                 continue;
             }
             newData.push({
