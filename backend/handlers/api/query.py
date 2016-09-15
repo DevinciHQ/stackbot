@@ -40,7 +40,8 @@ def query_handler():
         for i in data:
             data = {
                 'name': i['name'],
-                'url': i['url']
+                'url': i['url'],
+                'displayUrl': i['displayUrl']
             }
             payload.append(data)
         return jsonify(ApiResponse(payload))
@@ -87,7 +88,8 @@ def query_handler():
     for i in data:
         data = {
             'name': i['name'],
-            'url': i['url']
+            'url': i['url'],
+            'displayUrl': i['displayUrl']
         }
         payload.append(data)
     return jsonify(ApiResponse(payload))
