@@ -14,6 +14,7 @@ export class SearchComponent {
 
     private preSearchText: any;
     private res: any;
+    private googleRedirectLink: any;
     constructor(private queryService: QueryService, private auth: AuthService, private toggleReport: ToggleReportService) {
         this.preSearchText = this.populateSearch(window.location.href);
         this.recordOmniSearch(window.location.href);
@@ -86,6 +87,10 @@ export class SearchComponent {
     processData(items: any[]) {
         let newData: any = [];
         for (let item of items) {
+            if(item['googleRedirectLink']) {
+                this.googleRedirectLink = item['googleRedirectLink']
+                continue;
+            }
             newData.push({
                 'name' : item['name'],
                 'url': item['url'],

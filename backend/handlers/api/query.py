@@ -45,7 +45,7 @@ def query_handler():
                 'snippet': i['snippet']
             }
             payload.append(data)
-        payload.append({'redirect': create_google_redirect(query_string)})
+        payload.append({'googleRedirectLink': create_google_redirect(query_string)})
         return jsonify(ApiResponse(payload))
     # The request WAS trying to authenticate, so let's try to get the authenticated user.
     try:
@@ -95,7 +95,7 @@ def query_handler():
             'snippet': i['snippet']
         }
         payload.append(data)
-    payload.append({'redirect': create_google_redirect(query_string)})
+    payload.append({'googleRedirectLink': create_google_redirect(query_string)})
     return jsonify(ApiResponse(payload))
 
 
