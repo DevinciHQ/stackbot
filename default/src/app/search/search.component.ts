@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { QueryService } from '../query/index';
 import {AuthService} from '../auth/auth.service';
 import {ToggleReportService} from '../shared/toggle.report.service';
+import {ResultService} from '../result/result.service';
 
 @Component({
     selector: 'search',
@@ -13,9 +14,9 @@ import {ToggleReportService} from '../shared/toggle.report.service';
 export class SearchComponent {
 
     private preSearchText: any;
-    private res: any;
     private googleRedirectLink: any;
-    constructor(private queryService: QueryService, private auth: AuthService, private toggleReport: ToggleReportService) {
+    constructor(private queryService: QueryService, private auth: AuthService,
+                private toggleReport: ToggleReportService, private resultService: ResultService) {
         this.preSearchText = this.populateSearch(window.location.href);
         if (this.preSearchText) {
             this.submit(this.preSearchText);
@@ -40,8 +41,11 @@ export class SearchComponent {
             data => {
                 // If when data is returned from a query with a redirect set, do the redirect.
                 if (data['payload'] && data['success']) {
-                    this.res = this.processData(data['payload']);
+                    this.resultService.processData(data['payload']);
                     this.toggleReport.hideReport();
+                    if (data['payload'][data['payload'].length - 1]['googleRedirectLink']) {
+                        this.googleRedirectLink = data['payload'][data['payload'].length - 1]['googleRedirectLink'];
+                    }
                 }
             }
         );
@@ -85,22 +89,5 @@ export class SearchComponent {
 
     private _redirect(href: any) {
         window.location.href = href;
-    }
-
-    processData(items: any[]) {
-        let newData: any = [];
-        for (let item of items) {
-            if (item['googleRedirectLink']) {
-                this.googleRedirectLink = item['googleRedirectLink'];
-                continue;
-            }
-            newData.push({
-                'name' : item['name'],
-                'url': item['url'],
-                'displayUrl': item['displayUrl'],
-                'snippet': item['snippet']
-            });
-        }
-        return newData;
     }
 }

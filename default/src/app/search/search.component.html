@@ -7,16 +7,7 @@
         <button class="btn" type="button" (click)="submit(searchField.value)" id="search-button">Search</button>
     </span>
     <span class="input-group-btn" *ngIf="googleRedirectLink">
-        <button class="btn" type="button" (click)="_redirect(googleRedirectLink)" id="search-button">Google Instead?</button>
+        <button class="btn" type="button" (click)="_redirect(googleRedirectLink)" id="google-search-button">Google Instead?</button>
     </span>
 </div>
-<br>
-<div>
-    <span *ngFor="let link of res" link="yellow">
-        <a href="{{link.url}}" style="color: yellow;">{{link.name}}</a> <br>
-        {{link.displayUrl}} <br>
-        {{link.snippet}} <br><br>
-    </span>
-</div>
-
 

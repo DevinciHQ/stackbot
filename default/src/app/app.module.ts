@@ -16,10 +16,12 @@ import { AppComponent }  from './app.component';
 import { ReportComponent } from './report/index';
 import { AuthService, AuthButtonComponent, AuthIntegrationsComponent } from './auth/index';
 import { SearchComponent } from './search/index';
+import { ResultComponent } from './result/index';
 
 // DO NOT DELETE: This is needed or the compiler says, Cannot find namespace 'firebase'.
 /* tslint:disable */
 import * as firebase from 'firebase';
+import {ResultService} from './result/result.service';
 /* tslint:enable */
 
 const firebaseConfig = {
@@ -43,7 +45,8 @@ let providers = [
     HTTP_PROVIDERS,
     AuthService,
     BackendService,
-    ToggleReportService
+    ToggleReportService,
+    ResultService
 ];
 
 let declarations = [
@@ -54,6 +57,7 @@ let declarations = [
     FocusMeDirective,
     AuthIntegrationsComponent,
     KeysPipe,
+    ResultComponent,
 ];
 
 let imports = [

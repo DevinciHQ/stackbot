@@ -1,0 +1,7 @@
+<div *ngIf="resultService.data.length != 0">
+    <span *ngFor="let link of results">
+        <a href="{{link.url}}">{{link.name}}</a><br>
+        {{link.displayUrl}} <br>
+        {{link.snippet}} <br><br>
+    </span>
+</div>
