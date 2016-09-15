@@ -40,4 +40,6 @@ button:hover {
 .left-addon input  { padding-left:  30px; }
 .right-addon input { padding-right: 30px; }
 
-
+#google-search-button {
+    margin-left: 2px;
+}
