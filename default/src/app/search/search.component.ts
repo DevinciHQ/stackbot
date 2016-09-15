@@ -17,6 +17,9 @@ export class SearchComponent {
     private googleRedirectLink: any;
     constructor(private queryService: QueryService, private auth: AuthService, private toggleReport: ToggleReportService) {
         this.preSearchText = this.populateSearch(window.location.href);
+        if (this.preSearchText) {
+            this.submit(this.preSearchText);
+        }
         this.recordOmniSearch(window.location.href);
     }
 
