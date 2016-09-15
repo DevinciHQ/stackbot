@@ -1,6 +1,6 @@
 export class ResultService {
 
-    public data = [];
+    data: any = [];
 
     processData(items: any[]) {
         let newData: any = [];
