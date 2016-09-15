@@ -82,7 +82,7 @@ export class SearchComponent {
     }
 
     processData(items: any[]) {
-        let newData = [];
+        let newData: any = [];
         for (let item of items) {
             newData.push({
                 'name' : item['name'],
