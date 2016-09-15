@@ -19,8 +19,6 @@ def query_handler():
     # Make sure the length of the query string is at least 1 char.
     search_string = request.args.get('q', '')
 
-
-
     tags = get_tags(search_string)
     query_string = get_query(search_string)
 
@@ -39,16 +37,12 @@ def query_handler():
         else:
             return jsonify(ApiResponse())
         payload = []
-        count = 0
         for i in data:
-            count += 1
             data = {
                 'name': i['name'],
                 'url': i['url']
             }
             payload.append(data)
-            if count == 3:
-                break
         return jsonify(ApiResponse(payload))
     # The request WAS trying to authenticate, so let's try to get the authenticated user.
     try:
@@ -64,8 +58,6 @@ def query_handler():
     source = request.args.get('source')
     if source not in ['site-search', 'omnibox']:
         abort(400) # The source field should be required.
-
-
 
     # Create a new Query entity from the q value.
     # TODO: Add the other values that we want from the request headers.
@@ -92,16 +84,12 @@ def query_handler():
     else:
         return jsonify(ApiResponse())
     payload = []
-    count = 0
     for i in data:
-        count += 1
         data = {
             'name': i['name'],
             'url': i['url']
         }
         payload.append(data)
-        if count == 3:
-            break
     return jsonify(ApiResponse(payload))
 
 
