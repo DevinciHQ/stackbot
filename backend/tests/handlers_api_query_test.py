@@ -95,6 +95,11 @@ class QueryApiTestCase(unittest.TestCase):
         redirect = query.create_google_redirect("&? Search test")
         self.assertEqual(redirect, "https://google.com/#q=%26%3F+Search+test")
 
+    def test_get_bing_data(self):
+        """ Test to get the data back from bing. """
+        data = query.get_bing_data("Is google better than bing ?")
+        self.assertEqual(data, "No way")
+
     def open_with_auth(self, url, method):
         fake_token = get_fake_jwt_token()
         return self.app.open(url, method=method, headers={"Authorization": "Bearer " + fake_token},

@@ -6,6 +6,7 @@ import { Observable, BehaviorSubject, Observer }   from 'rxjs';
 import { User } from '../shared/user';
 // Note that this also imports moment itself.
 import * as moment from 'moment-timezone';
+import {ToggleReportService} from '../shared/toggle.report.service';
 
 class MockQueryService {
 
@@ -46,7 +47,8 @@ describe('SearchComponent', () => {
         addProviders([
             ReportComponent,
             {provide: QueryService, useClass: MockQueryService},
-            {provide: AuthService, useClass: MockAuthService}
+            {provide: AuthService, useClass: MockAuthService},
+            {provide: ToggleReportService, useClass: ToggleReportService}
         ]);
     });
     it('should not call QueryService.getQueries() when user is logged out.',

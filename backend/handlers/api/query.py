@@ -2,6 +2,8 @@
 import datetime
 import logging
 import urllib
+import json
+from google.appengine.api import urlfetch
 
 from flask import request, abort, jsonify
 from shared import app
@@ -29,8 +31,22 @@ def query_handler():
     # If we get an unauthenticated query request, just go ahead and redirect them to google for now
     # without recording it in the database. (We may change this behavior soon)
     if not security.is_request_with_auth(request):
-        return jsonify(ApiResponse({'redirect': create_google_redirect(query_string)}))
-
+        data = get_bing_data(query_string)
+        if 'webPages' in data:
+            data = data['webPages']['value']
+        else:
+            return jsonify(ApiResponse())
+        payload = []
+        for i in data:
+            data = {
+                'name': i['name'],
+                'url': i['url'],
+                'displayUrl': i['displayUrl'],
+                'snippet': i['snippet']
+            }
+            payload.append(data)
+        payload.append({'googleRedirectLink': create_google_redirect(query_string)})
+        return jsonify(ApiResponse(payload))
     # The request WAS trying to authenticate, so let's try to get the authenticated user.
     try:
         user = security.authenticate_user(request)
@@ -65,7 +81,22 @@ def query_handler():
     # Save to the datatore.
     query.put()
     logging.debug('query: %s', str(query))
-    return jsonify(ApiResponse({'redirect': create_google_redirect(query_string)}))
+    data = get_bing_data(query_string)
+    if 'webPages' in data:
+        data = data['webPages']['value']
+    else:
+        return jsonify(ApiResponse())
+    payload = []
+    for i in data:
+        data = {
+            'name': i['name'],
+            'url': i['url'],
+            'displayUrl': i['displayUrl'],
+            'snippet': i['snippet']
+        }
+        payload.append(data)
+    payload.append({'googleRedirectLink': create_google_redirect(query_string)})
+    return jsonify(ApiResponse(payload))
 
 
 def get_tags(search_string):
@@ -107,3 +138,18 @@ def create_google_redirect(search_string):
     escaped_q = urllib.urlencode({'q': search_string})
     redirect = 'https://google.com/#' + escaped_q
     return redirect
+
+
+def get_bing_data(query_string):
+    """ Get the search result using Bing's api. """
+    url = 'https://api.cognitive.microsoft.com/bing/v5.0/search?'+urllib.urlencode({'q':query_string})
+
+    try:
+        headers = {'Ocp-Apim-Subscription-Key': 'd4ded470d517472da9b40836ab319538'}
+        result = urlfetch.fetch(
+            url=url,
+            method=urlfetch.GET,
+            headers=headers)
+    except urlfetch.Error:
+        logging.exception('Caught exception fetching url')
+    return json.loads(result.content)

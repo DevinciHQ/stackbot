@@ -9,16 +9,19 @@ import { AUTH_PROVIDERS } from 'angular2-jwt';
 import { FocusMeDirective } from './shared/focus-me.directive';
 import { BackendService } from './shared/backend.service';
 import { KeysPipe } from './shared/keys.pipe';
+import {ToggleReportService} from './shared/toggle.report.service';
 
 
 import { AppComponent }  from './app.component';
 import { ReportComponent } from './report/index';
 import { AuthService, AuthButtonComponent, AuthIntegrationsComponent } from './auth/index';
 import { SearchComponent } from './search/index';
+import { ResultComponent } from './result/index';
 
 // DO NOT DELETE: This is needed or the compiler says, Cannot find namespace 'firebase'.
 /* tslint:disable */
 import * as firebase from 'firebase';
+import {ResultService} from './result/result.service';
 /* tslint:enable */
 
 const firebaseConfig = {
@@ -42,6 +45,8 @@ let providers = [
     HTTP_PROVIDERS,
     AuthService,
     BackendService,
+    ToggleReportService,
+    ResultService
 ];
 
 let declarations = [
@@ -52,6 +57,7 @@ let declarations = [
     FocusMeDirective,
     AuthIntegrationsComponent,
     KeysPipe,
+    ResultComponent,
 ];
 
 let imports = [

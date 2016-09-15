@@ -2,6 +2,8 @@
 import { Component } from '@angular/core';
 import { QueryService } from '../query/index';
 import {AuthService} from '../auth/auth.service';
+import {ToggleReportService} from '../shared/toggle.report.service';
+import {ResultService} from '../result/result.service';
 
 @Component({
     selector: 'search',
@@ -12,8 +14,13 @@ import {AuthService} from '../auth/auth.service';
 export class SearchComponent {
 
     private preSearchText: any;
-    constructor(private queryService: QueryService, private auth: AuthService) {
+    private googleRedirectLink: any;
+    constructor(private queryService: QueryService, private auth: AuthService,
+                private toggleReport: ToggleReportService, private resultService: ResultService) {
         this.preSearchText = this.populateSearch(window.location.href);
+        if (this.preSearchText) {
+            this.submit(this.preSearchText);
+        }
         this.recordOmniSearch(window.location.href);
     }
 
@@ -33,8 +40,12 @@ export class SearchComponent {
         this.queryService.doQuery(searchField, 'site-search').subscribe(
             data => {
                 // If when data is returned from a query with a redirect set, do the redirect.
-                if (data['payload'] && data['payload']['redirect']) {
-                    this._redirect(data['payload']['redirect']);
+                if (data['payload'] && data['success']) {
+                    this.resultService.processData(data['payload']);
+                    this.toggleReport.hideReport();
+                    if (data['payload'][data['payload'].length - 1]['googleRedirectLink']) {
+                        this.googleRedirectLink = data['payload'][data['payload'].length - 1]['googleRedirectLink'];
+                    }
                 }
             }
         );

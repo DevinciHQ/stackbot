@@ -7,6 +7,7 @@ import { QueryService } from '../query/query.service';
 import { AuthService } from '../auth/index';
 // Note that this also imports moment itself.
 import * as moment from 'moment-timezone';
+import {ToggleReportService} from '../shared/toggle.report.service';
 
 @Component({
     selector: 'report',
@@ -46,9 +47,8 @@ export class ReportComponent {
         moment.tz.setDefault(this.tz);
     }
 
-    constructor(private queryService: QueryService, private auth: AuthService) {
+    constructor(private queryService: QueryService, private auth: AuthService, private toggleReport: ToggleReportService) {
         this.setTimezone();
-
         this.auth.getUser().subscribe(
             user => {
                 if (user && user.loggedIn) {
