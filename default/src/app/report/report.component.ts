@@ -25,8 +25,6 @@ export class ReportComponent {
 
     public currDay: moment.Moment = null;
 
-    public showReport: boolean = true;
-
     public formatMonth(dateTime: moment.Moment): string {
         return  dateTime.format('MMM');
     }
@@ -51,7 +49,6 @@ export class ReportComponent {
 
     constructor(private queryService: QueryService, private auth: AuthService, private toggleReport: ToggleReportService) {
         this.setTimezone();
-        this.showReport = toggleReport.showReport;
         this.auth.getUser().subscribe(
             user => {
                 if (user && user.loggedIn) {
