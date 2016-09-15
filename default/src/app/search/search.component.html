@@ -7,14 +7,13 @@
         <button class="btn" type="button" (click)="submit(searchField.value)" id="search-button">Search</button>
     </span>
 </div>
-
+<br>
 <div>
-    <table>
-        <tr *ngFor="let link of res">
-            <td>{{link.name}}</td>
-            <td>{{link.url}}</td>
-        </tr>
-    </table>
+    <span *ngFor="let link of res" link="yellow">
+        <a href="{{link.url}}" style="color: yellow;">{{link.name}}</a> <br>
+        {{link.displayUrl}} <br>
+        {{link.snippet}} <br><br>
+    </span>
 </div>
 
 

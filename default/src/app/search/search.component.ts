@@ -87,6 +87,8 @@ export class SearchComponent {
             newData.push({
                 'name' : item['name'],
                 'url': item['url'],
+                'displayUrl': item['displayUrl'],
+                'snippet': item['snippet']
             });
         }
         return newData;
