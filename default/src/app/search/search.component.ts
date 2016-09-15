@@ -2,6 +2,7 @@
 import { Component } from '@angular/core';
 import { QueryService } from '../query/index';
 import {AuthService} from '../auth/auth.service';
+import {ToggleReportService} from '../shared/toggle.report.service';
 
 @Component({
     selector: 'search',
@@ -13,7 +14,7 @@ export class SearchComponent {
 
     private preSearchText: any;
     private res: any;
-    constructor(private queryService: QueryService, private auth: AuthService) {
+    constructor(private queryService: QueryService, private auth: AuthService, private toggleReport: ToggleReportService) {
         this.preSearchText = this.populateSearch(window.location.href);
         this.recordOmniSearch(window.location.href);
     }
@@ -36,6 +37,7 @@ export class SearchComponent {
                 // If when data is returned from a query with a redirect set, do the redirect.
                 if (data['payload'] && data['success']) {
                     this.res = this.processData(data['payload']);
+                    this.toggleReport.hideReport();
                 }
             }
         );

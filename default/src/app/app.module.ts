@@ -9,6 +9,7 @@ import { AUTH_PROVIDERS } from 'angular2-jwt';
 import { FocusMeDirective } from './shared/focus-me.directive';
 import { BackendService } from './shared/backend.service';
 import { KeysPipe } from './shared/keys.pipe';
+import {ToggleReportService} from './shared/toggle.report.service';
 
 
 import { AppComponent }  from './app.component';
@@ -42,6 +43,7 @@ let providers = [
     HTTP_PROVIDERS,
     AuthService,
     BackendService,
+    ToggleReportService
 ];
 
 let declarations = [
